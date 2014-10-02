@@ -71,10 +71,10 @@ function menu_load()
 end
 
 function menu_update(dt)
-	--coinanimation
+	--coinanimation "THIS CONTROLS THE FRAMES OF THE COIN, ?BLOCKS, AXE, AND HUD COIN ICON" -HammerGuy
 	coinanimation = coinanimation + dt*6.75
-	while coinanimation > 6 do
-		coinanimation = coinanimation - 5
+	while coinanimation > 5 do
+		coinanimation = coinanimation - 4
 	end	
 
 
