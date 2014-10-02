@@ -71,14 +71,12 @@ function menu_load()
 end
 
 function menu_update(dt)
-	--coinanimation
+	--coinanimation "THIS CONTROLS THE FRAMES OF THE COIN, ?BLOCKS, AXE, AND HUD COIN ICON" -HammerGuy
 	coinanimation = coinanimation + dt*6.75
-	while coinanimation > 6 do
-		coinanimation = coinanimation - 5
+	while coinanimation > 5 do
+		coinanimation = coinanimation - 4
 	end	
 
-
-	
 	if mappackscroll then
 		--smooth the scroll
 		if mappackscrollsmooth > mappackscroll then
@@ -229,10 +227,10 @@ function menu_draw()
 	end
 	
 	local coinframe
-	if math.floor(coinanimation) == 4 then
-		coinframe = 2
-	elseif math.floor(coinanimation) == 5 then
-		coinframe = 1
+	if math.floor(coinanimation) == 3 then
+		coinframe = 3
+	elseif math.floor(coinanimation) == 4 then
+		coinframe = 4
 	else
 		coinframe = math.floor(coinanimation)
 	end
