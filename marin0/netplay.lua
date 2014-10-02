@@ -578,6 +578,21 @@ function network_powerup(datatable)
 	end
 end
 
+function network_poisonmush(datatable)
+	if #objects["poisonmush"] == 1 then
+		objects["poisonmush"][1].destroy = true
+		triggered = true
+	end
+
+	for i, v in pairs(objects["poisonmush"]) do
+		--print(math.floor(v.x), x, math.floor(v.y), y)
+		if math.floor(v.x) == x or math.floor(v.y) == y then
+			v.destroy = true
+		end
+	end
+	
+end
+
 function network_lives(datatable)
 	for x = 1, players do
 		mariolives[x] = tonumber(datatable[x+1])
@@ -949,16 +964,27 @@ end
 
 function network_plantout(datatable)
 	if objects["plant"][tonumber(datatable[2])] then
-		--GOOMBA: BOWSER, THEY'RE MAKING IT PAST OUR DEFENSES, WE'RE ON OUT LAST LINE OF SOLDIERS
-		--BOWSER: ...
-		--BOWSER: ...
-		--BOWSER: ...
-		--BOWSER: SEND OUT THE FUCKING PLANT
-
 		objects["plant"][tonumber(datatable[2])].timer2 = 0
 	end
 end
 
+function network_redplantout(datatable)
+	if objects["redplant"][tonumber(datatable[2])] then
+		objects["redplant"][tonumber(datatable[2])].timer2 = 0
+	end
+end
+
+function network_reddownplantout(datatable)
+	if objects["reddownplant"][tonumber(datatable[2])] then
+		objects["reddownplant"][tonumber(datatable[2])].timer2 = 0
+	end
+end
+
+function network_downplantout(datatable)
+	if objects["downplant"][tonumber(datatable[2])] then
+		objects["downplant"][tonumber(datatable[2])].timer2 = 0
+	end
+end
 
 function getifmainmario(b)
 	for i, v in pairs(objects["player"]) do
