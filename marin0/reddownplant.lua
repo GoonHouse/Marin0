@@ -78,6 +78,7 @@ function reddownplant:update(dt)
 			table.insert(networksendqueue, "reddownplantout;" .. networkclientnumber .. ";" .. reddownplantid) 
 		end
 	end
+	return self.destroy
 end
 	
 function reddownplant:shotted()
