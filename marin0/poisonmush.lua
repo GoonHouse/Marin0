@@ -93,7 +93,7 @@ function poisonmush:leftcollide(a, b)
 		self.active = false
 		self.destroy = true
 		self.drawable = false
-		table.insert(networksendqueue, "poisonmush;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		table.insert(networksendqueue, "poisonmushed;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
 	end
 	
 	return false
@@ -114,7 +114,7 @@ function poisonmush:rightcollide(a, b)
 		self.active = false
 		self.destroy = true
 		self.drawable = false
-		table.insert(networksendqueue, "poisonmush;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		table.insert(networksendqueue, "poisonmushed;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
 	end
 	
 	return false
@@ -133,7 +133,7 @@ function poisonmush:floorcollide(a, b)
 		self.active = false
 		self.destroy = true
 		self.drawable = false
-		table.insert(networksendqueue, "poisonmush;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		table.insert(networksendqueue, "poisonmushed;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
 	end
 end
 
@@ -150,7 +150,7 @@ function poisonmush:ceilcollide(a, b)
 		self.active = false
 		self.destroy = true
 		self.drawable = false
-		table.insert(networksendqueue, "poisonmush;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		table.insert(networksendqueue, "poisonmushed;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
 	end
 end
 

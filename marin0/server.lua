@@ -554,6 +554,11 @@ function server_1up(datatable, clientnumber)
 	server_sendtootherpeers(sendstring, clientnumber)
 end
 
+function server_poisonmushed(datatable, clientnumber)
+	local sendstring = "poisonmushed;" .. clientnumber .. ";" .. datatable[3] .. ";" .. datatable[4] .. ";" .. datatable[5]
+	server_sendtootherpeers(sendstring, clientnumber)
+end
+
 function server_pointingangle(datatable, clientnumber)
 	server_peerlist[clientnumber].pointingangle = datatable[3]
 	if datatable[4] == "now" then
@@ -808,6 +813,24 @@ end
 function server_plantout(datatable, clientnumber)
 	--table.insert(server_peerlist[clientnumber].plants, {id=datatable[3]})
 	local sendstring = "plantout;" .. datatable[3]
+	server_sendtootherpeers(sendstring, clientnumber)
+end
+
+function server_redplantout(datatable, clientnumber)
+	--table.insert(server_peerlist[clientnumber].plants, {id=datatable[3]})
+	local sendstring = "redplantout;" .. datatable[3]
+	server_sendtootherpeers(sendstring, clientnumber)
+end
+
+function server_reddownplantout(datatable, clientnumber)
+	--table.insert(server_peerlist[clientnumber].plants, {id=datatable[3]})
+	local sendstring = "reddownplantout;" .. datatable[3]
+	server_sendtootherpeers(sendstring, clientnumber)
+end
+
+function server_downplantout(datatable, clientnumber)
+	--table.insert(server_peerlist[clientnumber].plants, {id=datatable[3]})
+	local sendstring = "downplantout;" .. datatable[3]
 	server_sendtootherpeers(sendstring, clientnumber)
 end
 

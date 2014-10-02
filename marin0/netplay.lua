@@ -578,7 +578,7 @@ function network_powerup(datatable)
 	end
 end
 
-function network_poisonmush(datatable)
+function network_poisonmushed(datatable)
 	if #objects["poisonmush"] == 1 then
 		objects["poisonmush"][1].destroy = true
 		triggered = true
