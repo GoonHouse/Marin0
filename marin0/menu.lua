@@ -958,11 +958,15 @@ function menu_draw()
 				properprint(string.lower(shaderlist[currentshaderi2]), (180-string.len(shaderlist[currentshaderi2])*8)*scale, 65*scale)
 			end
 			
-			love.graphics.setColor(100, 100, 100, 255)
-			properprint("shaders will really", 30*scale, 80*scale)
-			properprint("reduce performance!", 30*scale, 90*scale)
-			
 			if optionsselection == 5 then
+				love.graphics.setColor(255, 255, 255, 255)
+			else
+				love.graphics.setColor(100, 100, 100, 255)
+			end
+			properprint("graphic styles:", 30*scale, 80*scale)
+			properprint(string.lower(graphicspack), 30*scale, 90*scale)
+
+			if optionsselection == 6 then
 				love.graphics.setColor(255, 255, 255, 255)
 			else
 				love.graphics.setColor(100, 100, 100, 255)
@@ -973,7 +977,7 @@ function menu_draw()
 			drawrectangle(179, 105, 1, 7)
 			love.graphics.draw(volumesliderimg, math.floor((89+89*volume)*scale), 105*scale, 0, scale, scale)
 			
-			if optionsselection == 6 then
+			if optionsselection == 7 then
 				love.graphics.setColor(255, 255, 255, 255)
 			else
 				love.graphics.setColor(100, 100, 100, 255)
@@ -981,7 +985,7 @@ function menu_draw()
 			
 			properprint("reset game mappacks", 30*scale, 120*scale)
 			
-			if optionsselection == 7 then
+			if optionsselection == 8 then
 				love.graphics.setColor(255, 255, 255, 255)
 			else
 				love.graphics.setColor(100, 100, 100, 255)
@@ -989,7 +993,7 @@ function menu_draw()
 			
 			properprint("reset all settings", 30*scale, 135*scale)
 			
-			if optionsselection == 8 then
+			if optionsselection == 9 then
 				love.graphics.setColor(255, 255, 255, 255)
 			else
 				love.graphics.setColor(100, 100, 100, 255)
@@ -1884,8 +1888,16 @@ function menu_keypressed(key, unicode)
 					else
 						shaders:set(2, shaderlist[currentshaderi2])
 					end
+
+				elseif optionsselection == 5 then --gfxref
+					graphicspacki = graphicspacki + 1
+					if graphicspacki > #graphicspacklist then
+						graphicspacki = 1
+					end
+					graphicspack = graphicspacklist[graphicspacki]
+					loadgraphics()
 					
-				elseif optionsselection == 5 then
+				elseif optionsselection == 6 then
 					if volume < 1 then
 						volume = volume + 0.1
 						if volume > 1 then
@@ -1895,7 +1907,7 @@ function menu_keypressed(key, unicode)
 						playsound(coinsound)
 						soundenabled = true
 					end
-				elseif optionsselection == 8 then
+				elseif optionsselection == 9 then
 					vsync = not vsync
 					changescale(scale)
 				end
@@ -1988,8 +2000,16 @@ function menu_keypressed(key, unicode)
 					else
 						shaders:set(2, shaderlist[currentshaderi2])
 					end
-					
+
 				elseif optionsselection == 5 then
+					graphicspacki = graphicspacki - 1
+					if graphicspacki < 1 then
+						graphicspacki = #graphicspacklist
+					end
+					graphicspack = graphicspacklist[graphicspacki]
+					loadgraphics()
+				
+				elseif optionsselection == 6 then
 					if volume > 0 then
 						volume = volume - 0.1
 						if volume <= 0 then
@@ -1999,7 +2019,7 @@ function menu_keypressed(key, unicode)
 						love.audio.setVolume( volume )
 						playsound(coinsound)
 					end
-				elseif optionsselection == 8 then
+				elseif optionsselection == 9 then
 					vsync = not vsync
 					changescale(scale)
 				end

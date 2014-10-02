@@ -178,9 +178,11 @@ function love.load()
 	end
 	http.TIMEOUT = 4
 	
-	graphicspack = "SMB" --SMB, ALLSTARS
+	graphicspacki = 1
+	graphicspack = graphicspacklist[graphicspacki] --SMB, ALLSTARS
 	playertypei = 1
 	playertype = playertypelist[playertypei] --portal, minecraft
+	loadgraphics()
 	
 	if volume == 0 then
 		soundenabled = false
@@ -202,343 +204,6 @@ function love.load()
 	backgroundcolor[2] = {0, 0, 0}
 	backgroundcolor[3] = {32, 56, 236}
 	
-	--IMAGES--
-	
-	menuselection = love.graphics.newImage("graphics/" .. graphicspack .. "/menuselect.png")
-	mappackback = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackback.png")
-	mappacknoicon = love.graphics.newImage("graphics/" .. graphicspack .. "/mappacknoicon.png")
-	mappackoverlay = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackoverlay.png")
-	mappackhighlight = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackhighlight.png")
-	
-	mappackscrollbar = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackscrollbar.png")
-	
-	--tiles
-	smbtilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/smbtiles.png")
-	portaltilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaltiles.png")
-	entitiesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/entities.png")
-	tilequads = {}
-	
-	rgblist = {}
-	
-	--add smb tiles
-	local imgwidth, imgheight = smbtilesimg:getWidth(), smbtilesimg:getHeight()
-	local width = math.floor(imgwidth/17)
-	local height = math.floor(imgheight/17)
-	local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/smbtiles.png")
-	
-	for y = 1, height do
-		for x = 1, width do
-			table.insert(tilequads, quad:new(smbtilesimg, imgdata, x, y, imgwidth, imgheight))
-			local r, g, b = getaveragecolor(imgdata, x, y)
-			table.insert(rgblist, {r, g, b})
-		end
-	end
-	smbtilecount = width*height
-	
-	--add portal tiles
-	local imgwidth, imgheight = portaltilesimg:getWidth(), portaltilesimg:getHeight()
-	local width = math.floor(imgwidth/17)
-	local height = math.floor(imgheight/17)
-	local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/portaltiles.png")
-	
-	for y = 1, height do
-		for x = 1, width do
-			table.insert(tilequads, quad:new(portaltilesimg, imgdata, x, y, imgwidth, imgheight))
-			local r, g, b = getaveragecolor(imgdata, x, y)
-			table.insert(rgblist, {r, g, b})
-		end
-	end
-	portaltilecount = width*height
-	
-	--add entities
-	entityquads = {}
-	local imgwidth, imgheight = entitiesimg:getWidth(), entitiesimg:getHeight()
-	local width = math.floor(imgwidth/17)
-	local height = math.floor(imgheight/17)
-	local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/entities.png")
-	
-	for y = 1, height do
-		for x = 1, width do
-			table.insert(entityquads, entity:new(entitiesimg, x, y, imgwidth, imgheight))
-			entityquads[#entityquads]:sett(#entityquads)
-		end
-	end
-	entitiescount = width*height
-	
-	fontimage2 = love.graphics.newImage("graphics/" .. graphicspack .. "/smallfont.png")
-	numberglyphs = "012458"
-	font2quads = {}
-	for i = 1, 6 do
-		font2quads[string.sub(numberglyphs, i, i)] = love.graphics.newQuad((i-1)*4, 0, 4, 8, 32, 8)
-	end
-	
-	oneuptextimage = love.graphics.newImage("graphics/" .. graphicspack .. "/oneuptext.png")
-	
-	blockdebrisimage = love.graphics.newImage("graphics/" .. graphicspack .. "/blockdebris.png")
-	blockdebrisquads = {}
-	for y = 1, 4 do
-		blockdebrisquads[y] = {}
-		for x = 1, 2 do
-			blockdebrisquads[y][x] = love.graphics.newQuad((x-1)*8, (y-1)*8, 8, 8, 16, 32)
-		end
-	end
-	
-	coinblockanimationimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinblockanimation.png")
-	coinblockanimationquads = {}
-	for i = 1, 30 do
-		coinblockanimationquads[i] = love.graphics.newQuad((i-1)*8, 0, 8, 52, 256, 64)
-	end
-	
-	coinanimationimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinanimation.png")
-	coinanimationquads = {}
-	for j = 1, 4 do
-		coinanimationquads[j] = {}
-		for i = 1, 4 do
-			coinanimationquads[j][i] = love.graphics.newQuad((i-1)*5, (j-1)*8, 5, 8, 24, 32)
-		end
-	end
-	
-	--coinblock
-	coinblockimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinblock.png")
-	coinblockquads = {}
-	for j = 1, 4 do
-		coinblockquads[j] = {}
-		for i = 1, 4 do
-			coinblockquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 80, 64)
-		end
-	end
-	
-	--coin
-	coinimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coin.png")
-	coinquads = {}
-	for i = 1, 4 do
-		coinquads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 80, 16)
-	end
-	
-	--axe
-	axeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/axe.png")
-	axequads = {}
-	for i = 1, 4 do
-		axequads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
-	end
-	
-	--spring, red
-	springimg = love.graphics.newImage("graphics/" .. graphicspack .. "/springred.png")
-	springquads = {}
-	for i = 1, 4 do
-		springquads[i] = {}
-		for j = 1, 3 do
-			springquads[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*32, 16, 32, 48, 128)
-		end
-	end
-	
-	--spring, green
-	springgreenimg = love.graphics.newImage("graphics/" .. graphicspack .. "/springgreen.png")
-	springgreenquads = {}
-	for i = 1, 4 do
-		springgreenquads[i] = {}
-		for j = 1, 3 do
-			springgreenquads[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*32, 16, 32, 48, 128)
-		end
-	end
-	
-	--toad
-	toadimg = love.graphics.newImage("graphics/" .. graphicspack .. "/toad.png")
-	
-	--queen I mean princess
-	peachimg = love.graphics.newImage("graphics/" .. graphicspack .. "/peach.png")
-	
-	platformimg = love.graphics.newImage("graphics/" .. graphicspack .. "/platform.png")
-	platformbonusimg = love.graphics.newImage("graphics/" .. graphicspack .. "/platformbonus.png")
-	
-	seesawimg = love.graphics.newImage("graphics/" .. graphicspack .. "/seesaw.png")
-	seesawquad = {}
-	for i = 1, 4 do
-		seesawquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
-	end
-	
-	titleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/title.png")
-	playerselectimg = love.graphics.newImage("graphics/" .. graphicspack .. "/playerselectarrow.png")
-	
-	starimg = love.graphics.newImage("graphics/" .. graphicspack .. "/star.png")
-	starquad = {}
-	for i = 1, 4 do
-		starquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
-	end
-	
-	flowerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/flower.png")
-	flowerquad = {}
-	for i = 1, 4 do
-		flowerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
-	end
-	
-	fireballimg = love.graphics.newImage("graphics/" .. graphicspack .. "/fireball.png")
-	fireballquad = {}
-	for i = 1, 4 do
-		fireballquad[i] = love.graphics.newQuad((i-1)*8, 0, 8, 8, 80, 16)
-	end
-	
-	for i = 5, 7 do
-		fireballquad[i] = love.graphics.newQuad((i-5)*16+32, 0, 16, 16, 80, 16)
-	end
-	
-	vineimg = love.graphics.newImage("graphics/" .. graphicspack .. "/vine.png")
-	vinequad = {}
-	for i = 1, 4 do
-		vinequad[i] = {}
-		for j = 1, 2 do
-			vinequad[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*16, 16, 16, 32, 64) 
-		end
-	end
-
-	-- WIND
-	windleafimage = love.graphics.newImage("graphics/" .. graphicspack .. "/windleaf.png")
-	windleafquad = {}
-	for y = 1, 4 do
-		windleafquad[y] = {}
-		for x = 1, 2 do
-			windleafquad[y][x] = love.graphics.newQuad((x-1)*6, (y-1)*6, 6, 6, 12, 24)
-		end
-	end
-	
-	--enemies
-	goombaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/goomba.png")
-	goombaquad = {}
-	
-	for y = 1, 4 do
-		goombaquad[y] = {}
-		for x = 1, 2 do
-			goombaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
-		end
-	end
-	
-	spikeyimg = love.graphics.newImage("graphics/" .. graphicspack .. "/spikey.png")
-	
-	spikeyquad = {}
-	for x = 1, 4 do
-		spikeyquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 64, 16)
-	end
-	
-	lakitoimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lakito.png")
-	lakitoquad = {}
-	for x = 1, 2 do
-		lakitoquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 24)
-	end
-	
-	koopaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/koopa.png")
-	kooparedimage = love.graphics.newImage("graphics/" .. graphicspack .. "/koopared.png")
-	beetleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/beetle.png")
-	koopaquad = {}
-	
-	for y = 1, 4 do
-		koopaquad[y] = {}
-		for x = 1, 5 do
-			koopaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*24, 16, 24, 128, 128)
-		end
-	end
-	
-	cheepcheepimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cheepcheep.png")
-	cheepcheepquad = {}
-	
-	cheepcheepquad[1] = {}
-	cheepcheepquad[1][1] = love.graphics.newQuad(0, 0, 16, 16, 32, 32)
-	cheepcheepquad[1][2] = love.graphics.newQuad(16, 0, 16, 16, 32, 32)
-	
-	cheepcheepquad[2] = {}
-	cheepcheepquad[2][1] = love.graphics.newQuad(0, 16, 16, 16, 32, 32)
-	cheepcheepquad[2][2] = love.graphics.newQuad(16, 16, 16, 16, 32, 32)
-	
-	squidimg = love.graphics.newImage("graphics/" .. graphicspack .. "/squid.png")
-	squidquad = {}
-	for x = 1, 2 do
-		squidquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 32)
-	end
-	
-	bulletbillimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bulletbill.png")
-	bulletbillquad = {}
-	
-	for y = 1, 4 do
-		bulletbillquad[y] = love.graphics.newQuad(0, (y-1)*16, 16, 16, 16, 64)
-	end
-	
-	hammerbrosimg = love.graphics.newImage("graphics/" .. graphicspack .. "/hammerbros.png")
-	hammerbrosquad = {}
-	for y = 1, 4 do
-		hammerbrosquad[y] = {}
-		for x = 1, 4 do
-			hammerbrosquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*34, 16, 34, 64, 256)
-		end
-	end	
-	
-	hammerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/hammer.png")
-	hammerquad = {}
-	for j = 1, 4 do
-		hammerquad[j] = {}
-		for i = 1, 4 do
-			hammerquad[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 64, 64)
-		end
-	end
-	
-	plantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/plant.png")
-	plantquads = {}
-	for j = 1, 4 do
-		plantquads[j] = {}
-		for i = 1, 2 do
-			plantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
-		end
-	end
-
-	redplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/redplant.png")
-	redplantquads = {}
-	for j = 1, 4 do
-		redplantquads[j] = {}
-		for i = 1, 2 do
-			redplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
-		end
-	end
-
-	reddownplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/reddownplant.png")
-	reddownplantquads = {}
-	for j = 1, 4 do
-		reddownplantquads[j] = {}
-		for i = 1, 2 do
-			reddownplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
-		end
-	end
-
-	downplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/downplant.png")
-	downplantquads = {}
-	for j = 1, 4 do
-		downplantquads[j] = {}
-		for i = 1, 2 do
-			downplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
-		end
-	end
-	
-	fireimg = love.graphics.newImage("graphics/" .. graphicspack .. "/fire.png")
-	firequad = {love.graphics.newQuad(0, 0, 24, 8, 48, 8), love.graphics.newQuad(24, 0, 24, 8, 48, 8)}
-	
-	upfireimg = love.graphics.newImage("graphics/" .. graphicspack .. "/upfire.png")
-	
-	bowserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bowser.png")
-	bowserquad = {}
-	bowserquad[1] = {love.graphics.newQuad(0, 0, 32, 32, 64, 64), love.graphics.newQuad(32, 0, 32, 32, 64, 64)}
-	bowserquad[2] = {love.graphics.newQuad(0, 32, 32, 32, 64, 64), love.graphics.newQuad(32, 32, 32, 32, 64, 64)}
-	
-	decoysimg = love.graphics.newImage("graphics/" .. graphicspack .. "/decoys.png")
-	decoysquad = {}
-	for y = 1, 7 do
-		decoysquad[y] = love.graphics.newQuad(0, (y-1)*32, 32, 32, 64, 256)
-	end
-	
-	boximage = love.graphics.newImage("graphics/" .. graphicspack .. "/box.png")
-	boxquad = love.graphics.newQuad(0, 0, 12, 12, 16, 16)
-	
-	flagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/flag.png")
-	castleflagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/castleflag.png")
-	
-	bubbleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bubble.png")
-	
 	--eh
 	rainboomimg = love.graphics.newImage("graphics/rainboom.png")
 	rainboomquad = {}
@@ -557,190 +222,7 @@ function love.load()
 	
 	dropdownarrowimg = love.graphics.newImage("graphics/GUI/dropdownarrow.png")
 	
-	--players
-	marioanimations = {}
-	marioanimations[0] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations0.png")
-	marioanimations[1] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations1.png")
-	marioanimations[2] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations2.png")
-	marioanimations[3] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations3.png")
-
-	classicmarioanimations = {}
-	for x = 0, 3 do
-		classicmarioanimations[x] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/classic/marioanimations" .. x .. ".png")
-	end
-	
-	minecraftanimations = {}
-	minecraftanimations[0] = love.graphics.newImage("graphics/Minecraft/marioanimations0.png")
-	minecraftanimations[1] = love.graphics.newImage("graphics/Minecraft/marioanimations1.png")
-	minecraftanimations[2] = love.graphics.newImage("graphics/Minecraft/marioanimations2.png")
-	minecraftanimations[3] = love.graphics.newImage("graphics/Minecraft/marioanimations3.png")
-	
-	marioidle = {}
-	mariorun = {}
-	marioslide = {}
-	mariojump = {}
-	mariodie = {}
-	marioclimb = {}
-	marioswim = {}
-	mariogrow = {}
-	
-	for i = 1, 5 do
-		marioidle[i] = love.graphics.newQuad(0, (i-1)*20, 20, 20, 512, 128)
-		
-		mariorun[i] = {}
-		mariorun[i][1] = love.graphics.newQuad(20, (i-1)*20, 20, 20, 512, 128)
-		mariorun[i][2] = love.graphics.newQuad(40, (i-1)*20, 20, 20, 512, 128)
-		mariorun[i][3] = love.graphics.newQuad(60, (i-1)*20, 20, 20, 512, 128)
-		
-		marioslide[i] = love.graphics.newQuad(80, (i-1)*20, 20, 20, 512, 128)
-		mariojump[i] = love.graphics.newQuad(100, (i-1)*20, 20, 20, 512, 128)
-		mariodie[i] = love.graphics.newQuad(120, (i-1)*20, 20, 20, 512, 128)
-		
-		marioclimb[i] = {}
-		marioclimb[i][1] = love.graphics.newQuad(140, (i-1)*20, 20, 20, 512, 128)
-		marioclimb[i][2] = love.graphics.newQuad(160, (i-1)*20, 20, 20, 512, 128)
-		
-		marioswim[i] = {}
-		marioswim[i][1] = love.graphics.newQuad(180, (i-1)*20, 20, 20, 512, 128)
-		marioswim[i][2] = love.graphics.newQuad(200, (i-1)*20, 20, 20, 512, 128)
-		
-		mariogrow[i] = love.graphics.newQuad(260, 0, 20, 24, 512, 128)
-	end
-	
-	
-	bigmarioanimations = {}
-	bigmarioanimations[0] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations0.png")
-	bigmarioanimations[1] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations1.png")
-	bigmarioanimations[2] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations2.png")
-	bigmarioanimations[3] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations3.png")
-
-	bigclassicmarioanimations = {}
-
-	for x = 0, 3 do
-		bigclassicmarioanimations[x] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/classic/bigmarioanimations" .. x .. ".png")
-	end
-	
-	bigminecraftanimations = {}
-	bigminecraftanimations[0] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations0.png")
-	bigminecraftanimations[1] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations1.png")
-	bigminecraftanimations[2] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations2.png")
-	bigminecraftanimations[3] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations3.png")
-	
-	bigmarioidle = {}
-	bigmariorun = {}
-	bigmarioslide = {}
-	bigmariojump = {}
-	bigmariofire = {}
-	bigmarioclimb = {}
-	bigmarioswim = {}
-	bigmarioduck = {} --hehe duck.
-	
-	for i = 1, 5 do
-		bigmarioidle[i] = love.graphics.newQuad(0, (i-1)*36, 20, 36, 512, 256)
-		
-		bigmariorun[i] = {}
-		bigmariorun[i][1] = love.graphics.newQuad(20, (i-1)*36, 20, 36, 512, 256)
-		bigmariorun[i][2] = love.graphics.newQuad(40, (i-1)*36, 20, 36, 512, 256)
-		bigmariorun[i][3] = love.graphics.newQuad(60, (i-1)*36, 20, 36, 512, 256)
-		
-		bigmarioslide[i] = love.graphics.newQuad(80, (i-1)*36, 20, 36, 512, 256)
-		bigmariojump[i] = love.graphics.newQuad(100, (i-1)*36, 20, 36, 512, 256)
-		bigmariofire[i] = love.graphics.newQuad(120, (i-1)*36, 20, 36, 512, 256)
-		
-		bigmarioclimb[i] = {}
-		bigmarioclimb[i][1] = love.graphics.newQuad(140, (i-1)*36, 20, 36, 512, 256)
-		bigmarioclimb[i][2] = love.graphics.newQuad(160, (i-1)*36, 20, 36, 512, 256)
-		
-		bigmarioswim[i] = {}
-		bigmarioswim[i][1] = love.graphics.newQuad(180, (i-1)*36, 20, 36, 512, 256)
-		bigmarioswim[i][2] = love.graphics.newQuad(200, (i-1)*36, 20, 36, 512, 256)
-		
-		bigmarioduck[i] = love.graphics.newQuad(260, (i-1)*36, 20, 36, 512, 256)
-	end
-	
-	--portals
-	portalimage = love.graphics.newImage("graphics/" .. graphicspack .. "/portal.png")
-	portal1quad = {}
-	for i = 0, 7 do
-		portal1quad[i] = love.graphics.newQuad(0, i*4, 32, 4, 64, 32)
-	end
-	
-	portal2quad = {}
-	for i = 0, 7 do
-		portal2quad[i] = love.graphics.newQuad(32, i*4, 32, 4, 64, 32)
-	end
-	
-	portalglow = love.graphics.newImage("graphics/" .. graphicspack .. "/portalglow.png")
-	
-	portalparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalparticle.png")
-	portalcrosshairimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalcrosshair.png")
-	portaldotimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaldot.png")
-	portalprojectileimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectile.png")
-	portalprojectileparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectileparticle.png")
-	
-	--Menu shit
-	huebarimg = love.graphics.newImage("graphics/" .. graphicspack .. "/huebar.png")
-	huebarmarkerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/huebarmarker.png")
-	volumesliderimg = love.graphics.newImage("graphics/" .. graphicspack .. "/volumeslider.png")
-	
-	--Portal props
-	emanceparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/emanceparticle.png")
-	emancesideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/emanceside.png")
-	
-	doorpieceimg = love.graphics.newImage("graphics/" .. graphicspack .. "/doorpiece.png")
-	doorcenterimg = love.graphics.newImage("graphics/" .. graphicspack .. "/doorcenter.png")
-	
-	buttonbaseimg = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonbase.png")
-	buttonbuttonimg = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonbutton.png")
-	
-	pushbuttonimg = love.graphics.newImage("graphics/" .. graphicspack .. "/pushbutton.png")
-	pushbuttonquad = {love.graphics.newQuad(0, 0, 16, 16, 32, 16), love.graphics.newQuad(16, 0, 16, 16, 32, 16)}
-	
-	wallindicatorimg = love.graphics.newImage("graphics/" .. graphicspack .. "/wallindicator.png")
-	wallindicatorquad = {love.graphics.newQuad(0, 0, 16, 16, 32, 16), love.graphics.newQuad(16, 0, 16, 16, 32, 16)}
-	
-	walltimerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/walltimer.png")
-	walltimerquad = {}
-	for i = 1, 10 do
-		walltimerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 160, 16)
-	end
-	
-	lightbridgeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lightbridge.png")
-	lightbridgesideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lightbridgeside.png")
-	
-	laserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laser.png")
-	lasersideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserside.png")
-	
-	faithplateplateimg = love.graphics.newImage("graphics/" .. graphicspack .. "/faithplateplate.png")
-	
-	laserdetectorimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserdetector.png")
-	
-	gel1img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel1.png")
-	gel2img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel2.png")
-	gel3img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel3.png")
-	gelquad = {love.graphics.newQuad(0, 0, 12, 12, 36, 12), love.graphics.newQuad(12, 0, 12, 12, 36, 12), love.graphics.newQuad(24, 0, 12, 12, 36, 12)}
-	
-	gel1ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel1ground.png")
-	gel2ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel2ground.png")
-	gel3ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel3ground.png")
-	
-	geldispenserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/geldispenser.png")
-	cubedispenserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cubedispenser.png")
-	
 	gradientimg = love.graphics.newImage("graphics/gradient.png");gradientimg:setFilter("linear", "linear")
-	
-	--optionsmenu
-	skinpuppet = {}
-	secondskinpuppet = {}
-	classicskinpuppet = {}
-	classicsecondskinpuppet = {}
-	for i = 0, 3 do
-		skinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/skin" .. i .. ".png")
-		secondskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/secondskin" .. i .. ".png")
-
-		classicskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/classic/skin" .. i .. ".png")
-		classicsecondskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/classic/secondskin" .. i .. ".png")
-	end
 	
 	--Ripping off
 	minecraftbreakimg = love.graphics.newImage("graphics/Minecraft/blockbreak.png")
@@ -1803,4 +1285,528 @@ function love.quit()
 			magicdns_remove()
 		end
 	end
+end
+
+function loadgraphics()
+	--IMAGES--
+	
+	menuselection = love.graphics.newImage("graphics/" .. graphicspack .. "/menuselect.png")
+	mappackback = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackback.png")
+	mappacknoicon = love.graphics.newImage("graphics/" .. graphicspack .. "/mappacknoicon.png")
+	mappackoverlay = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackoverlay.png")
+	mappackhighlight = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackhighlight.png")
+	
+	mappackscrollbar = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackscrollbar.png")
+	
+	--tiles
+	smbtilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/smbtiles.png")
+	portaltilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaltiles.png")
+	entitiesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/entities.png")
+	tilequads = {}
+	
+	rgblist = {}
+	
+	--add smb tiles
+	local imgwidth, imgheight = smbtilesimg:getWidth(), smbtilesimg:getHeight()
+	local width = math.floor(imgwidth/17)
+	local height = math.floor(imgheight/17)
+	local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/smbtiles.png")
+	
+	for y = 1, height do
+		for x = 1, width do
+			table.insert(tilequads, quad:new(smbtilesimg, imgdata, x, y, imgwidth, imgheight))
+			local r, g, b = getaveragecolor(imgdata, x, y)
+			table.insert(rgblist, {r, g, b})
+		end
+	end
+	smbtilecount = width*height
+	
+	--add portal tiles
+	local imgwidth, imgheight = portaltilesimg:getWidth(), portaltilesimg:getHeight()
+	local width = math.floor(imgwidth/17)
+	local height = math.floor(imgheight/17)
+	local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/portaltiles.png")
+	
+	for y = 1, height do
+		for x = 1, width do
+			table.insert(tilequads, quad:new(portaltilesimg, imgdata, x, y, imgwidth, imgheight))
+			local r, g, b = getaveragecolor(imgdata, x, y)
+			table.insert(rgblist, {r, g, b})
+		end
+	end
+	portaltilecount = width*height
+	
+	--add entities
+	entityquads = {}
+	local imgwidth, imgheight = entitiesimg:getWidth(), entitiesimg:getHeight()
+	local width = math.floor(imgwidth/17)
+	local height = math.floor(imgheight/17)
+	local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/entities.png")
+	
+	for y = 1, height do
+		for x = 1, width do
+			table.insert(entityquads, entity:new(entitiesimg, x, y, imgwidth, imgheight))
+			entityquads[#entityquads]:sett(#entityquads)
+		end
+	end
+	entitiescount = width*height
+	
+	fontimage2 = love.graphics.newImage("graphics/" .. graphicspack .. "/smallfont.png")
+	numberglyphs = "012458"
+	font2quads = {}
+	for i = 1, 6 do
+		font2quads[string.sub(numberglyphs, i, i)] = love.graphics.newQuad((i-1)*4, 0, 4, 8, 32, 8)
+	end
+	
+	oneuptextimage = love.graphics.newImage("graphics/" .. graphicspack .. "/oneuptext.png")
+	
+	blockdebrisimage = love.graphics.newImage("graphics/" .. graphicspack .. "/blockdebris.png")
+	blockdebrisquads = {}
+	for y = 1, 4 do
+		blockdebrisquads[y] = {}
+		for x = 1, 2 do
+			blockdebrisquads[y][x] = love.graphics.newQuad((x-1)*8, (y-1)*8, 8, 8, 16, 32)
+		end
+	end
+	
+	coinblockanimationimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinblockanimation.png")
+	coinblockanimationquads = {}
+	for i = 1, 30 do
+		coinblockanimationquads[i] = love.graphics.newQuad((i-1)*8, 0, 8, 52, 256, 64)
+	end
+	
+	coinanimationimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinanimation.png")
+	coinanimationquads = {}
+	for j = 1, 4 do
+		coinanimationquads[j] = {}
+		for i = 1, 4 do
+			coinanimationquads[j][i] = love.graphics.newQuad((i-1)*5, (j-1)*8, 5, 8, 24, 32)
+		end
+	end
+	
+	--coinblock
+	coinblockimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinblock.png")
+	coinblockquads = {}
+	for j = 1, 4 do
+		coinblockquads[j] = {}
+		for i = 1, 4 do
+			coinblockquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 80, 64)
+		end
+	end
+	
+	--coin
+	coinimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coin.png")
+	coinquads = {}
+	for i = 1, 4 do
+		coinquads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 80, 16)
+	end
+	
+	--axe
+	axeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/axe.png")
+	axequads = {}
+	for i = 1, 4 do
+		axequads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	--spring, red
+	springimg = love.graphics.newImage("graphics/" .. graphicspack .. "/springred.png")
+	springquads = {}
+	for i = 1, 4 do
+		springquads[i] = {}
+		for j = 1, 3 do
+			springquads[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*32, 16, 32, 48, 128)
+		end
+	end
+	
+	--spring, green
+	springgreenimg = love.graphics.newImage("graphics/" .. graphicspack .. "/springgreen.png")
+	springgreenquads = {}
+	for i = 1, 4 do
+		springgreenquads[i] = {}
+		for j = 1, 3 do
+			springgreenquads[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*32, 16, 32, 48, 128)
+		end
+	end
+	
+	--toad
+	toadimg = love.graphics.newImage("graphics/" .. graphicspack .. "/toad.png")
+	
+	--queen I mean princess
+	peachimg = love.graphics.newImage("graphics/" .. graphicspack .. "/peach.png")
+	
+	platformimg = love.graphics.newImage("graphics/" .. graphicspack .. "/platform.png")
+	platformbonusimg = love.graphics.newImage("graphics/" .. graphicspack .. "/platformbonus.png")
+	
+	seesawimg = love.graphics.newImage("graphics/" .. graphicspack .. "/seesaw.png")
+	seesawquad = {}
+	for i = 1, 4 do
+		seesawquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	titleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/title.png")
+	playerselectimg = love.graphics.newImage("graphics/" .. graphicspack .. "/playerselectarrow.png")
+	
+	starimg = love.graphics.newImage("graphics/" .. graphicspack .. "/star.png")
+	starquad = {}
+	for i = 1, 4 do
+		starquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	flowerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/flower.png")
+	flowerquad = {}
+	for i = 1, 4 do
+		flowerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	fireballimg = love.graphics.newImage("graphics/" .. graphicspack .. "/fireball.png")
+	fireballquad = {}
+	for i = 1, 4 do
+		fireballquad[i] = love.graphics.newQuad((i-1)*8, 0, 8, 8, 80, 16)
+	end
+	
+	for i = 5, 7 do
+		fireballquad[i] = love.graphics.newQuad((i-5)*16+32, 0, 16, 16, 80, 16)
+	end
+	
+	vineimg = love.graphics.newImage("graphics/" .. graphicspack .. "/vine.png")
+	vinequad = {}
+	for i = 1, 4 do
+		vinequad[i] = {}
+		for j = 1, 2 do
+			vinequad[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*16, 16, 16, 32, 64) 
+		end
+	end
+
+	-- WIND
+	windleafimage = love.graphics.newImage("graphics/" .. graphicspack .. "/windleaf.png")
+	windleafquad = {}
+	for y = 1, 4 do
+		windleafquad[y] = {}
+		for x = 1, 2 do
+			windleafquad[y][x] = love.graphics.newQuad((x-1)*6, (y-1)*6, 6, 6, 12, 24)
+		end
+	end
+	
+	--enemies
+	goombaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/goomba.png")
+	goombaquad = {}
+	
+	for y = 1, 4 do
+		goombaquad[y] = {}
+		for x = 1, 2 do
+			goombaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	
+	spikeyimg = love.graphics.newImage("graphics/" .. graphicspack .. "/spikey.png")
+	
+	spikeyquad = {}
+	for x = 1, 4 do
+		spikeyquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	lakitoimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lakito.png")
+	lakitoquad = {}
+	for x = 1, 2 do
+		lakitoquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 24)
+	end
+	
+	koopaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/koopa.png")
+	kooparedimage = love.graphics.newImage("graphics/" .. graphicspack .. "/koopared.png")
+	beetleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/beetle.png")
+	koopaquad = {}
+	
+	for y = 1, 4 do
+		koopaquad[y] = {}
+		for x = 1, 5 do
+			koopaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*24, 16, 24, 128, 128)
+		end
+	end
+	
+	cheepcheepimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cheepcheep.png")
+	cheepcheepquad = {}
+	
+	cheepcheepquad[1] = {}
+	cheepcheepquad[1][1] = love.graphics.newQuad(0, 0, 16, 16, 32, 32)
+	cheepcheepquad[1][2] = love.graphics.newQuad(16, 0, 16, 16, 32, 32)
+	
+	cheepcheepquad[2] = {}
+	cheepcheepquad[2][1] = love.graphics.newQuad(0, 16, 16, 16, 32, 32)
+	cheepcheepquad[2][2] = love.graphics.newQuad(16, 16, 16, 16, 32, 32)
+	
+	squidimg = love.graphics.newImage("graphics/" .. graphicspack .. "/squid.png")
+	squidquad = {}
+	for x = 1, 2 do
+		squidquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 32)
+	end
+	
+	bulletbillimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bulletbill.png")
+	bulletbillquad = {}
+	
+	for y = 1, 4 do
+		bulletbillquad[y] = love.graphics.newQuad(0, (y-1)*16, 16, 16, 16, 64)
+	end
+	
+	hammerbrosimg = love.graphics.newImage("graphics/" .. graphicspack .. "/hammerbros.png")
+	hammerbrosquad = {}
+	for y = 1, 4 do
+		hammerbrosquad[y] = {}
+		for x = 1, 4 do
+			hammerbrosquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*34, 16, 34, 64, 256)
+		end
+	end	
+	
+	hammerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/hammer.png")
+	hammerquad = {}
+	for j = 1, 4 do
+		hammerquad[j] = {}
+		for i = 1, 4 do
+			hammerquad[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 64, 64)
+		end
+	end
+	
+	plantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/plant.png")
+	plantquads = {}
+	for j = 1, 4 do
+		plantquads[j] = {}
+		for i = 1, 2 do
+			plantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
+		end
+	end
+
+	redplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/redplant.png")
+	redplantquads = {}
+	for j = 1, 4 do
+		redplantquads[j] = {}
+		for i = 1, 2 do
+			redplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
+		end
+	end
+
+	reddownplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/reddownplant.png")
+	reddownplantquads = {}
+	for j = 1, 4 do
+		reddownplantquads[j] = {}
+		for i = 1, 2 do
+			reddownplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
+		end
+	end
+
+	downplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/downplant.png")
+	downplantquads = {}
+	for j = 1, 4 do
+		downplantquads[j] = {}
+		for i = 1, 2 do
+			downplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
+		end
+	end
+	
+	fireimg = love.graphics.newImage("graphics/" .. graphicspack .. "/fire.png")
+	firequad = {love.graphics.newQuad(0, 0, 24, 8, 48, 8), love.graphics.newQuad(24, 0, 24, 8, 48, 8)}
+	
+	upfireimg = love.graphics.newImage("graphics/" .. graphicspack .. "/upfire.png")
+	
+	bowserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bowser.png")
+	bowserquad = {}
+	bowserquad[1] = {love.graphics.newQuad(0, 0, 32, 32, 64, 64), love.graphics.newQuad(32, 0, 32, 32, 64, 64)}
+	bowserquad[2] = {love.graphics.newQuad(0, 32, 32, 32, 64, 64), love.graphics.newQuad(32, 32, 32, 32, 64, 64)}
+	
+	decoysimg = love.graphics.newImage("graphics/" .. graphicspack .. "/decoys.png")
+	decoysquad = {}
+	for y = 1, 7 do
+		decoysquad[y] = love.graphics.newQuad(0, (y-1)*32, 32, 32, 64, 256)
+	end
+	
+	boximage = love.graphics.newImage("graphics/" .. graphicspack .. "/box.png")
+	boxquad = love.graphics.newQuad(0, 0, 12, 12, 16, 16)
+	
+	flagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/flag.png")
+	castleflagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/castleflag.png")
+	
+	bubbleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bubble.png")
+
+	
+	--players
+	marioanimations = {}
+	marioanimations[0] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations0.png")
+	marioanimations[1] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations1.png")
+	marioanimations[2] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations2.png")
+	marioanimations[3] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations3.png")
+
+	classicmarioanimations = {}
+	for x = 0, 3 do
+		classicmarioanimations[x] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/classic/marioanimations" .. x .. ".png")
+	end
+	
+	minecraftanimations = {}
+	minecraftanimations[0] = love.graphics.newImage("graphics/Minecraft/marioanimations0.png")
+	minecraftanimations[1] = love.graphics.newImage("graphics/Minecraft/marioanimations1.png")
+	minecraftanimations[2] = love.graphics.newImage("graphics/Minecraft/marioanimations2.png")
+	minecraftanimations[3] = love.graphics.newImage("graphics/Minecraft/marioanimations3.png")
+	
+	marioidle = {}
+	mariorun = {}
+	marioslide = {}
+	mariojump = {}
+	mariodie = {}
+	marioclimb = {}
+	marioswim = {}
+	mariogrow = {}
+	
+	for i = 1, 5 do
+		marioidle[i] = love.graphics.newQuad(0, (i-1)*20, 20, 20, 512, 128)
+		
+		mariorun[i] = {}
+		mariorun[i][1] = love.graphics.newQuad(20, (i-1)*20, 20, 20, 512, 128)
+		mariorun[i][2] = love.graphics.newQuad(40, (i-1)*20, 20, 20, 512, 128)
+		mariorun[i][3] = love.graphics.newQuad(60, (i-1)*20, 20, 20, 512, 128)
+		
+		marioslide[i] = love.graphics.newQuad(80, (i-1)*20, 20, 20, 512, 128)
+		mariojump[i] = love.graphics.newQuad(100, (i-1)*20, 20, 20, 512, 128)
+		mariodie[i] = love.graphics.newQuad(120, (i-1)*20, 20, 20, 512, 128)
+		
+		marioclimb[i] = {}
+		marioclimb[i][1] = love.graphics.newQuad(140, (i-1)*20, 20, 20, 512, 128)
+		marioclimb[i][2] = love.graphics.newQuad(160, (i-1)*20, 20, 20, 512, 128)
+		
+		marioswim[i] = {}
+		marioswim[i][1] = love.graphics.newQuad(180, (i-1)*20, 20, 20, 512, 128)
+		marioswim[i][2] = love.graphics.newQuad(200, (i-1)*20, 20, 20, 512, 128)
+		
+		mariogrow[i] = love.graphics.newQuad(260, 0, 20, 24, 512, 128)
+	end
+	
+	
+	bigmarioanimations = {}
+	bigmarioanimations[0] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations0.png")
+	bigmarioanimations[1] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations1.png")
+	bigmarioanimations[2] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations2.png")
+	bigmarioanimations[3] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations3.png")
+
+	bigclassicmarioanimations = {}
+
+	for x = 0, 3 do
+		bigclassicmarioanimations[x] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/classic/bigmarioanimations" .. x .. ".png")
+	end
+	
+	bigminecraftanimations = {}
+	bigminecraftanimations[0] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations0.png")
+	bigminecraftanimations[1] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations1.png")
+	bigminecraftanimations[2] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations2.png")
+	bigminecraftanimations[3] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations3.png")
+	
+	bigmarioidle = {}
+	bigmariorun = {}
+	bigmarioslide = {}
+	bigmariojump = {}
+	bigmariofire = {}
+	bigmarioclimb = {}
+	bigmarioswim = {}
+	bigmarioduck = {} --hehe duck.
+	
+	for i = 1, 5 do
+		bigmarioidle[i] = love.graphics.newQuad(0, (i-1)*36, 20, 36, 512, 256)
+		
+		bigmariorun[i] = {}
+		bigmariorun[i][1] = love.graphics.newQuad(20, (i-1)*36, 20, 36, 512, 256)
+		bigmariorun[i][2] = love.graphics.newQuad(40, (i-1)*36, 20, 36, 512, 256)
+		bigmariorun[i][3] = love.graphics.newQuad(60, (i-1)*36, 20, 36, 512, 256)
+		
+		bigmarioslide[i] = love.graphics.newQuad(80, (i-1)*36, 20, 36, 512, 256)
+		bigmariojump[i] = love.graphics.newQuad(100, (i-1)*36, 20, 36, 512, 256)
+		bigmariofire[i] = love.graphics.newQuad(120, (i-1)*36, 20, 36, 512, 256)
+		
+		bigmarioclimb[i] = {}
+		bigmarioclimb[i][1] = love.graphics.newQuad(140, (i-1)*36, 20, 36, 512, 256)
+		bigmarioclimb[i][2] = love.graphics.newQuad(160, (i-1)*36, 20, 36, 512, 256)
+		
+		bigmarioswim[i] = {}
+		bigmarioswim[i][1] = love.graphics.newQuad(180, (i-1)*36, 20, 36, 512, 256)
+		bigmarioswim[i][2] = love.graphics.newQuad(200, (i-1)*36, 20, 36, 512, 256)
+		
+		bigmarioduck[i] = love.graphics.newQuad(260, (i-1)*36, 20, 36, 512, 256)
+	end
+	
+	--portals
+	portalimage = love.graphics.newImage("graphics/" .. graphicspack .. "/portal.png")
+	portal1quad = {}
+	for i = 0, 7 do
+		portal1quad[i] = love.graphics.newQuad(0, i*4, 32, 4, 64, 32)
+	end
+	
+	portal2quad = {}
+	for i = 0, 7 do
+		portal2quad[i] = love.graphics.newQuad(32, i*4, 32, 4, 64, 32)
+	end
+	
+	portalglow = love.graphics.newImage("graphics/" .. graphicspack .. "/portalglow.png")
+	
+	portalparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalparticle.png")
+	portalcrosshairimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalcrosshair.png")
+	portaldotimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaldot.png")
+	portalprojectileimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectile.png")
+	portalprojectileparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectileparticle.png")
+	
+	--Menu shit
+	huebarimg = love.graphics.newImage("graphics/" .. graphicspack .. "/huebar.png")
+	huebarmarkerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/huebarmarker.png")
+	volumesliderimg = love.graphics.newImage("graphics/" .. graphicspack .. "/volumeslider.png")
+	
+	--Portal props
+	emanceparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/emanceparticle.png")
+	emancesideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/emanceside.png")
+	
+	doorpieceimg = love.graphics.newImage("graphics/" .. graphicspack .. "/doorpiece.png")
+	doorcenterimg = love.graphics.newImage("graphics/" .. graphicspack .. "/doorcenter.png")
+	
+	buttonbaseimg = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonbase.png")
+	buttonbuttonimg = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonbutton.png")
+	
+	pushbuttonimg = love.graphics.newImage("graphics/" .. graphicspack .. "/pushbutton.png")
+	pushbuttonquad = {love.graphics.newQuad(0, 0, 16, 16, 32, 16), love.graphics.newQuad(16, 0, 16, 16, 32, 16)}
+	
+	wallindicatorimg = love.graphics.newImage("graphics/" .. graphicspack .. "/wallindicator.png")
+	wallindicatorquad = {love.graphics.newQuad(0, 0, 16, 16, 32, 16), love.graphics.newQuad(16, 0, 16, 16, 32, 16)}
+	
+	walltimerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/walltimer.png")
+	walltimerquad = {}
+	for i = 1, 10 do
+		walltimerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 160, 16)
+	end
+	
+	lightbridgeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lightbridge.png")
+	lightbridgesideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lightbridgeside.png")
+	
+	laserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laser.png")
+	lasersideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserside.png")
+	
+	faithplateplateimg = love.graphics.newImage("graphics/" .. graphicspack .. "/faithplateplate.png")
+	
+	laserdetectorimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserdetector.png")
+	
+	gel1img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel1.png")
+	gel2img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel2.png")
+	gel3img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel3.png")
+	gelquad = {love.graphics.newQuad(0, 0, 12, 12, 36, 12), love.graphics.newQuad(12, 0, 12, 12, 36, 12), love.graphics.newQuad(24, 0, 12, 12, 36, 12)}
+	
+	gel1ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel1ground.png")
+	gel2ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel2ground.png")
+	gel3ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel3ground.png")
+	
+	geldispenserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/geldispenser.png")
+	cubedispenserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cubedispenser.png")
+
+	--optionsmenu
+	skinpuppet = {}
+	secondskinpuppet = {}
+	classicskinpuppet = {}
+	classicsecondskinpuppet = {}
+	for i = 0, 3 do
+		skinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/skin" .. i .. ".png")
+		secondskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/secondskin" .. i .. ".png")
+
+		classicskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/classic/skin" .. i .. ".png")
+		classicsecondskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/classic/secondskin" .. i .. ".png")
+	end
+	
 end
