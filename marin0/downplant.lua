@@ -78,6 +78,7 @@ function downplant:update(dt)
 			table.insert(networksendqueue, "downplantout;" .. networkclientnumber .. ";" .. downplantid) 
 		end
 	end
+	return self.destroy
 end
 	
 function downplant:shotted()

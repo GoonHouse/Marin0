@@ -119,11 +119,11 @@ function fireball:passivecollide(a, b)
 end
 
 function fireball:hitstuff(a, b)
-	if a == "tile" or a == "bulletbill" or a == "portalwall" or a == "spring" then
+	if a == "tile" or a == "bulletbill" or a == "portalwall" or a == "spring" or a == "springgreen" then
 		self:explode()
 		playsound(blockhitsound)
 
-	elseif a == "goomba" or a == "koopa" or a == "hammerbro" or a == "plant" or a == "cheep" or a == "bowser" or a == "squid" or a == "cheep" or a == "flyingfish" or a == "lakito" then
+	elseif a == "goomba" or a == "koopa" or a == "hammerbro" or a == "plant" or a == "cheep" or a == "bowser" or a == "squid" or a == "cheep" or a == "flyingfish" or a == "lakito" or a == "redplant" or a == "reddownplant" or a == "downplant" then
 		if a ~= "koopa" or b.t ~= "beetle" then
 			b:shotted("right")
 			if a ~= "bowser" then
