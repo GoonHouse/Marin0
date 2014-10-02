@@ -77,8 +77,6 @@ function menu_update(dt)
 		coinanimation = coinanimation - 4
 	end	
 
-
-	
 	if mappackscroll then
 		--smooth the scroll
 		if mappackscrollsmooth > mappackscroll then
@@ -229,10 +227,10 @@ function menu_draw()
 	end
 	
 	local coinframe
-	if math.floor(coinanimation) == 4 then
-		coinframe = 2
-	elseif math.floor(coinanimation) == 5 then
-		coinframe = 1
+	if math.floor(coinanimation) == 3 then
+		coinframe = 3
+	elseif math.floor(coinanimation) == 4 then
+		coinframe = 4
 	else
 		coinframe = math.floor(coinanimation)
 	end
