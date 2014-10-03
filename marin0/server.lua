@@ -555,7 +555,10 @@ function server_1up(datatable, clientnumber)
 end
 
 function server_poisonmushed(datatable, clientnumber)
-	local sendstring = "poisonmushed;" .. clientnumber .. ";" .. datatable[3] .. ";" .. datatable[4] .. ";" .. datatable[5]
+	local sendstring = "poisonmushed;" .. clientnumber .. ";" .. datatable[3].. ";" .. datatable[4]
+	if datatable[5] then
+		sendstring = sendstring .. ";" .. datatable[5]
+	end
 	server_sendtootherpeers(sendstring, clientnumber)
 end
 
