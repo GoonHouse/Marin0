@@ -93,6 +93,7 @@ poisonmushspeed = 3.6
 poisonmushtime = 0.7 --time until it fully emerged out the block
 poisonmushjumpforce = 13
 starjumpforce = 13
+firefloweranimationdelay = 0.2
 staranimationdelay = 0.04
 mariostarblinkrate = 0.08 --/disco
 mariostarblinkrateslow = 0.16 --/disco

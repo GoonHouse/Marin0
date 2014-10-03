@@ -1410,6 +1410,16 @@ function loadgraphics()
 			coinblockquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 80, 64)
 		end
 	end
+
+	--brickblock
+	brickblockimage = newImageFallback("brickblock.png")
+	brickblockquads = {}
+	for j = 1, 4 do
+		brickblockquads[j] = {}
+		for i = 1, 4 do
+			brickblockquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 80, 64)
+		end
+	end
 	
 	--coin
 	coinimage = newImageFallback("coin.png")

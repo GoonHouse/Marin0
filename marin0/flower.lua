@@ -48,13 +48,13 @@ function flower:update(dt)
 	
 	--animate
 	self.timer = self.timer + dt
-	while self.timer > staranimationdelay do
+	while self.timer > firefloweranimationdelay do
 		self.quadi = self.quadi + 1
 		if self.quadi == 5 then
 			self.quadi = 1
 		end
 		self.quad = flowerquad[self.quadi]
-		self.timer = self.timer - staranimationdelay
+		self.timer = self.timer - firefloweranimationdelay
 	end
 	
 	if self.destroy then

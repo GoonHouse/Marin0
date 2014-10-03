@@ -1128,6 +1128,8 @@ function game_draw()
 					love.graphics.drawq(coinblockimage, coinblockquads[spriteset][coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
 				elseif tilequads[tilenumber].coin then --coin
 					love.graphics.drawq(coinimage, coinquads[coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
+				elseif tilequads[tilenumber].breakable and tilequads[tilenumber].invisible == false then --coinblock
+					love.graphics.drawq(brickblockimage, brickblockquads[spriteset][coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
 				elseif bounceyoffset ~= 0 then
 					if tilequads[tilenumber].invisible == false or editormode then
 						love.graphics.drawq(tilequads[tilenumber].image, tilequads[tilenumber].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
@@ -3888,13 +3890,15 @@ function moveoutportal(p0) --pushes objects out of the portal i in.
 end
 
 function nextlevel()
-	love.audio.stop()
-	mariolevel = mariolevel + 1
-	if mariolevel > 4 then
-		mariolevel = 1
-		marioworld = marioworld + 1
-	end
-	levelscreen_load("next")
+   love.audio.stop()
+   if levelfinishtype == "flag" then
+      mariolevel = mariolevel + 1
+   else
+      mariolevel = 1
+      marioworld = marioworld + 1
+   end
+   
+   levelscreen_load("next")
 
 	if onlinemp then
 		for i, v in pairs(objects["player"]) do
