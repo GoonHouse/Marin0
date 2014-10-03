@@ -5,8 +5,7 @@ portalgundelay = 0.2
 gellifetime = 2
 bulletbilllifetime = 20
 playertypelist = {"portal", "minecraft", "gelcannon"}
-graphicspacklist = {"SMB", "MARIN0"}
-
+fallbackgraphicspack = "SMB" -- we're gonna make a mess
 joystickdeadzone = 0.2
 joystickaimdeadzone = 0.5
 

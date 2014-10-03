@@ -2,7 +2,7 @@ io.stdout:setvbuf("no")
 
 --[[
 	STEAL MY SHIT AND I'LL FUCK YOU UP
-	PRETTY MUCH EVERYTHING BY MAURICE GUÉGAN AND IF SOMETHING ISN'T BY ME THEN IT SHOULD BE OBVIOUS OR NOBODY CARES
+	PRETTY MUCH EVERYTHING BY MAURICE GUGAN AND IF SOMETHING ISN'T BY ME THEN IT SHOULD BE OBVIOUS OR NOBODY CARES
 
 	THIS AWESOME PIECE OF CELESTIAL AMBROSIA IS RELEASED AS NON-COMMERCIAL, SHARE ALIKE, WHATEVER. YOU MAY PRINT OUT THIS CODES AND USE IT AS WALLPAPER IN YOUR BATHROOM.
 	FOR SPECIFIC LICENSE (I know you linux users get a hard on when it comes to licenses) SEE http://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -12,6 +12,11 @@ function love.load()
 	marioversion = 3
 	versionstring = "version 1.6"
 	shaderlist = love.filesystem.enumerate( "shaders/" )
+	graphicspacklist = love.filesystem.enumerate( "graphics/" )
+	
+	graphicspacki = 1 --@DEV: We have no guarantee which pack this will be, so we're gonna wanna change this later.
+	graphicspack = graphicspacklist[graphicspacki]
+	
 	dlclist = {"dlc_a_portal_tribute", "dlc_acid_trip", "dlc_escape_the_lab", "dlc_scienceandstuff", "dlc_smb2J", "dlc_the_untitled_game"}
 	
 	local rem
@@ -28,7 +33,7 @@ function love.load()
 	currentshaderi1 = 1
 	currentshaderi2 = 1
 	
-	hatcount = #love.filesystem.enumerate("graphics/SMB/hats")
+	hatcount = #love.filesystem.enumerate("graphics/SMB/hats") --@DEV: We shouldn't be changing this, but we should consider it when we add the fallback.
 	
 	if not pcall(loadconfig) then
 		players = 1
@@ -46,7 +51,7 @@ function love.load()
 	--version check by checking for a const that was added in 0.8.0
 	if love._version_major == nil then error("You have an outdated version of Love! Get 0.8.0 or higher and retry.") end
 	
-	iconimg = love.graphics.newImage("graphics/icon.gif")
+	iconimg = newImageFallback("icon.gif")
 	love.graphics.setIcon(iconimg)
 	
 	love.graphics.setDefaultImageFilter("nearest", "nearest")
@@ -54,8 +59,8 @@ function love.load()
 	love.graphics.setBackgroundColor(0, 0, 0)
 	
 	
-	fontimage = love.graphics.newImage("graphics/SMB/font.png")
-	fontimageback = love.graphics.newImage("graphics/fontback.png")
+	fontimage = newImageFallback("font.png")
+	fontimageback = newImageFallback("fontback.png")
 	fontglyphs = "0123456789abcdefghijklmnopqrstuvwxyz.:/,'C-_>* !{}?"
 	fontquads = {}
 	for i = 1, string.len(fontglyphs) do
@@ -178,8 +183,6 @@ function love.load()
 	end
 	http.TIMEOUT = 4
 	
-	graphicspacki = 1
-	graphicspack = graphicspacklist[graphicspacki] --SMB, ALLSTARS
 	playertypei = 1
 	playertype = playertypelist[playertypei] --portal, minecraft
 	loadgraphics()
@@ -205,7 +208,7 @@ function love.load()
 	backgroundcolor[3] = {32, 56, 236}
 	
 	--eh
-	rainboomimg = love.graphics.newImage("graphics/rainboom.png")
+	rainboomimg = newImageFallback("rainboom.png")
 	rainboomquad = {}
 	for x = 1, 7 do
 		for y = 1, 7 do
@@ -213,25 +216,25 @@ function love.load()
 		end
 	end
 	
-	logo = love.graphics.newImage("graphics/stabyourself.png")
-	logoblood = love.graphics.newImage("graphics/stabyourselfblood.png")
+	logo = newImageFallback("stabyourself.png")
+	logoblood = newImageFallback("stabyourselfblood.png")
 	
 	--GUI
-	checkboximg = love.graphics.newImage("graphics/GUI/checkbox.png")
+	checkboximg = newImageFallback("GUI/checkbox.png")
 	checkboxquad = {{love.graphics.newQuad(0, 0, 9, 9, 18, 18), love.graphics.newQuad(9, 0, 9, 9, 18, 18)}, {love.graphics.newQuad(0, 9, 9, 9, 18, 18), love.graphics.newQuad(9, 9, 9, 9, 18, 18)}}
 	
-	dropdownarrowimg = love.graphics.newImage("graphics/GUI/dropdownarrow.png")
+	dropdownarrowimg = newImageFallback("GUI/dropdownarrow.png")
 	
-	gradientimg = love.graphics.newImage("graphics/gradient.png");gradientimg:setFilter("linear", "linear")
+	gradientimg = newImageFallback("gradient.png");gradientimg:setFilter("linear", "linear")
 	
 	--Ripping off
-	minecraftbreakimg = love.graphics.newImage("graphics/Minecraft/blockbreak.png")
+	minecraftbreakimg = newImageFallback("Minecraft/blockbreak.png")
 	minecraftbreakquad = {}
 	for i = 1, 10 do
 		minecraftbreakquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 160, 16)
 	end
-	minecraftgui = love.graphics.newImage("graphics/Minecraft/gui.png")
-	minecraftselected = love.graphics.newImage("graphics/Minecraft/selected.png")
+	minecraftgui = newImageFallback("Minecraft/gui.png")
+	minecraftselected = newImageFallback("Minecraft/selected.png")
 	
 	--AUDIO--
 	--sounds
@@ -307,8 +310,8 @@ function love.load()
 		delete_mappack(v)
 	end
 
-	chatlogfont = love.graphics.newFont("graphics/chatfont.ttf", 7*scale)
-	bigchatlogfont = love.graphics.newFont("graphics/chatfont.ttf", 14*scale)
+	chatlogfont = newFontFallback("chatfont.ttf", 7*scale)
+	bigchatlogfont = newFontFallback("chatfont.ttf", 14*scale)
 	
 	intro_load()
 
@@ -490,6 +493,8 @@ function saveconfig()
 	
 	s = s .. "scale:" .. scale .. ";"
 	
+	s = s .. "graphicspack:" .. graphicspacklist[graphicspacki] .. ";"
+	
 	s = s .. "shader1:" .. shaderlist[currentshaderi1] .. ";"
 	s = s .. "shader2:" .. shaderlist[currentshaderi2] .. ";"
 	
@@ -592,17 +597,28 @@ function loadconfig()
 			
 		elseif s2[1] == "scale" then
 			scale = tonumber(s2[2])
-			
+		elseif s2[1] == "graphicspack" then
+			print("debug: graphicspack iter")
+			for i = 1, #graphicspacklist do
+				print("gp: "..graphicspacklist[i].."; s2: "..s2[2])
+				if graphicspacklist[i] == s2[2] then
+					graphicspack = s2[2]
+					graphicspacki = i
+					break
+				end
+			end
 		elseif s2[1] == "shader1" then
 			for i = 1, #shaderlist do
 				if shaderlist[i] == s2[2] then
 					currentshaderi1 = i
+					break
 				end
 			end
 		elseif s2[1] == "shader2" then
 			for i = 1, #shaderlist do
 				if shaderlist[i] == s2[2] then
 					currentshaderi2 = i
+					break
 				end
 			end
 		elseif s2[1] == "volume" then
@@ -727,6 +743,7 @@ function defaultconfig()
 	
 	--options
 	scale = 2
+	graphicspack = "SMB"
 	volume = 1
 	mappack = "onlinesmb"
 	vsync = false
@@ -819,8 +836,8 @@ function changescale(s, fullscreen)
 		shaders:refresh()
 	end
 
-	chatlogfont = love.graphics.newFont("graphics/chatfont.ttf", 7*scale)
-	bigchatlogfont = love.graphics.newFont("graphics/chatfont.ttf", 14*scale)
+	chatlogfont = newFontFallback("chatfont.ttf", 7*scale)
+	bigchatlogfont = newFontFallback("chatfont.ttf", 14*scale)
 end
 
 function love.keypressed(key, unicode)
@@ -1263,7 +1280,7 @@ function loadcustombackground()
 	end
 	
 	if #custombackgroundimg == 0 then
-		custombackgroundimg[i] = love.graphics.newImage("graphics/SMB/portalbackground.png")
+		custombackgroundimg[i] = newImageFallback("portalbackground.png")
 		custombackgroundwidth[i] = custombackgroundimg[i]:getWidth()/16
 		custombackgroundheight[i] = custombackgroundimg[i]:getHeight()/16
 	end
@@ -1290,18 +1307,18 @@ end
 function loadgraphics()
 	--IMAGES--
 	
-	menuselection = love.graphics.newImage("graphics/" .. graphicspack .. "/menuselect.png")
-	mappackback = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackback.png")
-	mappacknoicon = love.graphics.newImage("graphics/" .. graphicspack .. "/mappacknoicon.png")
-	mappackoverlay = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackoverlay.png")
-	mappackhighlight = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackhighlight.png")
+	menuselection = newImageFallback("menuselect.png")
+	mappackback = newImageFallback("mappackback.png")
+	mappacknoicon = newImageFallback("mappacknoicon.png")
+	mappackoverlay = newImageFallback("mappackoverlay.png")
+	mappackhighlight = newImageFallback("mappackhighlight.png")
 	
-	mappackscrollbar = love.graphics.newImage("graphics/" .. graphicspack .. "/mappackscrollbar.png")
+	mappackscrollbar = newImageFallback("mappackscrollbar.png")
 	
 	--tiles
-	smbtilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/smbtiles.png")
-	portaltilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaltiles.png")
-	entitiesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/entities.png")
+	smbtilesimg = newImageFallback("smbtiles.png")
+	portaltilesimg = newImageFallback("portaltiles.png")
+	entitiesimg = newImageFallback("entities.png")
 	tilequads = {}
 	
 	rgblist = {}
@@ -1351,16 +1368,16 @@ function loadgraphics()
 	end
 	entitiescount = width*height
 	
-	fontimage2 = love.graphics.newImage("graphics/" .. graphicspack .. "/smallfont.png")
+	fontimage2 = newImageFallback("smallfont.png")
 	numberglyphs = "012458"
 	font2quads = {}
 	for i = 1, 6 do
 		font2quads[string.sub(numberglyphs, i, i)] = love.graphics.newQuad((i-1)*4, 0, 4, 8, 32, 8)
 	end
 	
-	oneuptextimage = love.graphics.newImage("graphics/" .. graphicspack .. "/oneuptext.png")
+	oneuptextimage = newImageFallback("oneuptext.png")
 	
-	blockdebrisimage = love.graphics.newImage("graphics/" .. graphicspack .. "/blockdebris.png")
+	blockdebrisimage = newImageFallback("blockdebris.png")
 	blockdebrisquads = {}
 	for y = 1, 4 do
 		blockdebrisquads[y] = {}
@@ -1369,13 +1386,13 @@ function loadgraphics()
 		end
 	end
 	
-	coinblockanimationimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinblockanimation.png")
+	coinblockanimationimage = newImageFallback("coinblockanimation.png")
 	coinblockanimationquads = {}
 	for i = 1, 30 do
 		coinblockanimationquads[i] = love.graphics.newQuad((i-1)*8, 0, 8, 52, 256, 64)
 	end
 	
-	coinanimationimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinanimation.png")
+	coinanimationimage = newImageFallback("coinanimation.png")
 	coinanimationquads = {}
 	for j = 1, 4 do
 		coinanimationquads[j] = {}
@@ -1385,7 +1402,7 @@ function loadgraphics()
 	end
 	
 	--coinblock
-	coinblockimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coinblock.png")
+	coinblockimage = newImageFallback("coinblock.png")
 	coinblockquads = {}
 	for j = 1, 4 do
 		coinblockquads[j] = {}
@@ -1395,21 +1412,21 @@ function loadgraphics()
 	end
 	
 	--coin
-	coinimage = love.graphics.newImage("graphics/" .. graphicspack .. "/coin.png")
+	coinimage = newImageFallback("coin.png")
 	coinquads = {}
 	for i = 1, 4 do
 		coinquads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 80, 16)
 	end
 	
 	--axe
-	axeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/axe.png")
+	axeimg = newImageFallback("axe.png")
 	axequads = {}
 	for i = 1, 4 do
 		axequads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
 	end
 	
 	--spring, red
-	springimg = love.graphics.newImage("graphics/" .. graphicspack .. "/springred.png")
+	springimg = newImageFallback("springred.png")
 	springquads = {}
 	for i = 1, 4 do
 		springquads[i] = {}
@@ -1419,7 +1436,7 @@ function loadgraphics()
 	end
 	
 	--spring, green
-	springgreenimg = love.graphics.newImage("graphics/" .. graphicspack .. "/springgreen.png")
+	springgreenimg = newImageFallback("springgreen.png")
 	springgreenquads = {}
 	for i = 1, 4 do
 		springgreenquads[i] = {}
@@ -1429,36 +1446,36 @@ function loadgraphics()
 	end
 	
 	--toad
-	toadimg = love.graphics.newImage("graphics/" .. graphicspack .. "/toad.png")
+	toadimg = newImageFallback("toad.png")
 	
 	--queen I mean princess
-	peachimg = love.graphics.newImage("graphics/" .. graphicspack .. "/peach.png")
+	peachimg = newImageFallback("peach.png")
 	
-	platformimg = love.graphics.newImage("graphics/" .. graphicspack .. "/platform.png")
-	platformbonusimg = love.graphics.newImage("graphics/" .. graphicspack .. "/platformbonus.png")
+	platformimg = newImageFallback("platform.png")
+	platformbonusimg = newImageFallback("platformbonus.png")
 	
-	seesawimg = love.graphics.newImage("graphics/" .. graphicspack .. "/seesaw.png")
+	seesawimg = newImageFallback("seesaw.png")
 	seesawquad = {}
 	for i = 1, 4 do
 		seesawquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
 	end
 	
-	titleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/title.png")
-	playerselectimg = love.graphics.newImage("graphics/" .. graphicspack .. "/playerselectarrow.png")
+	titleimage = newImageFallback("title.png")
+	playerselectimg = newImageFallback("playerselectarrow.png")
 	
-	starimg = love.graphics.newImage("graphics/" .. graphicspack .. "/star.png")
+	starimg = newImageFallback("star.png")
 	starquad = {}
 	for i = 1, 4 do
 		starquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
 	end
 	
-	flowerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/flower.png")
+	flowerimg = newImageFallback("flower.png")
 	flowerquad = {}
 	for i = 1, 4 do
 		flowerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
 	end
 	
-	fireballimg = love.graphics.newImage("graphics/" .. graphicspack .. "/fireball.png")
+	fireballimg = newImageFallback("fireball.png")
 	fireballquad = {}
 	for i = 1, 4 do
 		fireballquad[i] = love.graphics.newQuad((i-1)*8, 0, 8, 8, 80, 16)
@@ -1468,7 +1485,7 @@ function loadgraphics()
 		fireballquad[i] = love.graphics.newQuad((i-5)*16+32, 0, 16, 16, 80, 16)
 	end
 	
-	vineimg = love.graphics.newImage("graphics/" .. graphicspack .. "/vine.png")
+	vineimg = newImageFallback("vine.png")
 	vinequad = {}
 	for i = 1, 4 do
 		vinequad[i] = {}
@@ -1478,7 +1495,7 @@ function loadgraphics()
 	end
 
 	-- WIND
-	windleafimage = love.graphics.newImage("graphics/" .. graphicspack .. "/windleaf.png")
+	windleafimage = newImageFallback("windleaf.png")
 	windleafquad = {}
 	for y = 1, 4 do
 		windleafquad[y] = {}
@@ -1488,7 +1505,7 @@ function loadgraphics()
 	end
 	
 	--enemies
-	goombaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/goomba.png")
+	goombaimage = newImageFallback("goomba.png")
 	goombaquad = {}
 	
 	for y = 1, 4 do
@@ -1498,22 +1515,22 @@ function loadgraphics()
 		end
 	end
 	
-	spikeyimg = love.graphics.newImage("graphics/" .. graphicspack .. "/spikey.png")
+	spikeyimg = newImageFallback("spikey.png")
 	
 	spikeyquad = {}
 	for x = 1, 4 do
 		spikeyquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 64, 16)
 	end
 	
-	lakitoimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lakito.png")
+	lakitoimg = newImageFallback("lakito.png")
 	lakitoquad = {}
 	for x = 1, 2 do
 		lakitoquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 24)
 	end
 	
-	koopaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/koopa.png")
-	kooparedimage = love.graphics.newImage("graphics/" .. graphicspack .. "/koopared.png")
-	beetleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/beetle.png")
+	koopaimage = newImageFallback("koopa.png")
+	kooparedimage = newImageFallback("koopared.png")
+	beetleimage = newImageFallback("beetle.png")
 	koopaquad = {}
 	
 	for y = 1, 4 do
@@ -1523,7 +1540,7 @@ function loadgraphics()
 		end
 	end
 	
-	cheepcheepimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cheepcheep.png")
+	cheepcheepimg = newImageFallback("cheepcheep.png")
 	cheepcheepquad = {}
 	
 	cheepcheepquad[1] = {}
@@ -1534,20 +1551,20 @@ function loadgraphics()
 	cheepcheepquad[2][1] = love.graphics.newQuad(0, 16, 16, 16, 32, 32)
 	cheepcheepquad[2][2] = love.graphics.newQuad(16, 16, 16, 16, 32, 32)
 	
-	squidimg = love.graphics.newImage("graphics/" .. graphicspack .. "/squid.png")
+	squidimg = newImageFallback("squid.png")
 	squidquad = {}
 	for x = 1, 2 do
 		squidquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 32)
 	end
 	
-	bulletbillimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bulletbill.png")
+	bulletbillimg = newImageFallback("bulletbill.png")
 	bulletbillquad = {}
 	
 	for y = 1, 4 do
 		bulletbillquad[y] = love.graphics.newQuad(0, (y-1)*16, 16, 16, 16, 64)
 	end
 	
-	hammerbrosimg = love.graphics.newImage("graphics/" .. graphicspack .. "/hammerbros.png")
+	hammerbrosimg = newImageFallback("hammerbros.png")
 	hammerbrosquad = {}
 	for y = 1, 4 do
 		hammerbrosquad[y] = {}
@@ -1556,7 +1573,7 @@ function loadgraphics()
 		end
 	end	
 	
-	hammerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/hammer.png")
+	hammerimg = newImageFallback("hammer.png")
 	hammerquad = {}
 	for j = 1, 4 do
 		hammerquad[j] = {}
@@ -1565,7 +1582,7 @@ function loadgraphics()
 		end
 	end
 	
-	plantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/plant.png")
+	plantimg = newImageFallback("plant.png")
 	plantquads = {}
 	for j = 1, 4 do
 		plantquads[j] = {}
@@ -1574,7 +1591,7 @@ function loadgraphics()
 		end
 	end
 
-	redplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/redplant.png")
+	redplantimg = newImageFallback("redplant.png")
 	redplantquads = {}
 	for j = 1, 4 do
 		redplantquads[j] = {}
@@ -1583,7 +1600,7 @@ function loadgraphics()
 		end
 	end
 
-	reddownplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/reddownplant.png")
+	reddownplantimg = newImageFallback("reddownplant.png")
 	reddownplantquads = {}
 	for j = 1, 4 do
 		reddownplantquads[j] = {}
@@ -1592,7 +1609,7 @@ function loadgraphics()
 		end
 	end
 
-	downplantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/downplant.png")
+	downplantimg = newImageFallback("downplant.png")
 	downplantquads = {}
 	for j = 1, 4 do
 		downplantquads[j] = {}
@@ -1601,48 +1618,48 @@ function loadgraphics()
 		end
 	end
 	
-	fireimg = love.graphics.newImage("graphics/" .. graphicspack .. "/fire.png")
+	fireimg = newImageFallback("fire.png")
 	firequad = {love.graphics.newQuad(0, 0, 24, 8, 48, 8), love.graphics.newQuad(24, 0, 24, 8, 48, 8)}
 	
-	upfireimg = love.graphics.newImage("graphics/" .. graphicspack .. "/upfire.png")
+	upfireimg = newImageFallback("upfire.png")
 	
-	bowserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bowser.png")
+	bowserimg = newImageFallback("bowser.png")
 	bowserquad = {}
 	bowserquad[1] = {love.graphics.newQuad(0, 0, 32, 32, 64, 64), love.graphics.newQuad(32, 0, 32, 32, 64, 64)}
 	bowserquad[2] = {love.graphics.newQuad(0, 32, 32, 32, 64, 64), love.graphics.newQuad(32, 32, 32, 32, 64, 64)}
 	
-	decoysimg = love.graphics.newImage("graphics/" .. graphicspack .. "/decoys.png")
+	decoysimg = newImageFallback("decoys.png")
 	decoysquad = {}
 	for y = 1, 7 do
 		decoysquad[y] = love.graphics.newQuad(0, (y-1)*32, 32, 32, 64, 256)
 	end
 	
-	boximage = love.graphics.newImage("graphics/" .. graphicspack .. "/box.png")
+	boximage = newImageFallback("box.png")
 	boxquad = love.graphics.newQuad(0, 0, 12, 12, 16, 16)
 	
-	flagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/flag.png")
-	castleflagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/castleflag.png")
+	flagimg = newImageFallback("flag.png")
+	castleflagimg = newImageFallback("castleflag.png")
 	
-	bubbleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bubble.png")
+	bubbleimg = newImageFallback("bubble.png")
 
 	
 	--players
 	marioanimations = {}
-	marioanimations[0] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations0.png")
-	marioanimations[1] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations1.png")
-	marioanimations[2] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations2.png")
-	marioanimations[3] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/marioanimations3.png")
+	marioanimations[0] = newImageFallback("player/marioanimations0.png")
+	marioanimations[1] = newImageFallback("player/marioanimations1.png")
+	marioanimations[2] = newImageFallback("player/marioanimations2.png")
+	marioanimations[3] = newImageFallback("player/marioanimations3.png")
 
 	classicmarioanimations = {}
 	for x = 0, 3 do
-		classicmarioanimations[x] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/classic/marioanimations" .. x .. ".png")
+		classicmarioanimations[x] = newImageFallback("player/classic/marioanimations" .. x .. ".png")
 	end
 	
 	minecraftanimations = {}
-	minecraftanimations[0] = love.graphics.newImage("graphics/Minecraft/marioanimations0.png")
-	minecraftanimations[1] = love.graphics.newImage("graphics/Minecraft/marioanimations1.png")
-	minecraftanimations[2] = love.graphics.newImage("graphics/Minecraft/marioanimations2.png")
-	minecraftanimations[3] = love.graphics.newImage("graphics/Minecraft/marioanimations3.png")
+	minecraftanimations[0] = newImageFallback("Minecraft/marioanimations0.png")
+	minecraftanimations[1] = newImageFallback("Minecraft/marioanimations1.png")
+	minecraftanimations[2] = newImageFallback("Minecraft/marioanimations2.png")
+	minecraftanimations[3] = newImageFallback("Minecraft/marioanimations3.png")
 	
 	marioidle = {}
 	mariorun = {}
@@ -1678,22 +1695,22 @@ function loadgraphics()
 	
 	
 	bigmarioanimations = {}
-	bigmarioanimations[0] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations0.png")
-	bigmarioanimations[1] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations1.png")
-	bigmarioanimations[2] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations2.png")
-	bigmarioanimations[3] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/bigmarioanimations3.png")
+	bigmarioanimations[0] = newImageFallback("player/bigmarioanimations0.png")
+	bigmarioanimations[1] = newImageFallback("player/bigmarioanimations1.png")
+	bigmarioanimations[2] = newImageFallback("player/bigmarioanimations2.png")
+	bigmarioanimations[3] = newImageFallback("player/bigmarioanimations3.png")
 
 	bigclassicmarioanimations = {}
 
 	for x = 0, 3 do
-		bigclassicmarioanimations[x] = love.graphics.newImage("graphics/" .. graphicspack .. "/player/classic/bigmarioanimations" .. x .. ".png")
+		bigclassicmarioanimations[x] = newImageFallback("player/classic/bigmarioanimations" .. x .. ".png")
 	end
 	
 	bigminecraftanimations = {}
-	bigminecraftanimations[0] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations0.png")
-	bigminecraftanimations[1] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations1.png")
-	bigminecraftanimations[2] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations2.png")
-	bigminecraftanimations[3] = love.graphics.newImage("graphics/Minecraft/bigmarioanimations3.png")
+	bigminecraftanimations[0] = newImageFallback("Minecraft/bigmarioanimations0.png")
+	bigminecraftanimations[1] = newImageFallback("Minecraft/bigmarioanimations1.png")
+	bigminecraftanimations[2] = newImageFallback("Minecraft/bigmarioanimations2.png")
+	bigminecraftanimations[3] = newImageFallback("Minecraft/bigmarioanimations3.png")
 	
 	bigmarioidle = {}
 	bigmariorun = {}
@@ -1728,7 +1745,7 @@ function loadgraphics()
 	end
 	
 	--portals
-	portalimage = love.graphics.newImage("graphics/" .. graphicspack .. "/portal.png")
+	portalimage = newImageFallback("portal.png")
 	portal1quad = {}
 	for i = 0, 7 do
 		portal1quad[i] = love.graphics.newQuad(0, i*4, 32, 4, 64, 32)
@@ -1739,62 +1756,62 @@ function loadgraphics()
 		portal2quad[i] = love.graphics.newQuad(32, i*4, 32, 4, 64, 32)
 	end
 	
-	portalglow = love.graphics.newImage("graphics/" .. graphicspack .. "/portalglow.png")
+	portalglow = newImageFallback("portalglow.png")
 	
-	portalparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalparticle.png")
-	portalcrosshairimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalcrosshair.png")
-	portaldotimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaldot.png")
-	portalprojectileimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectile.png")
-	portalprojectileparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectileparticle.png")
+	portalparticleimg = newImageFallback("portalparticle.png")
+	portalcrosshairimg = newImageFallback("portalcrosshair.png")
+	portaldotimg = newImageFallback("portaldot.png")
+	portalprojectileimg = newImageFallback("portalprojectile.png")
+	portalprojectileparticleimg = newImageFallback("portalprojectileparticle.png")
 	
 	--Menu shit
-	huebarimg = love.graphics.newImage("graphics/" .. graphicspack .. "/huebar.png")
-	huebarmarkerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/huebarmarker.png")
-	volumesliderimg = love.graphics.newImage("graphics/" .. graphicspack .. "/volumeslider.png")
+	huebarimg = newImageFallback("huebar.png")
+	huebarmarkerimg = newImageFallback("huebarmarker.png")
+	volumesliderimg = newImageFallback("volumeslider.png")
 	
 	--Portal props
-	emanceparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/emanceparticle.png")
-	emancesideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/emanceside.png")
+	emanceparticleimg = newImageFallback("emanceparticle.png")
+	emancesideimg = newImageFallback("emanceside.png")
 	
-	doorpieceimg = love.graphics.newImage("graphics/" .. graphicspack .. "/doorpiece.png")
-	doorcenterimg = love.graphics.newImage("graphics/" .. graphicspack .. "/doorcenter.png")
+	doorpieceimg = newImageFallback("doorpiece.png")
+	doorcenterimg = newImageFallback("doorcenter.png")
 	
-	buttonbaseimg = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonbase.png")
-	buttonbuttonimg = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonbutton.png")
+	buttonbaseimg = newImageFallback("buttonbase.png")
+	buttonbuttonimg = newImageFallback("buttonbutton.png")
 	
-	pushbuttonimg = love.graphics.newImage("graphics/" .. graphicspack .. "/pushbutton.png")
+	pushbuttonimg = newImageFallback("pushbutton.png")
 	pushbuttonquad = {love.graphics.newQuad(0, 0, 16, 16, 32, 16), love.graphics.newQuad(16, 0, 16, 16, 32, 16)}
 	
-	wallindicatorimg = love.graphics.newImage("graphics/" .. graphicspack .. "/wallindicator.png")
+	wallindicatorimg = newImageFallback("wallindicator.png")
 	wallindicatorquad = {love.graphics.newQuad(0, 0, 16, 16, 32, 16), love.graphics.newQuad(16, 0, 16, 16, 32, 16)}
 	
-	walltimerimg = love.graphics.newImage("graphics/" .. graphicspack .. "/walltimer.png")
+	walltimerimg = newImageFallback("walltimer.png")
 	walltimerquad = {}
 	for i = 1, 10 do
 		walltimerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 160, 16)
 	end
 	
-	lightbridgeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lightbridge.png")
-	lightbridgesideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/lightbridgeside.png")
+	lightbridgeimg = newImageFallback("lightbridge.png")
+	lightbridgesideimg = newImageFallback("lightbridgeside.png")
 	
-	laserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laser.png")
-	lasersideimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserside.png")
+	laserimg = newImageFallback("laser.png")
+	lasersideimg = newImageFallback("laserside.png")
 	
-	faithplateplateimg = love.graphics.newImage("graphics/" .. graphicspack .. "/faithplateplate.png")
+	faithplateplateimg = newImageFallback("faithplateplate.png")
 	
-	laserdetectorimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserdetector.png")
+	laserdetectorimg = newImageFallback("laserdetector.png")
 	
-	gel1img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel1.png")
-	gel2img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel2.png")
-	gel3img = love.graphics.newImage("graphics/" .. graphicspack .. "/gel3.png")
+	gel1img = newImageFallback("gel1.png")
+	gel2img = newImageFallback("gel2.png")
+	gel3img = newImageFallback("gel3.png")
 	gelquad = {love.graphics.newQuad(0, 0, 12, 12, 36, 12), love.graphics.newQuad(12, 0, 12, 12, 36, 12), love.graphics.newQuad(24, 0, 12, 12, 36, 12)}
 	
-	gel1ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel1ground.png")
-	gel2ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel2ground.png")
-	gel3ground = love.graphics.newImage("graphics/" .. graphicspack .. "/gel3ground.png")
+	gel1ground = newImageFallback("gel1ground.png")
+	gel2ground = newImageFallback("gel2ground.png")
+	gel3ground = newImageFallback("gel3ground.png")
 	
-	geldispenserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/geldispenser.png")
-	cubedispenserimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cubedispenser.png")
+	geldispenserimg = newImageFallback("geldispenser.png")
+	cubedispenserimg = newImageFallback("cubedispenser.png")
 
 	--optionsmenu
 	skinpuppet = {}
@@ -1802,11 +1819,33 @@ function loadgraphics()
 	classicskinpuppet = {}
 	classicsecondskinpuppet = {}
 	for i = 0, 3 do
-		skinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/skin" .. i .. ".png")
-		secondskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/secondskin" .. i .. ".png")
+		skinpuppet[i] = newImageFallback("options/skin" .. i .. ".png")
+		secondskinpuppet[i] = newImageFallback("options/secondskin" .. i .. ".png")
 
-		classicskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/classic/skin" .. i .. ".png")
-		classicsecondskinpuppet[i] = love.graphics.newImage("graphics/" .. graphicspack .. "/options/classic/secondskin" .. i .. ".png")
+		classicskinpuppet[i] = newImageFallback("options/classic/skin" .. i .. ".png")
+		classicsecondskinpuppet[i] = newImageFallback("options/classic/secondskin" .. i .. ".png")
 	end
 	
+end
+
+function newImageFallback( filepath )
+	if love.filesystem.exists("graphics/"..graphicspack.."/"..filepath) then
+		return love.graphics.newImage("graphics/"..graphicspack.."/"..filepath)
+	elseif love.filesystem.exists("graphics/SMB/"..filepath) then
+		--print("WARNING: newImageFallback had to fall back on a file not found in ["..graphicspack.."]:" ..filepath)
+		return love.graphics.newImage("graphics/SMB/"..filepath)
+	else
+		assert(false, "Attempted to load file named '"..filepath.."' but could not find it anywhere.")
+	end
+end
+
+function newFontFallback( filepath )
+	if love.filesystem.exists("graphics/"..graphicspack.."/"..filepath) then
+		return love.graphics.newFont("graphics/"..graphicspack.."/"..filepath)
+	elseif love.filesystem.exists("graphics/SMB/"..filepath) then
+		--print("WARNING: newFontFallback had to fall back on a file not found in ["..graphicspack.."]:" ..filepath)
+		return love.graphics.newFont("graphics/SMB/"..filepath)
+	else
+		assert(false, "Attempted to load file named '"..filepath.."' but could not find it anywhere.")
+	end
 end
