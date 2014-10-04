@@ -4,6 +4,8 @@
 portalgundelay = 0.2
 gellifetime = 2
 bulletbilllifetime = 20
+bigbilllifetime = 20
+kingbilllifetime = 50
 playertypelist = {"portal", "minecraft", "gelcannon"}
 fallbackgraphicspack = "SMB" -- we're gonna make a mess
 joystickdeadzone = 0.2
@@ -14,15 +16,19 @@ runacceleration = 16 --acceleration of running on ground
 walkaccelerationair = 8 --acceleration of walking in the air
 runaccelerationair = 16 --acceleration of running in the air
 minspeed = 0.7 --When friction is in effect and speed falls below this, speed is set to 0
+frogminspeed = 6.3
 maxwalkspeed = 6.4 --fastest speedx when walking
 maxrunspeed = 9.0 --fastest speedx when running
 friction = 14 --amount of speed that is substracted when not pushing buttons, as well as speed added to acceleration when changing directions
 superfriction = 100 --see above, but when speed is greater than maxrunspeed
 frictionair = 0 --see above, but in air
 airslidefactor = 0.8 --multiply of acceleration in air when changing direction
+icefriction = 3 --friction when on ice entity
 
 mariocombo = {100, 200, 400, 500, 800, 1000, 2000, 4000, 5000, 8000} --combo scores for bouncing on enemies
 koopacombo = {500, 800, 1000, 2000, 4000, 5000, 8000} --combo scores for series of koopa kills
+bigkoopacombo = {500, 800, 1000, 2000, 4000, 5000, 8000}
+drybonescombo = {500, 800, 1000, 2000, 4000, 5000, 8000}
 
 --star scores are identical so I'm just gonn be lazy
 firepoints = {	goomba = 100,
@@ -35,16 +41,53 @@ firepoints = {	goomba = 100,
 				hammerbro = 1000,
 				lakito = 200,
 				bulletbill = 200,
-				redplant = 200,
+				paragoomba = 100,
 				downplant = 200,
-				reddownplant = 200}
+				bigbill = 400,
+				kingbill = 1000,
+				sidestepper = 100,
+				barrel = 100,
+				icicle = 100,
+				angrysun = 500,
+				splunkin = 100,
+				biggoomba = 200,
+				bigkoopa = 400,
+				goombrat = 100,
+				firebro = 1000,
+				redplant = 200,
+				reddownplant = 200,
+				fishbone = 200,
+				drybones = 200,
+				meteor = 100,
+				drygoomba = 100,
+				dryplant = 200,
+				drydownplant = 200,
+				boomerangbro = 1000,
+				ninji = 100,
+				parabeetle = 200,
+				boo = 400,
+				mole = 100,
+				bigmole = 1000,
+				bomb = 100,
+				fireplant = 200,
+				plantfire = 100,
+				downfireplant = 200,
+				torpedoted = 200,
+				torpedolauncher = 400,
+				boomboom = 2000,
+				cannonball = 200,
+				amp = 1000}
 
 yacceleration = 80 --gravity
 yaccelerationjumping = 30 --gravity while jumping (Only for mario)
+tinymariogravity = 24 --mini mario gravity
 maxyspeed = 100 --SMB: 14
 --minportalspeedy = 3 --Things exiting floor portals can't be slower than this (REPLACED WITH OBJECT'S HEIGHT (SEE PHYSICS.LUA FUNC "PORTALCOORDS" UP->UP))
 jumpforce = 16--SMB: 16, Smaller(For portal?): 12.1
 jumpforceadd = 1.9 --how much jumpforce is added at top speed (linear)
+raccoonjumpforce = 20
+raccoonjumpforceadd = 2.0
+raccoonflyjumpforce = 10
 headforce = 2 --how fast mario will be sent back down when hitting a block with his head
 --bounceforce = 12 --when jumping on an enemy, speedy will be set to this to make mario bounce (negative)
 bounceheight = 14/16 --when jumping on enemy, the height that mario will fly up
@@ -67,6 +110,9 @@ uwjumpforceadd = 0
 uwyacceleration = 9
 uwyaccelerationjumping = 12
 
+waterdamping = 0.2
+waterjumpforce = 13
+
 uwmaxheight = 2.5
 uwpushdownspeed = 3
 
@@ -85,10 +131,21 @@ horbouncespeedy = 20
 horbouncemaxspeedx = 15
 horbounceminspeedx = 2
 
+--levelstuff
+maxlevels = 4 --number of levels in a world
+
+--yoshi
+yoshieggjumpforce = 30
+yoshieggbreaktime = .5
+yoshijumpforce = 14
+yoshijumpforceadd = 1.9
+
 --items
 mushroomspeed = 3.6
 mushroomtime = 0.7 --time until it fully emerged out the block
 mushroomjumpforce = 13
+threeupspeed = 0
+plusclockspeed = 0
 poisonmushspeed = 3.6
 poisonmushtime = 0.7 --time until it fully emerged out the block
 poisonmushjumpforce = 13
@@ -100,16 +157,89 @@ mariostarblinkrateslow = 0.16 --/disco
 mariostarduration = 12
 mariostarrunout = 1 --subtracts, doesn't add.
 
+leafjumpforce = 7 --when it comes out of the block
+
 goombaspeed = 2
 goombaacceleration = 8
 goombaanimationspeed = 0.2
 goombadeathtime = 0.5 --the "stomped" animation of goombas will last this long
+goombajumpforce = 9 --paragoomba
+
+thwompspeed = 0
+thwompacceleration = 0
+thwompanimationspeed = 0.2
+thwompdeathtime = 0.5 --unused
+
+
+muncheracceleration = 8
+muncheranimationspeed = 0.1
+muncherdeathtime = 0
+
+biggoombaspeed = 2
+biggoombaacceleration = 8
+biggoombaanimationspeed = 0.2
+biggoombadeathtime = 0.5
+
+barrelspeed = 6
+barrelacceleration = 4
+barrelanimationspeed = 0.1
+barreldeathtime = 0
+
+splunkinspeed = 2
+splunkinmadspeed = 4
+splinkinacceleration = 8
+splunkinanimationspeed = 0.2
+splunkindeathtime = 0.5
+splunkinhealth = 2
+
+ninjijumpforce = 23
+
+iciclespeed = 0
+icicleacceleration = 0
+icicleanimationspeed = 99.9
+icicledeathtime = 0.1
+
+sunfirespeed = 0
+sunfireacceleration = 0
+sunfireanimationspeed = 0.1
+sunfiredeathtime = 0.1
+
+bigsunfirespeed = 0
+bigsunfireacceleration = 0
+bigsunfireanimationspeed = 0.1
+bigsunfiredeathtime = 0.1
+
+sidestepperspeed = 2
+sidestepperacceleration = 8
+sidestepperanimationspeed = 0.2
+sidestepperdeathtime = 0
 
 koopaspeed = 2
 koopasmallspeed = 12 --speed of turtle shells
 koopaanimationspeed = 0.2
 koopajumpforce = 10
 koopaflyinggravity = 30
+koopabluespeed = 3 --blue koopa speed
+
+drybonesspeed = 2
+drybonessmallspeed = 0 --waz?
+drybonesanimationspeed = 0.2
+drybonesjumpforce = 10
+drybonesflyinggravity = 30
+
+bigkoopaspeed = 2
+bigkoopasmallspeed = 12 --speed of turtle shells
+bigkoopaanimationspeed = 0.2
+bigkoopajumpforce = 10
+bigkoopaflyinggravity = 30
+
+shellspeed = 2
+shellsmallspeed = 12 --speed of turtle shells
+shellanimationspeed = 0.2
+shelljumpforce = 10
+shellflyinggravity = 30
+
+molespeed = 3.5
 
 bowseranimationspeed = 0.5
 bowserspeedbackwards = 1.875
@@ -118,6 +248,10 @@ bowserjumpforce = 7
 bowsergravity = 10.9
 bowserjumpdelay = 1
 bowserfallspeed = 8.25 --for animation
+
+boomboomjumpforce = 15
+boomboomhighjumpforce = 35
+boomboomhp = 3
 
 bowserhammertable = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1, 2, 1}
 bowserhammerdrawtime = 0.5
@@ -147,6 +281,12 @@ seesawfriction = 4
 koopaflyingdistance = 7.5
 koopaflyingtime = 7
 
+drybonesflyingdistance = 7.5
+drybonesflyingtime = 7
+
+bigkoopaflyingdistance = 7.5
+bigkoopaflyingtime = 7
+
 lakitothrowtime = 4
 lakitorespawn = 16
 lakitospace = 4
@@ -154,6 +294,15 @@ lakitodistancetime = 1.5
 lakitohidetime = 0.5
 lakitopassivex = 18-4/16 --from the flag (or axe (or right end of map))
 lakitopassivespeed = 3
+
+angrysunthrowtime = 4
+angrysunrespawn = 16
+angrysunspace = 4
+angrysundistancetime = 1.5
+angrysunhidetime = 1.0
+angrysunpassivex = 18-4/16 --from the flag (or axe (or right end of map))
+angrysunpassivespeed = 5
+angrysunfalltime = 0.1
 
 -- loiters between 4 blocks behind and 4 blocks ahead of you (total 9 blocks he goes above)
 -- spawns only 3 of the hedgehog things and then hides until they're offscreen/dead
@@ -222,6 +371,13 @@ emanceparticlespeedmod = 0.3
 emanceimgwidth = 64
 emancelinecolor = {100, 100, 255, 10}
 
+--excursion funnel
+funnelbuildupspeed = 1
+funnelspeed = 2
+excursionbaseanimationtime = 0.15
+funnelforce = 5
+funnelmovespeed = 3
+
 boxfriction = 20
 boxfrictionair = 8
 
@@ -244,6 +400,19 @@ bulletbilltimemax = 4.5
 bulletbilltimemin = 1.0
 bulletbillrange = 3
 
+bigbillspeed = 8.0
+bigbilltimemax = 4.5
+bigbilltimemin = 1.0
+bigbillrange = 3
+
+kingbillspeed = 5.0
+kingbilltimemax = 4.5
+kingbilltimemin = 1.0
+kingbillrange = 13
+kingbillshotgravity = 60
+
+cannonballspeed = 7
+
 hammerbropreparetime = 0.5
 hammerbrotime = {0.6, 1.6}
 hammerbrospeed = 1.5
@@ -251,6 +420,14 @@ hammerbroanimationspeed = 0.15
 hammerbrojumptime = 3
 hammerbrojumpforce = 19
 hammerbrojumpforcedown = 6
+
+firebropreparetime = 0.5
+firebrotime = {0.6, 1.6}
+firebrospeed = 1.5
+firebroanimationspeed = 0.15
+firebrojumptime = 3
+firebrojumpforce = 19
+firebrojumpforcedown = 6
 
 hammerspeed = 4
 hammerstarty = 8
@@ -284,6 +461,21 @@ castlefireangleadd = 11.25
 castlefiredelay = 3.4/(360/castlefireangleadd) --the number in front of the bracket is how long a full turn takes
 castlefireanimationdelay = 0.07
 
+--turrets
+turretupdatetime = 0.1
+turrettime = 1
+turretroom = 0.8
+turretdarkenfactor = 0.3
+turretshottime = 0.02
+
+turretcriticleangle = math.pi/4
+frenzytime = 1.5
+
+turretshotduration = 0.1
+
+refillhitstime = 0.5
+maxhitpoints = 50
+
 --plants
 plantintime = 1.8
 plantouttime = 2
@@ -308,6 +500,10 @@ reddownplantouttime = 1.5
 reddownplantanimationdelay = 0.15
 reddownplantmovedist = -24/16
 reddownplantmovespeed = 4
+
+fireplantouttime = 5
+
+downfireplantintime = 5
 
 vinespeed = 2.13
 vinemovespeed = 3.21
@@ -432,4 +628,6 @@ guirepeatdelay = 0.07
 mappackhorscrollrange = 220
 
 maximumbulletbills = 5
+maximumbigbills = 5
+maximumkingbills = 1
 coinblocktime = 4

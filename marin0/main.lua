@@ -7,6 +7,9 @@ io.stdout:setvbuf("no")
 	THIS AWESOME PIECE OF CELESTIAL AMBROSIA IS RELEASED AS NON-COMMERCIAL, SHARE ALIKE, WHATEVER. YOU MAY PRINT OUT THIS CODES AND USE IT AS WALLPAPER IN YOUR BATHROOM.
 	FOR SPECIFIC LICENSE (I know you linux users get a hard on when it comes to licenses) SEE http://creativecommons.org/licenses/by-nc-sa/3.0/
 	NOW GO AWAY (or stay and modify shit. I don't care as long as you stick to the above license.)
+	
+	EXTRA ENTITIES & TWEAKS BY ALESAN99
+	DAFUQ ARE YOU DOING HERE!
 ]]
 function love.load()
 	marioversion = 3
@@ -43,6 +46,7 @@ function love.load()
 	
 	saveconfig()
 	width = 25
+	height = 14 --?
 	fsaa = 0
 	fullscreen = false
 	changescale(scale, fullscreen)
@@ -83,7 +87,8 @@ function love.load()
 	love.graphics.setColor(100, 100, 100)
 	loadingtexts = {"reticulating splines..", "loading..", "booting glados..", "growing potatoes..", "voting against acta..", "rendering important stuff..",
 					"baking cake..", "happy explosion day..", "raising coolness by 20 percent..", "yay facepunch..", "stabbing myself..", "sharpening knives..",
-					"tanaka, thai kick..", "loading game genie.."}
+					"tanaka, thai kick..", "loading game genie..", "thanking alesan99..", "avoiding lawsuits..", "loading bugs..",
+					"fixign typo..", "this message will self destruct in 3 2 1..", "preparing deadly neurotoxin.."}
 	loadingtext = loadingtexts[math.random(#loadingtexts)]
 	properprint(loadingtext, 25*8*scale-string.len(loadingtext)*4*scale, 108*scale)
 	love.graphics.present()
@@ -181,6 +186,7 @@ function love.load()
 	if getupdate() then
 		updatenotification = true
 	end
+	credited = true
 	http.TIMEOUT = 4
 	
 	playertypei = 1
@@ -193,6 +199,7 @@ function love.load()
 		soundenabled = true
 	end
 	love.filesystem.mkdir( "mappacks" )
+	love.filesystem.mkdir( "modmappacks" )
 	editormode = false
 	yoffset = 0
 	love.graphics.setPointSize(3*scale)
@@ -201,45 +208,31 @@ function love.load()
 	uispace = math.floor(width*16*scale/4)
 	guielements = {}
 	
+	endingtextcolor = {255, 255, 255}
+	endingtext = {"congratulations!", "you have finished this mappack!"}
+	endingtextcolorname = "white"
+	playername = "mario"
+	toadtext = {"thank you mario!", "but our princess is in", "another castle!"}
+	peachtext = {"thank you mario!", "your quest is over.", "we present you a new quest.", "push button b", "to play as steve"}
+	pressbtosteve = true
+	hudtextcolor = {255, 255, 255}
+	hudvisible = true
+	loadcustomtext()
+	
+	--custom players
+	--loadplayer()
+	
 	--Backgroundcolors
 	backgroundcolor = {}
 	backgroundcolor[1] = {92, 148, 252}
 	backgroundcolor[2] = {0, 0, 0}
 	backgroundcolor[3] = {32, 56, 236}
 	
-	--eh
-	rainboomimg = newImageFallback("rainboom.png")
-	rainboomquad = {}
-	for x = 1, 7 do
-		for y = 1, 7 do
-			rainboomquad[x+(y-1)*7] = love.graphics.newQuad((x-1)*204, (y-1)*182, 204, 182, 1428, 1274)
-		end
-	end
-	
-	logo = newImageFallback("stabyourself.png")
-	logoblood = newImageFallback("stabyourselfblood.png")
-	
-	--GUI
-	checkboximg = newImageFallback("GUI/checkbox.png")
-	checkboxquad = {{love.graphics.newQuad(0, 0, 9, 9, 18, 18), love.graphics.newQuad(9, 0, 9, 9, 18, 18)}, {love.graphics.newQuad(0, 9, 9, 9, 18, 18), love.graphics.newQuad(9, 9, 9, 9, 18, 18)}}
-	
-	dropdownarrowimg = newImageFallback("GUI/dropdownarrow.png")
-	
-	gradientimg = newImageFallback("gradient.png");gradientimg:setFilter("linear", "linear")
-	
-	--Ripping off
-	minecraftbreakimg = newImageFallback("Minecraft/blockbreak.png")
-	minecraftbreakquad = {}
-	for i = 1, 10 do
-		minecraftbreakquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 160, 16)
-	end
-	minecraftgui = newImageFallback("Minecraft/gui.png")
-	minecraftselected = newImageFallback("Minecraft/selected.png")
-	
 	--AUDIO--
 	--sounds
 	jumpsound = love.audio.newSource("sounds/jump.ogg", "static");love.audio.stop(jumpsound)
 	jumpbigsound = love.audio.newSource("sounds/jumpbig.ogg", "static");love.audio.stop(jumpbigsound)
+	jumptinysound = love.audio.newSource("sounds/jumptiny.ogg", "static");love.audio.stop(jumptinysound)
 	stompsound = love.audio.newSource("sounds/stomp.ogg", "static");stompsound:setVolume(0);stompsound:play();stompsound:stop();stompsound:setVolume(1)
 	shotsound = love.audio.newSource("sounds/shot.ogg", "static");shotsound:setVolume(0);shotsound:play();shotsound:stop();shotsound:setVolume(1)
 	blockhitsound = love.audio.newSource("sounds/blockhit.ogg", "static");blockhitsound:setVolume(0);blockhitsound:play();blockhitsound:stop();blockhitsound:setVolume(1)
@@ -268,7 +261,17 @@ function love.load()
 	pausesound = love.audio.newSource("sounds/pause.ogg", "static");pausesound:setVolume(0);pausesound:play();pausesound:stop();pausesound:setVolume(1)
 	bulletbillsound = love.audio.newSource("sounds/bulletbill.ogg", "static");pausesound:setVolume(0);pausesound:play();pausesound:stop();pausesound:setVolume(1)
 	stabsound = love.audio.newSource("sounds/stab.ogg", "static")
+	iciclesound = love.audio.newSource("sounds/icicle.ogg", "static");iciclesound:setVolume(0);iciclesound:play();iciclesound:stop();iciclesound:setVolume(1)
+	thwompsound = love.audio.newSource("sounds/thwomp.ogg", "static");thwompsound:setVolume(0);thwompsound:play();thwompsound:stop();thwompsound:setVolume(1)
+	boomerangsound = love.audio.newSource("sounds/boomerang.ogg", "static");boomerangsound:setVolume(0);boomerangsound:play();boomerangsound:stop();boomerangsound:setVolume(1)
+	raccoonswingsound = love.audio.newSource("sounds/raccoonswing.ogg", "static");raccoonswingsound:setVolume(0);raccoonswingsound:play();raccoonswingsound:stop();raccoonswingsound:setVolume(1)
+	raccoonplanesound = love.audio.newSource("sounds/raccoonplane.ogg", "static");raccoonplanesound:setVolume(0);raccoonplanesound:play();raccoonplanesound:stop();raccoonplanesound:setVolume(1);raccoonplanesound:setLooping(true)
+	skidsound = love.audio.newSource("sounds/skid.ogg", "static");skidsound:setVolume(0);skidsound:play();skidsound:stop();skidsound:setVolume(1)
+	turretshotsound = love.audio.newSource("sounds/turretshot.ogg", "static");turretshotsound:setVolume(0);turretshotsound:play();turretshotsound:stop();turretshotsound:setVolume(1)
+	bossmusic = love.audio.newSource("sounds/boss.ogg", "static");bossmusic:setVolume(0);bossmusic:play();bossmusic:stop();bossmusic:setVolume(1);bossmusic:setLooping(true)
 	
+	glados1sound = love.audio.newSource("sounds/glados/glados1.ogg", "static");glados1sound:setVolume(0);glados1sound:play();glados1sound:stop();glados1sound:setVolume(1)
+	glados2sound = love.audio.newSource("sounds/glados/glados2.ogg", "static");glados2sound:setVolume(0);glados2sound:play();glados2sound:stop();glados2sound:setVolume(1)
 	
 	portal1opensound = love.audio.newSource("sounds/portal1open.ogg", "static");portal1opensound:setVolume(0);portal1opensound:play();portal1opensound:stop();portal1opensound:setVolume(0.3)
 	portal2opensound = love.audio.newSource("sounds/portal2open.ogg", "static");portal2opensound:setVolume(0);portal2opensound:play();portal2opensound:stop();portal2opensound:setVolume(0.3)
@@ -294,8 +297,9 @@ function love.load()
 	]]
 	
 	soundlist = {jumpsound, jumpbigsound, stompsound, shotsound, blockhitsound, blockbreaksound, coinsound, pipesound, boomsound, mushroomappearsound, mushroomeatsound, shrinksound, deathsound, gameoversound,
-				fireballsound, oneupsound, levelendsound, castleendsound, scoreringsound, intermissionsound, firesound, bridgebreaksound, bowserfallsound, vinesound, swimsound, rainboomsoud, 
-				portal1opensound, portal2opensound, portalentersound, portalfizzlesound, lowtime, konamisound, pausesound, stabsound, bulletbillsound}
+				turretshotsound, fireballsound, oneupsound, levelendsound, castleendsound, bossmusic, scoreringsound, intermissionsound, firesound, bridgebreaksound, bowserfallsound, vinesound, swimsound, rainboomsoud, 
+				portal1opensound, portal2opensound, portalentersound, portalfizzlesound, lowtime, konamisound, pausesound, stabsound, bulletbillsound, iciclesound, thwompsound, boomerangsound, raccoonswingsound,
+				raccoonplanesound, skidsound, turretshotsound, bossmusic, jumptiny}
 	
 	-- musiclist = {overworldmusic, undergroundmusic, castlemusic, underwatermusic, starmusic}
 	-- musiclistfast = {overworldmusicfast, undergroundmusicfast, castlemusicfast, underwatermusicfast, starmusicfast}
@@ -396,7 +400,6 @@ function love.update(dt)
 		network_update(dt)
 	end
 	
-	
 	for i, v in pairs(guielements) do
 		v:update(dt)
 	end
@@ -420,8 +423,6 @@ function love.draw()
 	notice.draw()
 	
 	shaders:postdraw()
-
-
 	
 	love.graphics.setColor(255, 255,255)
 	if gamestate == "menu" then
@@ -529,6 +530,10 @@ function saveconfig()
 		end
 	end
 	
+	if mappackfolder == "modmappacks" then
+		s = s .. "modmappacks;"
+	end
+	
 	love.filesystem.write("options.txt", s)
 end
 
@@ -627,7 +632,7 @@ function loadconfig()
 		elseif s2[1] == "mouseowner" then
 			mouseowner = tonumber(s2[2])
 		elseif s2[1] == "mappack" then
-			if love.filesystem.exists("mappacks/" .. s2[2] .. "/") then
+			if love.filesystem.exists(mappackfolder .. "/" .. s2[2] .. "/") then
 				mappack = s2[2]
 			end
 		elseif s2[1] == "gamefinished" then
@@ -642,6 +647,8 @@ function loadconfig()
 					reachedworlds[s2[2]][i] = true
 				end
 			end
+		elseif s2[1] == "modmappacks" then
+			mappackfolder = "modmappacks"
 		end
 	end
 	
@@ -649,6 +656,140 @@ function loadconfig()
 		portalcolor[i] = {getrainbowcolor(portalhues[i][1]), getrainbowcolor(portalhues[i][2])}
 	end
 	players = 1
+end
+
+function loadcustomtext()
+	if love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/endingmusic.ogg") then
+		endingmusic = love.audio.newSource(mappackfolder .. "/" .. mappack .. "/endingmusic.ogg");endingmusic:play();endingmusic:stop()
+	elseif love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/endingmusic.mp3") then
+		endingmusic = love.audio.newSource(mappackfolder .. "/" .. mappack .. "/endingmusic.mp3");endingmusic:play();endingmusic:stop()
+	else
+		endingmusic = konamisound
+	end
+	if love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/text.txt") then
+		local s = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/text.txt")
+		--read .txt
+		local lines
+		if string.find(s, "\r\n") then
+			lines = s:split("\r\n")
+		else
+			lines = s:split("\n")
+		end
+		
+		for i = 1, #lines do
+			local s2 = lines[i]:split("=")
+			local s3
+			if string.find(s2[1], ":") then
+				s3 = s2[1]:split(":")
+			else
+				s3 = {s2[1]}
+			end
+			if s3[1] == "endingtextcolor" then
+				local s4 = s2[2]:split(",")
+				
+				for j = 1, 3 do
+					endingtextcolor[j] = tonumber(s4[j])
+				end
+			elseif s3[1] == "endingtext" then
+				local s4 = s2[2]:split(",")
+				
+				for j = 1, #s4 do
+					endingtext[j] = s4[j]
+				end
+			elseif s3[1] == "endingcolorname" then
+				endingtextcolorname = s2[2]
+			elseif s3[1] == "playername" then
+				playername = s2[2]
+			elseif s3[1] == "hudtextcolor" then
+				local s4 = s2[2]:split(",")
+				
+				for j = 1, 3 do
+					hudtextcolor[j] = tonumber(s4[j])
+				end
+			elseif s3[1] == "hudcolorname" then
+				hudtextcolorname = s2[2]
+			elseif s3[1] == "hudvisible" then
+				hudvisible = (s2[2] == "true")
+			elseif s3[1] == "toadtext" then
+				local s4 = s2[2]:split(",")
+				
+				for j = 1, 3 do
+					toadtext[j] = s4[j]
+				end
+			elseif s3[1] == "peachtext" then
+				local s4 = s2[2]:split(",")
+				
+				for j = 1, 5 do
+					peachtext[j] = s4[j]
+				end
+			elseif s3[1] == "steve" then
+				pressbtosteve = (s2[2] == "true")
+			end
+		end
+	else
+		endingtextcolor = {255, 255, 255}
+		endingtextcolorname = "white"
+		endingtext = {"congratulations!", "you have finished this mappack!"}
+		toadtext = {"thank you mario!", "but our princess is in", "another castle!"}
+		peachtext = {"thank you mario!", "your quest is over.", "we present you a new quest.", "push button b", "to play as steve"}
+		pressbtosteve = true
+		playername = "mario"
+		hudtextcolor = {255, 255, 255}
+		hudtextcolorname = "white"
+		hudvisible = true
+	end
+end
+
+function savecustomtext()
+	local s = ""
+	if textcolorl == "red" then
+		s = s .. "endingtextcolor=255,0,0"
+	elseif textcolorl == "blue" then
+		s = s .. "endingtextcolor=0,0,255"
+	elseif textcolorl == "yellow" then
+		s = s .. "endingtextcolor=255,255,0"
+	elseif textcolorl == "green" then
+		s = s .. "endingtextcolor=0,255,0"
+	elseif textcolorl == "orange" then
+		s = s .. "endingtextcolor=255,106,0"
+	elseif textcolorl == "pink" then
+		s = s .. "endingtextcolor=255,128,255"
+	elseif textcolorl == "purple" then
+		s = s .. "endingtextcolor=113,0,174"
+	else
+		s = s .. "endingtextcolor=255,255,255"
+	end
+	s = s .. "\r\nendingcolorname=" .. textcolorl
+	s = s .. "\r\nendingtext=" .. guielements["editendingtext1"].value .. "," .. guielements["editendingtext2"].value
+	s = s .. "\r\nplayername=" .. guielements["editplayername"].value
+	s = s .. "\r\n"
+	if textcolorp == "red" then
+		s = s .. "hudtextcolor=255,0,0"
+	elseif textcolorp == "blue" then
+		s = s .. "hudtextcolor=0,0,255"
+	elseif textcolorp == "yellow" then
+		s = s .. "hudtextcolor=255,255,0"
+	elseif textcolorp == "green" then
+		s = s .. "hudtextcolor=0,255,0"
+	elseif textcolorp == "orange" then
+		s = s .. "hudtextcolor=255,106,0"
+	elseif textcolorp == "pink" then
+		s = s .. "hudtextcolor=255,128,255"
+	elseif textcolorp == "purple" then
+		s = s .. "hudtextcolor=113,0,174"
+	elseif textcolorp == "black" then
+		s = s .. "hudtextcolor=0,0,0"
+	else
+		s = s .. "hudtextcolor=255,255,255"
+	end
+	s = s .. "\r\nhudcolorname=" .. textcolorp
+	s = s .. "\r\nhudvisible=" .. tostring(hudvisible)
+	s = s .. "\r\ntoadtext=" .. guielements["edittoadtext1"].value .. "," .. guielements["edittoadtext2"].value .. "," .. guielements["edittoadtext3"].value
+	s = s .. "\r\npeachtext=" .. guielements["editpeachtext1"].value .. "," .. guielements["editpeachtext2"].value .. "," .. guielements["editpeachtext3"].value .. "," .. guielements["editpeachtext4"].value .. "," .. guielements["editpeachtext5"].value
+	s = s .. "\r\nsteve=" .. tostring(pressbtosteve)
+	
+	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/text.txt", s)
+	loadcustomtext()
 end
 
 function defaultconfig()
@@ -738,8 +879,12 @@ function defaultconfig()
 	starcolors[2] = {{  0, 168,   0}, {252, 152,  56}, {252, 252, 252}}
 	starcolors[3] = {{252, 216, 168}, {216,  40,   0}, {252, 152,  56}}
 	starcolors[4] = {{216,  40,   0}, {252, 152,  56}, {252, 252, 252}}
-	
+
 	flowercolor = {{252, 216, 168}, {216,  40,   0}, {252, 152,  56}}
+	hammersuitcolor = {{  0,   0,   0}, { 255, 255, 255}, {252, 152,  56}}
+	frogsuitcolor = {{  0, 168,   0}, {  0,   0,   0}, {252, 152,  56}}
+	leafcolor = {{224, 32,   0}, {136, 112,   0}, {252, 152,  56}}
+	iceflowercolor = {{255, 255, 255}, {156, 252, 240}, {252, 152,  56}}
 	
 	--options
 	scale = 2
@@ -748,6 +893,7 @@ function defaultconfig()
 	mappack = "onlinesmb"
 	vsync = false
 
+	mappackfolder = "mappacks"
 	players = oldplayers
 	
 	reachedworlds = {}
@@ -774,7 +920,7 @@ function suspendgame()
 			s = s .. "size/" .. i .."/1|"
 		end
 	end
-	s = s .. "mappack/" .. mappack
+	s = s .. mappackfolder .. "/" .. mappack
 	
 	love.filesystem.write("suspend.txt", s)
 	
@@ -871,6 +1017,7 @@ function love.keypressed(key, unicode)
 		else
 			konamii = 1
 		end
+		
 		menu_keypressed(key, unicode)
 	elseif gamestate == "game" then
 		game_keypressed(key, unicode)
@@ -946,7 +1093,7 @@ function love.joystickreleased(joystick, button)
 	end
 end
 
-local function error_printer(msg, layer)
+--[[local function error_printer(msg, layer)
     print((debug.traceback("Error: " .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
 
@@ -1022,7 +1169,7 @@ function love.errhand(msg)
 
     end
 
-end
+end]]
 
 function round(num, idp) --Not by me
 	local mult = 10^(idp or 0)
@@ -1263,16 +1410,16 @@ function loadcustombackground()
 		levelstring = levelstring .. "_" .. mariosublevel
 	end
 	
-	while love.filesystem.exists("mappacks/" .. mappack .. "/" .. levelstring .. "background" .. i .. ".png") do
-		custombackgroundimg[i] = love.graphics.newImage("mappacks/" .. mappack .. "/" .. levelstring .. "background" .. i .. ".png")
+	while love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/" .. levelstring .. "background" .. i .. ".png") do
+		custombackgroundimg[i] = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/" .. levelstring .. "background" .. i .. ".png")
 		custombackgroundwidth[i] = custombackgroundimg[i]:getWidth()/16
 		custombackgroundheight[i] = custombackgroundimg[i]:getHeight()/16
 		i = i +1
 	end
 	
 	if #custombackgroundimg == 0 then
-		while love.filesystem.exists("mappacks/" .. mappack .. "/background" .. i .. ".png") do
-			custombackgroundimg[i] = love.graphics.newImage("mappacks/" .. mappack .. "/background" .. i .. ".png")
+		while love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/background" .. i .. ".png") do
+			custombackgroundimg[i] = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/background" .. i .. ".png")
 			custombackgroundwidth[i] = custombackgroundimg[i]:getWidth()/16
 			custombackgroundheight[i] = custombackgroundimg[i]:getHeight()/16
 			i = i +1
@@ -1286,6 +1433,67 @@ function loadcustombackground()
 	end
 end
 
+function loadcustomforeground()
+	local i = 1
+	customforegroundimg = {}
+	customforegroundwidth = {}
+	customforegroundheight = {}
+	--try to load map specific foreground first
+	local levelstring = marioworld .. "-" .. mariolevel
+	if mariosublevel ~= 0 then
+		levelstring = levelstring .. "_" .. mariosublevel
+	end
+	
+	while love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/" .. levelstring .. "foreground" .. i .. ".png") do
+		customforegroundimg[i] = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/" .. levelstring .. "foreground" .. i .. ".png")
+		customforegroundwidth[i] = customforegroundimg[i]:getWidth()/16
+		customforegroundheight[i] = customforegroundimg[i]:getHeight()/16
+		i = i +1
+	end
+	
+	if #customforegroundimg == 0 then
+		while love.filesystem.exists(mappackfolder .. "/" .. mappack .. "/foreground" .. i .. ".png") do
+			customforegroundimg[i] = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/foreground" .. i .. ".png")
+			customforegroundwidth[i] = customforegroundimg[i]:getWidth()/16
+			customforegroundheight[i] = customforegroundimg[i]:getHeight()/16
+			i = i +1
+		end
+	end
+	
+	if #customforegroundimg == 0 then
+		customforegroundimg[i] = love.graphics.newImage("graphics/SMB/portalbackground.png")
+		customforegroundwidth[i] = customforegroundimg[i]:getWidth()/16
+		customforegroundheight[i] = customforegroundimg[i]:getHeight()/16
+	end
+end
+
+function loadanimatedtiles() --animated
+	--Taken directly from SE
+	if animatedtilecount then
+		for i = 1, animatedtilecount do
+			tilequads[i+90000] = nil
+		end
+	end
+	
+	animatedtiles = {}
+			
+	local fl = love.filesystem.enumerate(mappackfolder .. "/" .. mappack .. "/animated")
+	animatedtilecount = 0
+	
+	local i = 1
+	while love.filesystem.isFile(mappackfolder .. "/" .. mappack .. "/animated/" .. i .. ".png") do
+		local v = mappackfolder .. "/" .. mappack .. "/animated/" .. i .. ".png"
+		if love.filesystem.isFile(v) and string.sub(v, -4) == ".png" then
+			if love.filesystem.isFile(string.sub(v, 1, -5) .. ".txt") then
+				animatedtilecount = animatedtilecount + 1
+				local t = animatedquad:new(v, love.filesystem.read(string.sub(v, 1, -5) .. ".txt"))
+				tilequads[animatedtilecount+90000] = t
+				table.insert(animatedtiles, t)
+			end
+		end
+		i = i + 1
+	end
+end
 function love.quit()
 	if onlinemp then
 		if not clientisnetworkhost then
@@ -1314,6 +1522,9 @@ function loadgraphics()
 	mappackhighlight = newImageFallback("mappackhighlight.png")
 	
 	mappackscrollbar = newImageFallback("mappackscrollbar.png")
+	
+	uparrowimg = love.graphics.newImage("graphics/" .. graphicspack .. "/uparrow.png")
+	downarrowimg = love.graphics.newImage("graphics/" .. graphicspack .. "/downarrow.png")
 	
 	--tiles
 	smbtilesimg = newImageFallback("smbtiles.png")
@@ -1376,6 +1587,7 @@ function loadgraphics()
 	end
 	
 	oneuptextimage = newImageFallback("oneuptext.png")
+	threeuptextimage = newImageFallback("threeuptext.png")
 	
 	blockdebrisimage = newImageFallback("blockdebris.png")
 	blockdebrisquads = {}
@@ -1421,6 +1633,29 @@ function loadgraphics()
 		end
 	end
 	
+	--flipblock and other block-like entities
+	flipblockimage = love.graphics.newImage("graphics/" .. graphicspack .. "/flipblock.png")
+	blocktogglebuttonimage = love.graphics.newImage("graphics/" .. graphicspack .. "/blocktogglebutton.png")
+	buttonblockimage = love.graphics.newImage("graphics/" .. graphicspack .. "/buttonblock.png")
+	flipblockquad = {}
+	
+	for y = 1, 4 do
+		flipblockquad[y] = {}
+		for x = 1, 4 do
+			flipblockquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 64, 64)
+		end
+	end
+	
+	bigblocktogglebuttonimage = love.graphics.newImage("graphics/" .. graphicspack .. "/bigblocktogglebutton.png")
+	bigblockquad = {}
+	
+	for y = 1, 4 do
+		bigblockquad[y] = {}
+		for x = 1, 2 do
+			bigblockquad[y][x] = love.graphics.newQuad((x-1)*32, (y-1)*32, 32, 32, 64, 128)
+		end
+	end
+	
 	--coin
 	coinimage = newImageFallback("coin.png")
 	coinquads = {}
@@ -1435,6 +1670,12 @@ function loadgraphics()
 		axequads[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
 	end
 	
+	--levelball
+	levelballimg = newImageFallback("levelball.png")
+	levelballquad = {}
+	for x = 1, 4 do
+		levelballquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 16, 16)
+	end
 	--spring, red
 	springimg = newImageFallback("springred.png")
 	springquads = {}
@@ -1453,6 +1694,19 @@ function loadgraphics()
 		for j = 1, 3 do
 			springgreenquads[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*32, 16, 32, 48, 128)
 		end
+	end
+	
+	--yoshi
+	yoshieggimg = newImageFallback("yoshiegg.png")
+	yoshieggquad = {}
+	for x = 1, 2 do
+		yoshieggquad[x] = love.graphics.newQuad((x-1)*12, 0, 12, 15, 24, 15)
+	end
+	
+	yoshiimage = newImageFallback("yoshi.png")
+	yoshiquad = {}
+	for x = 1, 10 do
+		yoshiquad[x] = love.graphics.newQuad((x-1)*30, 0, 30, 35, 300, 35)
 	end
 	
 	--toad
@@ -1480,6 +1734,13 @@ function loadgraphics()
 	end
 	
 	titleimage = newImageFallback("title.png")
+	titleframe = 1
+	titleframes = math.floor(titleimage:getWidth()/176)
+	titledelay = nil
+	titlequad = {}
+	for x = 1, titleframes do
+		titlequad[x] = love.graphics.newQuad((x-1)*176, 0, 176, 88, titleimage:getWidth(), titleimage:getHeight())
+	end
 	playerselectimg = newImageFallback("playerselectarrow.png")
 	
 	starimg = newImageFallback("star.png")
@@ -1489,12 +1750,29 @@ function loadgraphics()
 	end
 	
 	flowerimg = newImageFallback("flower.png")
+	iceflowerimg = newImageFallback("iceflower.png")
 	flowerquad = {}
+	for y = 1, 4 do
+		flowerquad[y] = {}
+		for x = 1, 4 do
+			flowerquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 64, 64)
+		end
+	end
+	
+	hammersuitimg = newImageFallback("hammersuit.png")
+	hammersuitquad = {}
 	for i = 1, 4 do
-		flowerquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
+		hammersuitquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	frogsuitimg = newImageFallback("frogsuit.png")
+	frogsuitquad = {}
+	for i = 1, 4 do
+		frogsuitquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 64, 16)
 	end
 	
 	fireballimg = newImageFallback("fireball.png")
+	iceballimg = newImageFallback("iceball.png")
 	fireballquad = {}
 	for i = 1, 4 do
 		fireballquad[i] = love.graphics.newQuad((i-1)*8, 0, 8, 8, 80, 16)
@@ -1512,26 +1790,169 @@ function loadgraphics()
 			vinequad[i][j] = love.graphics.newQuad((j-1)*16, (i-1)*16, 16, 16, 32, 64) 
 		end
 	end
-
-	-- WIND
-	windleafimage = newImageFallback("windleaf.png")
-	windleafquad = {}
+	--GLaDOS
+	gladosimage = newImageFallback("glados.png")
+	gladosquad = {}
+	for x = 1, 2 do
+		gladosquad[x] = love.graphics.newQuad((x-1)*86, 0, 86, 86, 86, 86)
+	end
+	
+	--cores
+	coreimage = newImageFallback("cores.png")
+	corequad = {}
+	for x = 1, 4 do
+		corequad[x] = love.graphics.newQuad((x-1)*13, 0, 13, 12, 52, 12)
+	end
+	
+	--portal gun pedestal
+	pedestalimage = newImageFallback("pedestal.png")
+	pedestalquad = {}
+	
+	for x = 1, 10 do
+		pedestalquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 160, 16)
+	end
+	
+	--dount (yummy for your tummy)
+	donutimage = newImageFallback("donut.png")
+	donutquad = {}
+	
 	for y = 1, 4 do
-		windleafquad[y] = {}
+		donutquad[y] = {}
 		for x = 1, 2 do
-			windleafquad[y][x] = love.graphics.newQuad((x-1)*6, (y-1)*6, 6, 6, 12, 24)
+			donutquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
 		end
 	end
 	
+	--energylauncher
+	energylauncherimage = newImageFallback("energylauncher.png")
+	energylauncherquad = {}
+	
+	for y = 1, 2 do
+		energylauncherquad[y] = {}
+		for x = 1, 2 do
+			energylauncherquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 32)
+		end
+	end
+	energyballimage = newImageFallback("energyball.png")
+	energyballquad = {}
+	
+	for x = 1, 4 do
+		energyballquad[x] = love.graphics.newQuad((x-1)*8, 0, 8, 8, 32, 8)
+	end
+	
 	--enemies
+	shyguyimg = newImageFallback("shyguy.png")
+	goombratimage = newImageFallback("goombrat.png")
+	drygoombaimage = newImageFallback("drygoomba.png")
 	goombaimage = newImageFallback("goomba.png")
+	goombaimageframes = math.floor(goombaimage:getWidth()/16)
 	goombaquad = {}
 	
 	for y = 1, 4 do
 		goombaquad[y] = {}
-		for x = 1, 2 do
-			goombaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		for x = 1, goombaimageframes do
+			goombaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, goombaimage:getWidth(), 64)
 		end
+	end
+	
+	thwompimage = newImageFallback("thwomp.png")
+	thwompquad = {}
+	
+	for y = 1, 4 do
+		thwompquad[y] = {}
+		for x = 1, 2 do
+			thwompquad[y][x] = love.graphics.newQuad((x-1)*24, (y-1)*30, 24, 30, 48, 119)
+		end
+	end
+	biggoombaimage = newImageFallback("biggoomba.png")
+	biggoombaquad = {}
+	
+	for y = 1, 4 do
+		biggoombaquad[y] = {}
+		for x = 1, 2 do
+			biggoombaquad[y][x] = love.graphics.newQuad((x-1)*32, (y-1)*32, 32, 32, 64, 128)
+		end
+	end
+	sidestepperimage = newImageFallback("sidestepper.png")
+	sidestepperquad = {}
+	
+	for y = 1, 4 do
+		sidestepperquad[y] = {}
+		for x = 1, 2 do
+			sidestepperquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	barrelimage = newImageFallback("barrel.png")
+	barrelquad = {}
+	
+	for y = 1, 4 do
+		barrelquad[y] = {}
+		for x = 1, 2 do
+			barrelquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	ninjiimage = newImageFallback("ninji.png")
+	ninjiquad = {}
+	
+	for y = 1, 4 do
+		ninjiquad[y] = {}
+		for x = 1, 2 do
+			ninjiquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	bigspikeyimg = newImageFallback("bigspikey.png")
+	
+	bigspikeyquad = {}
+	for x = 1, 4 do
+		bigspikeyquad[x] = love.graphics.newQuad((x-1)*32, 0, 32, 32, 128, 32)
+	end
+	--SPLUNKIN
+	splunkinimage = newImageFallback("splunkin.png")
+	splunkinquad = {}
+	
+	for y = 1, 4 do
+		splunkinquad[y] = {}
+		for x = 1, 2 do
+			splunkinquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	
+	splunkinmadimage = newImageFallback("splunkinmad.png")
+	splunkinmadquad = {}
+	
+	for y = 1, 4 do
+		splunkinmadquad[y] = {}
+		for x = 1, 2 do
+			splunkinmadquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	--enemies
+	
+	icicleimage = newImageFallback("icicle.png")
+	iciclequad = {}
+	
+	for y = 1, 4 do
+		iciclequad[y] = {}
+		for x = 1, 2 do
+			iciclequad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	
+	paragoombaimage = newImageFallback("paragoomba.png")
+	paragoombaquad = {}
+	
+	for y = 1, 4 do
+		paragoombaquad[y] = {}
+		for x = 1, 3 do
+			paragoombaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*23, 16, 23, 48, 92)
+		end
+	end
+	
+	muncherimg = newImageFallback("muncher.png")
+	
+	muncherquad = {}
+	for x = 1, 4 do
+		muncherquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 64, 16)
 	end
 	
 	spikeyimg = newImageFallback("spikey.png")
@@ -1541,21 +1962,117 @@ function loadgraphics()
 		spikeyquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 64, 16)
 	end
 	
+	parabeetleimg = newImageFallback("parabeetle.png")
+	
+	parabeetlequad = {}
+	for x = 1, 4 do
+		parabeetlequad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 64, 16)
+	end
+	
+	booimage = newImageFallback("boo.png")
+	booquad = {}
+	
+	for y = 1, 4 do
+		booquad[y] = {}
+		for x = 1, 2 do
+			booquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 64)
+		end
+	end
+	
+	moleimage = newImageFallback("mole.png")
+	molequad = {}
+	
+	for y = 1, 4 do
+		molequad[y] = {}
+		for x = 1, 4 do
+			molequad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 64, 64)
+		end
+	end
+	
+	bigmoleimage = newImageFallback("bigmole.png")
+	bigmolequad = {}
+	
+	for y = 1, 4 do
+		bigmolequad[y] = {}
+		for x = 1, 2 do
+			bigmolequad[y][x] = love.graphics.newQuad((x-1)*32, (y-1)*32, 32, 32, 64, 128)
+		end
+	end
+	
+	bombimage = newImageFallback("bomb.png")
+	bombquad = {}
+	
+	for y = 1, 4 do
+		bombquad[y] = {}
+		for x = 1, 3 do
+			bombquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 48, 64)
+		end
+	end
+	
+	ampimage = newImageFallback("amp.png")
+	ampquad = {}
+	
+	for y = 1, 4 do
+		ampquad[y] = {}
+		for x = 1, 4 do
+			ampquad[y][x] = love.graphics.newQuad((x-1)*32, (y-1)*32, 32, 32, 128, 128)
+		end
+	end
+	
+	windleafimage = newImageFallback("windleaf.png")
+	windleafquad = {}
+	for y = 1, 4 do
+		windleafquad[y] = {}
+		for x = 1, 2 do
+			windleafquad[y][x] = love.graphics.newQuad((x-1)*6, (y-1)*6, 6, 6, 12, 24)
+		end
+	end
+	
 	lakitoimg = newImageFallback("lakito.png")
 	lakitoquad = {}
 	for x = 1, 2 do
 		lakitoquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 24)
 	end
 	
+	angrysunimg = newImageFallback("angrysun.png")
+	angrysunquad = {}
+	for x = 1, 2 do
+		angrysunquad[x] = love.graphics.newQuad((x-1)*28, 0, 28, 28, 56, 28)
+	end
+	
 	koopaimage = newImageFallback("koopa.png")
 	kooparedimage = newImageFallback("koopared.png")
 	beetleimage = newImageFallback("beetle.png")
+	koopablueimage = newImageFallback("koopablue.png")
 	koopaquad = {}
 	
 	for y = 1, 4 do
 		koopaquad[y] = {}
 		for x = 1, 5 do
 			koopaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*24, 16, 24, 128, 128)
+		end
+	end
+	
+	drybonesimage = newImageFallback("drybones.png")
+	drybonesredimage = newImageFallback("drybones.png")
+	drybeetleimage = newImageFallback("drybones.png")
+	drybonesquad = {}
+	
+	for y = 1, 4 do
+		drybonesquad[y] = {}
+		for x = 1, 5 do
+			drybonesquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*24, 16, 24, 128, 128)
+		end
+	end
+	
+	bigkoopaimage = newImageFallback("bigkoopa.png")
+	bigbeetleimage = newImageFallback("bigbeetle.png")
+	bigkoopaquad = {}
+	
+	for y = 1, 4 do
+		bigkoopaquad[y] = {}
+		for x = 1, 5 do
+			bigkoopaquad[y][x] = love.graphics.newQuad((x-1)*32, (y-1)*48, 32, 48, 256, 256)
 		end
 	end
 	
@@ -1570,7 +2087,36 @@ function loadgraphics()
 	cheepcheepquad[2][1] = love.graphics.newQuad(0, 16, 16, 16, 32, 32)
 	cheepcheepquad[2][2] = love.graphics.newQuad(16, 16, 16, 16, 32, 32)
 	
+	sleepfishimg = newImageFallback("sleepfish.png") --seperate quad YAY
+	sleepfishquad = {}
+	
+	for y = 1, 2 do
+		sleepfishquad[y] = {}
+		for x = 1, 2 do
+			sleepfishquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, 32, 32)
+		end
+	end
+	
+	meteorimg = newImageFallback("meteor.png")
+	meteorquad = {}
+	
+	meteorquad[1] = {}
+	meteorquad[1][1] = love.graphics.newQuad(0, 0, 16, 16, 32, 32)
+	meteorquad[1][2] = love.graphics.newQuad(16, 0, 16, 16, 32, 32)
+	
+	fishboneimg = newImageFallback("fishbone.png")
+	fishbonequad = {}
+	
+	fishbonequad[1] = {}
+	fishbonequad[1][1] = love.graphics.newQuad(0, 0, 16, 16, 32, 32)
+	fishbonequad[1][2] = love.graphics.newQuad(16, 0, 16, 16, 32, 32)
+	
+	fishbonequad[2] = {}
+	fishbonequad[2][1] = love.graphics.newQuad(0, 16, 16, 16, 32, 32)
+	fishbonequad[2][2] = love.graphics.newQuad(16, 16, 16, 16, 32, 32)
+	
 	squidimg = newImageFallback("squid.png")
+	pinksquidimg = newImageFallback("pinksquid.png")
 	squidquad = {}
 	for x = 1, 2 do
 		squidquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 24, 32, 32)
@@ -1583,6 +2129,42 @@ function loadgraphics()
 		bulletbillquad[y] = love.graphics.newQuad(0, (y-1)*16, 16, 16, 16, 64)
 	end
 	
+	bigbillimg = newImageFallback("bigbill.png")
+	bigbillquad = {}
+	
+	for y = 1, 4 do
+		bigbillquad[y] = love.graphics.newQuad(0, (y-1)*32, 32, 32, 32, 128)
+	end
+	
+	kingbillimg = newImageFallback("kingbill.png")
+	kingbillquad = {}
+	
+	for y = 1, 4 do
+		kingbillquad[y] = love.graphics.newQuad(0, (y-1)*200, 200, 200, 200, 800)
+	end
+	
+	cannonballimg = newImageFallback("cannonball.png")
+	cannonballquad = love.graphics.newQuad(0, 0, 12, 12, 12, 12)
+	
+	torpedotedimage = newImageFallback("torpedoted.png")
+	torpedotedquad = {}
+	
+	for y = 1, 4 do
+		torpedotedquad[y] = {}
+		for x = 1, 2 do
+			torpedotedquad[y][x] = love.graphics.newQuad((x-1)*32, (y-1)*16, 32, 16, 64, 64)
+		end
+	end
+	
+	torpedolauncherimg = newImageFallback("torpedolauncher.png")
+	torpedolauncherquads = {}
+	for j = 1, 4 do
+		torpedolauncherquads[j] = {}
+		for i = 1, 2 do
+			torpedolauncherquads[j][i] = love.graphics.newQuad((i-1)*32, (j-1)*24, 32, 24, 64, 96)
+		end
+	end
+	
 	hammerbrosimg = newImageFallback("hammerbros.png")
 	hammerbrosquad = {}
 	for y = 1, 4 do
@@ -1592,12 +2174,39 @@ function loadgraphics()
 		end
 	end	
 	
+	firebrosimg = newImageFallback("firebros.png")
+	firebrosquad = {}
+	for y = 1, 4 do
+		firebrosquad[y] = {}
+		for x = 1, 4 do
+			firebrosquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*34, 16, 34, 64, 256)
+		end
+	end
+	
+	boomerangbrosimg = newImageFallback("boomerangbros.png")
+	boomerangbrosquad = {}
+	for y = 1, 4 do
+		boomerangbrosquad[y] = {}
+		for x = 1, 4 do
+			boomerangbrosquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*34, 16, 34, 64, 256)
+		end
+	end	
+	
 	hammerimg = newImageFallback("hammer.png")
 	hammerquad = {}
 	for j = 1, 4 do
 		hammerquad[j] = {}
 		for i = 1, 4 do
 			hammerquad[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 64, 64)
+		end
+	end
+	
+	boomerangimg = newImageFallback("boomerang.png")
+	boomerangquad = {}
+	for j = 1, 4 do
+		boomerangquad[j] = {}
+		for i = 1, 4 do
+			boomerangquad[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*16, 16, 16, 64, 64)
 		end
 	end
 	
@@ -1627,7 +2236,7 @@ function loadgraphics()
 			reddownplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
 		end
 	end
-
+	
 	downplantimg = newImageFallback("downplant.png")
 	downplantquads = {}
 	for j = 1, 4 do
@@ -1635,6 +2244,31 @@ function loadgraphics()
 		for i = 1, 2 do
 			downplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*24, 16, 24, 32, 128)
 		end
+	end
+
+	
+	fireplantimg = newImageFallback("fireplant.png")
+	fireplantquads = {}
+	for j = 1, 4 do
+		fireplantquads[j] = {}
+		for i = 1, 2 do
+			fireplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*23, 16, 23, 32, 128)
+		end
+	end
+	
+	downfireplantimg = newImageFallback("downfireplant.png")
+	downfireplantquads = {}
+	for j = 1, 4 do
+		downfireplantquads[j] = {}
+		for i = 1, 2 do
+			downfireplantquads[j][i] = love.graphics.newQuad((i-1)*16, (j-1)*23, 16, 23, 32, 128)
+		end
+	end
+	
+	longfireimg = newImageFallback("longfire.png")
+	longfirequad = {}
+	for i = 1, 5 do
+		longfirequad[i] = love.graphics.newQuad(0, (i-1)*14, 47, 14, 47, 70)
 	end
 	
 	fireimg = newImageFallback("fire.png")
@@ -1654,13 +2288,73 @@ function loadgraphics()
 	end
 	
 	boximage = newImageFallback("box.png")
+	box2image = newImageFallback("box2.png")
 	boxquad = love.graphics.newQuad(0, 0, 12, 12, 16, 16)
+	
+	--turrets
+		--normal
+		turretarmimg = newImageFallback("turretarm.png")
+		turret2armimg = newImageFallback("turret2arm.png")
+		
+		turretleftimg = newImageFallback("turretleft.png")
+		turretrightimg = newImageFallback("turretright.png")
+		turret2leftimg = newImageFallback("turret2left.png")
+		turret2rightimg = newImageFallback("turret2right.png")
+		
+		--rocket
+		rocketturretimage = newImageFallback("rocketturret.png")
+		rocketturretquad = {}
+		
+		for x = 1, 3 do
+			rocketturretquad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 16, 48, 16)
+		end
+		turretrocketimage = newImageFallback("turretrocket.png")
+		turretrocketquad = {}
+		
+		for x = 1, 2 do
+			turretrocketquad[x] = love.graphics.newQuad((x-1)*5, 0, 5, 5, 5, 5)
+		end
 	
 	flagimg = newImageFallback("flag.png")
 	castleflagimg = newImageFallback("castleflag.png")
 	
 	bubbleimg = newImageFallback("bubble.png")
 
+	boomboomimg = newImageFallback("boomboom.png")
+	
+	boomboomquad = {}
+	for x = 1, 8 do
+		boomboomquad[x] = love.graphics.newQuad((x-1)*32, 0, 32, 32, 256, 32)
+	end
+	
+	--eh
+	rainboomimg = newImageFallback("rainboom.png")
+	rainboomquad = {}
+	for x = 1, 7 do
+		for y = 1, 7 do
+			rainboomquad[x+(y-1)*7] = love.graphics.newQuad((x-1)*204, (y-1)*182, 204, 182, 1428, 1274)
+		end
+	end
+	
+	logo = newImageFallback("stabyourself.png")
+	logoblood = newImageFallback("stabyourselfblood.png")
+	
+	--GUI
+	checkboximg = newImageFallback("GUI/checkbox.png")
+	checkboxquad = {{love.graphics.newQuad(0, 0, 9, 9, 18, 18), love.graphics.newQuad(9, 0, 9, 9, 18, 18)}, {love.graphics.newQuad(0, 9, 9, 9, 18, 18), love.graphics.newQuad(9, 9, 9, 9, 18, 18)}}
+	
+	dropdownarrowimg = newImageFallback("GUI/dropdownarrow.png")
+	
+	gradientimg = newImageFallback("gradient.png");gradientimg:setFilter("linear", "linear")
+	
+	--Ripping off
+	minecraftbreakimg = newImageFallback("Minecraft/blockbreak.png")
+	minecraftbreakquad = {}
+	for i = 1, 10 do
+		minecraftbreakquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 16, 160, 16)
+	end
+	minecraftgui = newImageFallback("Minecraft/gui.png")
+	minecraftselected = newImageFallback("Minecraft/selected.png")
 	
 	--players
 	marioanimations = {}
@@ -1688,6 +2382,7 @@ function loadgraphics()
 	marioclimb = {}
 	marioswim = {}
 	mariogrow = {}
+	mariogrownogun = {}
 	
 	for i = 1, 5 do
 		marioidle[i] = love.graphics.newQuad(0, (i-1)*20, 20, 20, 512, 128)
@@ -1710,6 +2405,7 @@ function loadgraphics()
 		marioswim[i][2] = love.graphics.newQuad(200, (i-1)*20, 20, 20, 512, 128)
 		
 		mariogrow[i] = love.graphics.newQuad(260, 0, 20, 24, 512, 128)
+		mariogrownogun[i] = love.graphics.newQuad(280, 0, 20, 24, 512, 128)
 	end
 	
 	
@@ -1718,9 +2414,7 @@ function loadgraphics()
 	bigmarioanimations[1] = newImageFallback("player/bigmarioanimations1.png")
 	bigmarioanimations[2] = newImageFallback("player/bigmarioanimations2.png")
 	bigmarioanimations[3] = newImageFallback("player/bigmarioanimations3.png")
-
 	bigclassicmarioanimations = {}
-
 	for x = 0, 3 do
 		bigclassicmarioanimations[x] = newImageFallback("player/classic/bigmarioanimations" .. x .. ".png")
 	end
@@ -1761,6 +2455,201 @@ function loadgraphics()
 		bigmarioswim[i][2] = love.graphics.newQuad(200, (i-1)*36, 20, 36, 512, 256)
 		
 		bigmarioduck[i] = love.graphics.newQuad(260, (i-1)*36, 20, 36, 512, 256)
+	end
+	
+	hammermarioanimations = {}
+	hammermarioanimations[0] = newImageFallback("player/hammermarioanimations0.png")
+	hammermarioanimations[1] = newImageFallback("player/hammermarioanimations1.png")
+	hammermarioanimations[2] = newImageFallback("player/hammermarioanimations2.png")
+	hammermarioanimations[3] = newImageFallback("player/hammermarioanimations3.png")
+	
+	hammerminecraftanimations = {}
+	hammerminecraftanimations[0] = newImageFallback("Minecraft/hammermarioanimations0.png")
+	hammerminecraftanimations[1] = newImageFallback("Minecraft/hammermarioanimations1.png")
+	hammerminecraftanimations[2] = newImageFallback("Minecraft/hammermarioanimations2.png")
+	hammerminecraftanimations[3] = newImageFallback("Minecraft/hammermarioanimations3.png")
+	
+	hammermarioidle = {}
+	hammermariorun = {}
+	hammermarioslide = {}
+	hammermariojump = {}
+	hammermariofire = {}
+	hammermarioclimb = {}
+	hammermarioswim = {}
+	hammermarioduck = {} --hehe duck.
+	
+	for i = 1, 5 do
+		hammermarioidle[i] = love.graphics.newQuad(0, (i-1)*36, 20, 36, 512, 256)
+		
+		hammermariorun[i] = {}
+		hammermariorun[i][1] = love.graphics.newQuad(20, (i-1)*36, 20, 36, 512, 256)
+		hammermariorun[i][2] = love.graphics.newQuad(40, (i-1)*36, 20, 36, 512, 256)
+		hammermariorun[i][3] = love.graphics.newQuad(60, (i-1)*36, 20, 36, 512, 256)
+		
+		hammermarioslide[i] = love.graphics.newQuad(80, (i-1)*36, 20, 36, 512, 256)
+		hammermariojump[i] = love.graphics.newQuad(100, (i-1)*36, 20, 36, 512, 256)
+		hammermariofire[i] = love.graphics.newQuad(120, (i-1)*36, 20, 36, 512, 256)
+		
+		hammermarioclimb[i] = {}
+		hammermarioclimb[i][1] = love.graphics.newQuad(140, (i-1)*36, 20, 36, 512, 256)
+		hammermarioclimb[i][2] = love.graphics.newQuad(160, (i-1)*36, 20, 36, 512, 256)
+		
+		hammermarioswim[i] = {}
+		hammermarioswim[i][1] = love.graphics.newQuad(180, (i-1)*36, 20, 36, 512, 256)
+		hammermarioswim[i][2] = love.graphics.newQuad(200, (i-1)*36, 20, 36, 512, 256)
+		
+		hammermarioduck[i] = love.graphics.newQuad(260, (i-1)*36, 20, 36, 512, 256)
+	end
+	
+	frogmarioanimations = {}
+	frogmarioanimations[0] = newImageFallback("player/frogmarioanimations0.png")
+	frogmarioanimations[1] = newImageFallback("player/frogmarioanimations1.png")
+	frogmarioanimations[2] = newImageFallback("player/frogmarioanimations2.png")
+	frogmarioanimations[3] = newImageFallback("player/frogmarioanimations3.png")
+	
+	frogminecraftanimations = {}
+	frogminecraftanimations[0] = newImageFallback("Minecraft/frogmarioanimations0.png")
+	frogminecraftanimations[1] = newImageFallback("Minecraft/frogmarioanimations1.png")
+	frogminecraftanimations[2] = newImageFallback("Minecraft/frogmarioanimations2.png")
+	frogminecraftanimations[3] = newImageFallback("Minecraft/frogmarioanimations3.png")
+	
+	frogmarioidle = {}
+	frogmariorun = {}
+	frogmarioslide = {}
+	frogmariojump = {}
+	frogmariofire = {}
+	frogmarioclimb = {}
+	frogmarioswim = {}
+	frogmarioduck = {} --hehe duck.
+	
+	for i = 1, 5 do
+		frogmarioidle[i] = love.graphics.newQuad(0, (i-1)*36, 20, 36, 512, 256)
+		
+		frogmariorun[i] = {}
+		frogmariorun[i][1] = love.graphics.newQuad(20, (i-1)*36, 20, 36, 512, 256)
+		frogmariorun[i][2] = love.graphics.newQuad(40, (i-1)*36, 20, 36, 512, 256)
+		frogmariorun[i][3] = love.graphics.newQuad(60, (i-1)*36, 20, 36, 512, 256)
+		
+		frogmarioslide[i] = love.graphics.newQuad(80, (i-1)*36, 20, 36, 512, 256)
+		frogmariojump[i] = love.graphics.newQuad(100, (i-1)*36, 20, 36, 512, 256)
+		frogmariofire[i] = love.graphics.newQuad(120, (i-1)*36, 20, 36, 512, 256)
+		
+		frogmarioclimb[i] = {}
+		frogmarioclimb[i][1] = love.graphics.newQuad(140, (i-1)*36, 20, 36, 512, 256)
+		frogmarioclimb[i][2] = love.graphics.newQuad(160, (i-1)*36, 20, 36, 512, 256)
+		
+		frogmarioswim[i] = {}
+		frogmarioswim[i][1] = love.graphics.newQuad(180, (i-1)*36, 20, 36, 512, 256)
+		frogmarioswim[i][2] = love.graphics.newQuad(200, (i-1)*36, 20, 36, 512, 256)
+		
+		frogmarioduck[i] = love.graphics.newQuad(260, (i-1)*36, 20, 36, 512, 256)
+	end
+	
+	raccoonmarioanimations = {}
+	raccoonmarioanimations[0] = newImageFallback("player/raccoonmarioanimations0.png")
+	raccoonmarioanimations[1] = newImageFallback("player/raccoonmarioanimations1.png")
+	raccoonmarioanimations[2] = newImageFallback("player/raccoonmarioanimations2.png")
+	raccoonmarioanimations[3] = newImageFallback("player/raccoonmarioanimations3.png")
+	
+	raccoonminecraftanimations = {}
+	raccoonminecraftanimations[0] = newImageFallback("Minecraft/raccoonmarioanimations0.png")
+	raccoonminecraftanimations[1] = newImageFallback("Minecraft/raccoonmarioanimations1.png")
+	raccoonminecraftanimations[2] = newImageFallback("Minecraft/raccoonmarioanimations2.png")
+	raccoonminecraftanimations[3] = newImageFallback("Minecraft/raccoonmarioanimations3.png")
+	
+	raccoonmarioidle = {}
+	raccoonmariorun = {}
+	raccoonmarioslide = {}
+	raccoonmariojump = {}
+	raccoonmariofire = {}
+	raccoonmarioclimb = {}
+	raccoonmarioswim = {}
+	raccoonmarioduck = {} --hehe duck.
+	raccoonmariofloat = {}
+	raccoonmariospin = {}
+	raccoonmariorunfast = {}
+	raccoonmariofly = {}
+	
+	for i = 1, 5 do
+		raccoonmarioidle[i] = love.graphics.newQuad(0, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmariorun[i] = {}
+		raccoonmariorun[i][1] = love.graphics.newQuad(26, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariorun[i][2] = love.graphics.newQuad(52, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariorun[i][3] = love.graphics.newQuad(78, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmarioslide[i] = love.graphics.newQuad(104, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariojump[i] = love.graphics.newQuad(130, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariofire[i] = love.graphics.newQuad(156, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmarioclimb[i] = {}
+		raccoonmarioclimb[i][1] = love.graphics.newQuad(182, (i-1)*36, 26, 36, 598, 256)
+		raccoonmarioclimb[i][2] = love.graphics.newQuad(208, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmarioswim[i] = {}
+		raccoonmarioswim[i][1] = love.graphics.newQuad(234, (i-1)*36, 26, 36, 598, 256)
+		raccoonmarioswim[i][2] = love.graphics.newQuad(260, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmarioduck[i] = love.graphics.newQuad(286, (i-1)*36, 26, 36, 598, 256)
+	
+		raccoonmariofloat[i] = {}
+		raccoonmariofloat[i][1] = love.graphics.newQuad(312, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariofloat[i][2] = love.graphics.newQuad(338, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariofloat[i][3] = love.graphics.newQuad(130, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariofloat[i][4] = love.graphics.newQuad(130, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmariospin[i] = {}
+		raccoonmariospin[i][1] = love.graphics.newQuad(364, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariospin[i][2] = love.graphics.newQuad(390, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariospin[i][3] = love.graphics.newQuad(416, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmariorunfast[i] = {}
+		raccoonmariorunfast[i][1] = love.graphics.newQuad(442, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariorunfast[i][2] = love.graphics.newQuad(468, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariorunfast[i][3] = love.graphics.newQuad(494, (i-1)*36, 26, 36, 598, 256)
+		
+		raccoonmariofly[i] = {}
+		raccoonmariofly[i][1] = love.graphics.newQuad(520, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariofly[i][2] = love.graphics.newQuad(546, (i-1)*36, 26, 36, 598, 256)
+		raccoonmariofly[i][3] = love.graphics.newQuad(572, (i-1)*36, 26, 36, 598, 256)
+	end
+	
+	tinymarioanimations = {}
+	tinymarioanimations[0] = newImageFallback("player/tinymarioanimations0.png")
+	tinymarioanimations[1] = newImageFallback("player/tinymarioanimations1.png")
+	tinymarioanimations[2] = newImageFallback("player/tinymarioanimations2.png")
+	tinymarioanimations[3] = newImageFallback("player/tinymarioanimations3.png")
+	
+	tinymarioidle = {}
+	tinymariorun = {}
+	tinymarioslide = {}
+	tinymariojump = {}
+	tinymariodie = {}
+	tinymarioclimb = {}
+	tinymarioswim = {}
+	tinymariogrow = {}
+	
+	for i = 1, 5 do
+		tinymarioidle[i] = love.graphics.newQuad(0, (i-1)*10, 10, 10, 256, 64)
+		
+		tinymariorun[i] = {}
+		tinymariorun[i][1] = love.graphics.newQuad(10, (i-1)*10, 10, 10, 256, 64)
+		tinymariorun[i][2] = love.graphics.newQuad(20, (i-1)*10, 10, 10, 256, 64)
+		tinymariorun[i][3] = love.graphics.newQuad(30, (i-1)*10, 10, 10, 256, 64)
+		
+		tinymarioslide[i] = love.graphics.newQuad(40, (i-1)*10, 10, 10, 256, 64)
+		tinymariojump[i] = love.graphics.newQuad(50, (i-1)*10, 10, 10, 256, 64)
+		tinymariodie[i] = love.graphics.newQuad(60, (i-1)*10, 10, 10, 256, 64)
+		
+		tinymarioclimb[i] = {}
+		tinymarioclimb[i][1] = love.graphics.newQuad(70, (i-1)*10, 10, 10, 256, 64)
+		tinymarioclimb[i][2] = love.graphics.newQuad(80, (i-1)*10, 10, 10, 256, 64)
+		
+		tinymarioswim[i] = {}
+		tinymarioswim[i][1] = love.graphics.newQuad(90, (i-1)*10, 10, 10, 256, 64)
+		tinymarioswim[i][2] = love.graphics.newQuad(100, (i-1)*10, 10, 10, 256, 64)
+		
+		tinymariogrow[i] = love.graphics.newQuad(110, 0, 10, 12, 256, 64)
 	end
 	
 	--portals
@@ -1816,6 +2705,14 @@ function loadgraphics()
 	laserimg = newImageFallback("laser.png")
 	lasersideimg = newImageFallback("laserside.png")
 	
+	excursionfunnelimg = newImageFallback("funnel1.png")
+	excursionfunnel2img = newImageFallback("funnel2.png")
+	excursionbaseimg = newImageFallback("funnelbase.png")
+	excursionquad = {}
+	for x = 1, 8 do
+		excursionquad[x] = love.graphics.newQuad((x-1)*8, 0, 8, 32, 64, 32)
+	end
+	
 	faithplateplateimg = newImageFallback("faithplateplate.png")
 	
 	laserdetectorimg = newImageFallback("laserdetector.png")
@@ -1823,15 +2720,21 @@ function loadgraphics()
 	gel1img = newImageFallback("gel1.png")
 	gel2img = newImageFallback("gel2.png")
 	gel3img = newImageFallback("gel3.png")
+	gel4img = newImageFallback("gel4.png")
 	gelquad = {love.graphics.newQuad(0, 0, 12, 12, 36, 12), love.graphics.newQuad(12, 0, 12, 12, 36, 12), love.graphics.newQuad(24, 0, 12, 12, 36, 12)}
 	
 	gel1ground = newImageFallback("gel1ground.png")
 	gel2ground = newImageFallback("gel2ground.png")
 	gel3ground = newImageFallback("gel3ground.png")
+	gel4ground = newImageFallback("gel4ground.png")
 	
 	geldispenserimg = newImageFallback("geldispenser.png")
 	cubedispenserimg = newImageFallback("cubedispenser.png")
-
+	
+	--@DEV: No idea what these do, commented out to prevent a mess.
+	--customsprites = false
+	--loadcustomsprites()
+	
 	--optionsmenu
 	skinpuppet = {}
 	secondskinpuppet = {}
