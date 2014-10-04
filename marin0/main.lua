@@ -1460,9 +1460,18 @@ function loadgraphics()
 	
 	--queen I mean princess
 	peachimg = newImageFallback("peach.png")
-	
+
+	--platforms
 	platformimg = newImageFallback("platform.png")
+	platformquad = {}
+	for i = 1, 3 do
+		platformquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 8, 48, 8)
+	end
 	platformbonusimg = newImageFallback("platformbonus.png")
+	platformbonusquad = {}
+	for i = 1, 3 do
+		platformbonusquad[i] = love.graphics.newQuad((i-1)*16, 0, 16, 8, 48, 8)
+	end
 	
 	seesawimg = newImageFallback("seesaw.png")
 	seesawquad = {}
