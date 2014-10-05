@@ -37,7 +37,7 @@ function springgreen:update(dt)
 end
 
 function springgreen:draw()
-	love.graphics.drawq(springgreenimg, springgreenquads[spriteset][self.frame], math.floor((self.x-xscroll)*16*scale), (self.y*16-8)*scale, 0, scale, scale)
+	love.graphics.draw(springgreenimg, springgreenquads[spriteset][self.frame], math.floor((self.x-xscroll)*16*scale), (self.y*16-8)*scale, 0, scale, scale)
 end
 
 function springgreen:hit()

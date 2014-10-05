@@ -396,6 +396,13 @@ function game_update(dt)
 		table.remove(blockdebristable, v) --remove
 	end
 	
+	--@DEV: Special hook for EntranceJew because not being able to hit reload to clear my portals was pissing me off.
+	if objects["player"][mouseowner] and playertype == "portal" and objects["player"][mouseowner].controlsenabled then
+		if love.mouse.isDown("m") then
+			objects["player"][mouseowner]:removeportals()
+		end
+	end
+
 	--gelcannon
 	if objects["player"][mouseowner] and playertype == "gelcannon" and objects["player"][mouseowner].controlsenabled then
 		if gelcannontimer > 0 then
@@ -1247,14 +1254,14 @@ function game_draw()
 					print(tilenumber, tilequads)
 				end
 				if tilequads[tilenumber].coinblock and tilequads[tilenumber].invisible == false then --coinblock
-					love.graphics.drawq(coinblockimage, coinblockquads[spriteset][coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
+					love.graphics.draw(coinblockimage, coinblockquads[spriteset][coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
 				elseif tilequads[tilenumber].coin then --coin
-					love.graphics.drawq(coinimage, coinquads[coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
+					love.graphics.draw(coinimage, coinquads[coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
 				elseif tilequads[tilenumber].breakable and tilequads[tilenumber].invisible == false then --coinblock
-					love.graphics.drawq(brickblockimage, brickblockquads[spriteset][coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
+					love.graphics.draw(brickblockimage, brickblockquads[spriteset][coinframe], math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
 				elseif bounceyoffset ~= 0 then
 					if tilequads[tilenumber].invisible == false or editormode then
-						love.graphics.drawq(tilequads[tilenumber].image, tilequads[tilenumber].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
+						love.graphics.draw(tilequads[tilenumber].image, tilequads[tilenumber].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-bounceyoffset)*16-8)*scale, 0, scale, scale)
 					end
 				end
 				
@@ -1288,13 +1295,13 @@ function game_draw()
 				
 				if editormode then
 					if tilequads[t[1]].invisible and t[1] ~= 1 then
-						love.graphics.drawq(tilequads[t[1]].image, tilequads[t[1]].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-math.mod(yscroll, 1))*16-8)*scale, 0, scale, scale)
+						love.graphics.draw(tilequads[t[1]].image, tilequads[t[1]].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-math.mod(yscroll, 1))*16-8)*scale, 0, scale, scale)
 					end
 					
 					if #t > 1 and t[2] ~= "link" then
 						tilenumber = t[2]
 						love.graphics.setColor(255, 255, 255, 150)
-						love.graphics.drawq(entityquads[tilenumber].image, entityquads[tilenumber].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-math.mod(yscroll, 1))*16-8)*scale, 0, scale, scale)
+						love.graphics.draw(entityquads[tilenumber].image, entityquads[tilenumber].quad, math.floor((x-1-math.mod(xscroll, 1))*16*scale), ((y-1-math.mod(yscroll, 1))*16-8)*scale, 0, scale, scale)
 						love.graphics.setColor(255, 255, 255, 255)
 					end
 				end
@@ -1318,7 +1325,7 @@ function game_draw()
 		
 		properprint("*", uispace*1.5-8*scale, 16*scale)
 		
-		love.graphics.drawq(coinanimationimage, coinanimationquads[spriteset][coinframe], uispace*1.5-16*scale, 16*scale, 0, scale, scale)
+		love.graphics.draw(coinanimationimage, coinanimationquads[spriteset][coinframe], uispace*1.5-16*scale, 16*scale, 0, scale, scale)
 		properprint(addzeros(mariocoincount, 2), uispace*1.5-0*scale, 16*scale)
 		
 		properprint("world", uispace*2.5 - 20*scale, 8*scale)
@@ -1366,7 +1373,7 @@ function game_draw()
 						else
 							love.graphics.setColor(255, 255, 255)
 						end
-						love.graphics.drawq(marioanimations[count], marioidle[3], (x-string.len("p" .. i .. " * " .. printedvalue)*4-14)*scale, 22*scale, 0, scale)
+						love.graphics.draw(marioanimations[count], marioidle[3], (x-string.len("p" .. i .. " * " .. printedvalue)*4-14)*scale, 22*scale, 0, scale)
 						love.graphics.setScissor()
 
 
@@ -1447,7 +1454,7 @@ function game_draw()
 		love.graphics.setColor(255, 255, 255)
 		--axe
 		if axex then
-			love.graphics.drawq(axeimg, axequads[coinframe], math.floor((axex-1-xscroll)*16*scale), (axey-1.5-yscroll)*16*scale, 0, scale, scale)
+			love.graphics.draw(axeimg, axequads[coinframe], math.floor((axex-1-xscroll)*16*scale), (axey-1.5-yscroll)*16*scale, 0, scale, scale)
 			
 			if marioworld ~= 8 then
 				love.graphics.draw(toadimg, math.floor((mapwidth-7-xscroll)*16*scale), (11.0625-yscroll)*16*scale, 0, scale, scale)
@@ -1708,7 +1715,7 @@ function game_draw()
 								else
 									love.graphics.setColor(255, 255, 255)
 								end
-								love.graphics.drawq(v.graphic[k], v.quad, math.floor(((v.x-xscroll)*16+v.offsetX)*scale), math.floor(((v.y-yscroll)*16-v.offsetY)*scale), v.rotation, dirscale, horscale, v.quadcenterX, v.quadcenterY)
+								love.graphics.draw(v.graphic[k], v.quad, math.floor(((v.x-xscroll)*16+v.offsetX)*scale), math.floor(((v.y-yscroll)*16-v.offsetY)*scale), v.rotation, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 							end
 							
 							if v.drawhat and hatoffsets[v.animationstate] then
@@ -1766,7 +1773,7 @@ function game_draw()
 							
 							if v.graphic[0] then
 								love.graphics.setColor(255, 255, 255)
-								love.graphics.drawq(v.graphic[0], v.quad, math.floor(((v.x-xscroll)*16+v.offsetX)*scale), math.floor(((v.y-yscroll)*16-v.offsetY)*scale), v.rotation, dirscale, horscale, v.quadcenterX, v.quadcenterY)
+								love.graphics.draw(v.graphic[0], v.quad, math.floor(((v.x-xscroll)*16+v.offsetX)*scale), math.floor(((v.y-yscroll)*16-v.offsetY)*scale), v.rotation, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 							end
 						else
 							if v.graphic and v.quad then
@@ -1775,7 +1782,7 @@ function game_draw()
 								else
 									love.graphics.setColor(255, 255, 255)
 								end
-								love.graphics.drawq(v.graphic, v.quad, math.floor(((v.x-xscroll)*16+v.offsetX)*scale), math.floor(((v.y-yscroll)*16-v.offsetY)*scale), v.rotation, dirscale, horscale, v.quadcenterX, v.quadcenterY)
+								love.graphics.draw(v.graphic, v.quad, math.floor(((v.x-xscroll)*16+v.offsetX)*scale), math.floor(((v.y-yscroll)*16-v.offsetY)*scale), v.rotation, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 							end
 						end
 						
@@ -1814,7 +1821,7 @@ function game_draw()
 										else
 											love.graphics.setColor(255, 255, 255)
 										end
-										love.graphics.drawq(v.graphic[k], v.quad, math.ceil(((px-xscroll)*16+v.offsetX)*scale), math.ceil(((py-yscroll)*16-v.offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
+										love.graphics.draw(v.graphic[k], v.quad, math.ceil(((px-xscroll)*16+v.offsetX)*scale), math.ceil(((py-yscroll)*16-v.offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 									end
 									
 									if v.drawhat and hatoffsets[v.animationstate] then
@@ -1872,10 +1879,10 @@ function game_draw()
 									
 									if v.graphic[0] then
 										love.graphics.setColor(255, 255, 255)
-										love.graphics.drawq(v.graphic[0], v.quad, math.floor(((px-xscroll)*16+v.offsetX)*scale), math.floor(((py-yscroll)*16-v.offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
+										love.graphics.draw(v.graphic[0], v.quad, math.floor(((px-xscroll)*16+v.offsetX)*scale), math.floor(((py-yscroll)*16-v.offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 									end
 								else
-									love.graphics.drawq(v.graphic, v.quad, math.ceil(((px-xscroll)*16+v.offsetX)*scale), math.ceil(((py-yscroll)*16-v.offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
+									love.graphics.draw(v.graphic, v.quad, math.ceil(((px-xscroll)*16+v.offsetX)*scale), math.ceil(((py-yscroll)*16-v.offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 								end
 							end
 						end
@@ -1994,7 +2001,7 @@ function game_draw()
 				end
 				
 				love.graphics.setColor(unpack(objects["player"][i].portal1color))
-				love.graphics.drawq(portalimage, portal1quad[portalframe], math.floor(((objects["player"][i].portal1X-1-xscroll)*16+offsetx)*scale), math.floor(((objects["player"][i].portal1Y-1-yscroll)*16+offsety)*scale), rotation, scale, scale, 8, 8)
+				love.graphics.draw(portalimage, portal1quad[portalframe], math.floor(((objects["player"][i].portal1X-1-xscroll)*16+offsetx)*scale), math.floor(((objects["player"][i].portal1Y-1-yscroll)*16+offsety)*scale), rotation, scale, scale, 8, 8)
 			end
 			
 			if objects["player"][i].portal2X ~= false then
@@ -2021,7 +2028,7 @@ function game_draw()
 				end
 				
 				love.graphics.setColor(unpack(objects["player"][i].portal2color))
-				love.graphics.drawq(portalimage, portal2quad[portalframe], math.floor(((objects["player"][i].portal2X-1-xscroll)*16+offsetx)*scale), math.floor(((objects["player"][i].portal2Y-1-yscroll)*16+offsety)*scale), rotation, scale, scale, 8, 8)
+				love.graphics.draw(portalimage, portal2quad[portalframe], math.floor(((objects["player"][i].portal2X-1-xscroll)*16+offsetx)*scale), math.floor(((objects["player"][i].portal2Y-1-yscroll)*16+offsety)*scale), rotation, scale, scale, 8, 8)
 			end
 		end		
 		
@@ -2029,7 +2036,7 @@ function game_draw()
 		
 		--COINBLOCKANIMATION
 		for i, v in pairs(coinblockanimations) do
-			love.graphics.drawq(coinblockanimationimage, coinblockanimationquads[coinblockanimations[i].frame], math.floor((coinblockanimations[i].x - xscroll)*16*scale), math.floor(((coinblockanimations[i].y - yscroll)*16-8)*scale), 0, scale, scale, 4, 54)
+			love.graphics.draw(coinblockanimationimage, coinblockanimationquads[coinblockanimations[i].frame], math.floor((coinblockanimations[i].x - xscroll)*16*scale), math.floor(((coinblockanimations[i].y - yscroll)*16-8)*scale), 0, scale, scale, 4, 54)
 		end
 		
 		--SCROLLING SCORE
@@ -2165,7 +2172,7 @@ function game_draw()
 				love.graphics.setColor(255, 255, 255, 255)
 				local frame = math.ceil((breakingblockprogress/minecraftbreaktime)*10)
 				if frame ~= 0 then
-					love.graphics.drawq(minecraftbreakimg, minecraftbreakquad[frame], (breakingblockX-1-xscroll)*16*scale, (breakingblockY-1.5-yscroll)*16*scale, 0, scale, scale)
+					love.graphics.draw(minecraftbreakimg, minecraftbreakquad[frame], (breakingblockX-1-xscroll)*16*scale, (breakingblockY-1.5-yscroll)*16*scale, 0, scale, scale)
 				end
 			end
 			love.graphics.setColor(255, 255, 255, 255)
@@ -2184,7 +2191,7 @@ function game_draw()
 					elseif t <= smbtilecount+portaltilecount then
 						img = portaltilesimg
 					end
-					love.graphics.drawq(img, tilequads[t].quad, (width*8-88+(i-1)*20)*scale, 205*scale, 0, scale, scale)
+					love.graphics.draw(img, tilequads[t].quad, (width*8-88+(i-1)*20)*scale, 205*scale, 0, scale, scale)
 				end
 			end
 			
@@ -4579,9 +4586,9 @@ function savemap(filename)
 	
 	--tileset
 	
-	love.filesystem.mkdir( mappackfolder )
-	love.filesystem.mkdir( mappackfolder .. "/" .. mappack )
-	love.filesystem.mkdir( mappackfolder .. "/" .. mappack .. "/heights")
+	love.filesystem.createDirectory( mappackfolder )
+	love.filesystem.createDirectory( mappackfolder .. "/" .. mappack )
+	love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/heights")
 	
 	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt", s)
 	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. mariosublevel .. ".txt", mapheight)
@@ -5101,7 +5108,7 @@ end
 function properprint2(s, x, y)
 	for i = 1, string.len(tostring(s)) do
 		if fontquads[string.sub(s, i, i)] then
-			love.graphics.drawq(fontimage2, font2quads[string.sub(s, i, i)], x+((i-1)*4)*scale, y, 0, scale, scale)
+			love.graphics.draw(fontimage2, font2quads[string.sub(s, i, i)], x+((i-1)*4)*scale, y, 0, scale, scale)
 		end
 	end
 end

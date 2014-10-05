@@ -74,7 +74,7 @@ end
 function poisonmush:draw()
 	if self.uptimer < poisonmushtime and not self.destroy then
 		--Draw it coming out of the block.
-		love.graphics.drawq(entitiesimg, entityquads[101].quad, math.floor(((self.x-xscroll)*16+self.offsetX)*scale), math.floor(((self.y-yscroll)*16-self.offsetY)*scale), 0, scale, scale, self.quadcenterX, self.quadcenterY)
+		love.graphics.draw(entitiesimg, entityquads[101].quad, math.floor(((self.x-xscroll)*16+self.offsetX)*scale), math.floor(((self.y-yscroll)*16-self.offsetY)*scale), 0, scale, scale, self.quadcenterX, self.quadcenterY)
 	end
 end
 

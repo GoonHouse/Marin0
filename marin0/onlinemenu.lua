@@ -184,7 +184,7 @@ function drawplayercard(x, y, colortable, hattable, nick, ping)
 		else
 			love.graphics.setColor(255, 255, 255)
 		end
-		love.graphics.drawq(marioanimations[i], mariorun[3][runanimationframe], (x-6)*scale, (y-1)*scale, 0, scale*2)
+		love.graphics.draw(marioanimations[i], mariorun[3][runanimationframe], (x-6)*scale, (y-1)*scale, 0, scale*2)
 
 
 	end	

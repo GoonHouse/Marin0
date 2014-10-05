@@ -14,8 +14,8 @@ io.stdout:setvbuf("no")
 function love.load()
 	marioversion = 3
 	versionstring = "version 1.6"
-	shaderlist = love.filesystem.enumerate( "shaders/" )
-	graphicspacklist = love.filesystem.enumerate( "graphics/" )
+	shaderlist = love.filesystem.getDirectoryItems( "shaders/" )
+	graphicspacklist = love.filesystem.getDirectoryItems( "graphics/" )
 	
 	graphicspacki = 1 --@DEV: We have no guarantee which pack this will be, so we're gonna wanna change this later.
 	graphicspack = graphicspacklist[graphicspacki]
@@ -36,7 +36,7 @@ function love.load()
 	currentshaderi1 = 1
 	currentshaderi2 = 1
 	
-	hatcount = #love.filesystem.enumerate("graphics/SMB/hats") --@DEV: We shouldn't be changing this, but we should consider it when we add the fallback.
+	hatcount = #love.filesystem.getDirectoryItems("graphics/SMB/hats") --@DEV: We shouldn't be changing this, but we should consider it when we add the fallback.
 	
 	if not pcall(loadconfig) then
 		players = 1
@@ -50,15 +50,16 @@ function love.load()
 	fsaa = 0
 	fullscreen = false
 	changescale(scale, fullscreen)
-	love.graphics.setCaption( "Mari0" )
+	love.window.setTitle( "Mari0" )
 	
 	--version check by checking for a const that was added in 0.8.0
 	if love._version_major == nil then error("You have an outdated version of Love! Get 0.8.0 or higher and retry.") end
 	
 	iconimg = newImageFallback("icon.gif")
-	love.graphics.setIcon(iconimg)
+	love.window.setIcon(love.image.newImageData("graphics/SMB/icon.gif"))
+	--@DEV: Eventually redo this bit.
 	
-	love.graphics.setDefaultImageFilter("nearest", "nearest")
+	love.graphics.setDefaultFilter("nearest", "nearest")
 	
 	love.graphics.setBackgroundColor(0, 0, 0)
 	
@@ -198,8 +199,8 @@ function love.load()
 	else
 		soundenabled = true
 	end
-	love.filesystem.mkdir( "mappacks" )
-	love.filesystem.mkdir( "modmappacks" )
+	love.filesystem.createDirectory( "mappacks" )
+	love.filesystem.createDirectory( "modmappacks" )
 	editormode = false
 	yoffset = 0
 	love.graphics.setPointSize(3*scale)
@@ -973,7 +974,7 @@ function changescale(s, fullscreen)
 	end
 	
 	uispace = math.floor(width*16*scale/4)
-	love.graphics.setMode(width*16*scale, 224*scale, fullscreen, vsync, fsaa) --27x14 blocks (15 blocks actual height)
+	love.window.setMode(width*16*scale, 224*scale, {fullscreen=fullscreen, fullscreentype="normal", vsync=vsync, fsaa=fsaa}) --27x14 blocks (15 blocks actual height)
 	
 	gamewidth = love.graphics.getWidth()
 	gameheight = love.graphics.getHeight()
@@ -1371,7 +1372,7 @@ function properprint(s, x, y)
 			x = startx-((i)*8)*scale
 			y = y + 10*scale
 		elseif fontquads[char] then
-			love.graphics.drawq(fontimage, fontquads[char], x+((i-1)*8)*scale, y, 0, scale, scale)
+			love.graphics.draw(fontimage, fontquads[char], x+((i-1)*8)*scale, y, 0, scale, scale)
 		end
 	end
 end
@@ -1477,7 +1478,7 @@ function loadanimatedtiles() --animated
 	
 	animatedtiles = {}
 			
-	local fl = love.filesystem.enumerate(mappackfolder .. "/" .. mappack .. "/animated")
+	local fl = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/animated")
 	animatedtilecount = 0
 	
 	local i = 1

@@ -1,4 +1,4 @@
-local supported = love.graphics.isSupported and love.graphics.isSupported("canvas") and love.graphics.isSupported("pixeleffect")
+local supported = love.graphics.isSupported and love.graphics.isSupported("canvas") and love.graphics.isSupported("shader")
 local supports_npo2 = love.graphics.isSupported and love.graphics.isSupported("npot") or false -- on the safe side
 if not supported then 
 	shaderssupported = false
@@ -93,7 +93,7 @@ local function CreateShaderPass()
 			else
 				love.graphics.setPixelEffect()
 			end
-			love.graphics.drawq(self.canvas.canvas, self.canvas.quad, 0, 0)
+			love.graphics.draw(self.canvas.canvas, self.canvas.quad, 0, 0)
 		end
 	end
 	
@@ -120,7 +120,7 @@ function shaders:init(numpasses)
 		return
 	end
 	
-	local files = love.filesystem.enumerate("shaders")
+	local files = love.filesystem.getDirectoryItems("shaders")
 	
 	for i,v in ipairs(files) do
 		local filename, filetype = v:match("(.+)%.(.-)$")

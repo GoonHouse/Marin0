@@ -175,26 +175,26 @@ function platform:draw()
 	-- Middle
 	for i = 1, self.size-1 do
 		if self.dir ~= "justright" then
-			love.graphics.drawq(platformimg, platformquad[2], math.floor((self.x-1+i-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+			love.graphics.draw(platformimg, platformquad[2], math.floor((self.x-1+i-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 		else
-			love.graphics.drawq(platformbonusimg, platformbonusquad[2], math.floor((self.x-1+i-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+			love.graphics.draw(platformbonusimg, platformbonusquad[2], math.floor((self.x-1+i-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 		end
 	end
 	-- Right
 	if self.dir ~= "justright" then
-			love.graphics.drawq(platformimg, platformquad[3], math.floor((self.x-1+self.size-xscroll)*16*scale)-16, math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+			love.graphics.draw(platformimg, platformquad[3], math.floor((self.x-1+self.size-xscroll)*16*scale)-16, math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 		else
-			love.graphics.drawq(platformbonusimg, platformbonusquad[3], math.floor((self.x-1+self.size-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+			love.graphics.draw(platformbonusimg, platformbonusquad[3], math.floor((self.x-1+self.size-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 	end
 	-- Left
 	if self.dir ~= "justright" then
-			love.graphics.drawq(platformimg, platformquad[1], math.floor((self.x-1-xscroll)*16*scale)+32, math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+			love.graphics.draw(platformimg, platformquad[1], math.floor((self.x-1-xscroll)*16*scale)+32, math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 		else
-			love.graphics.drawq(platformbonusimg, platformbonusquad[1], math.floor((self.x-1-xscroll)*16*scale)+32, math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+			love.graphics.draw(platformbonusimg, platformbonusquad[1], math.floor((self.x-1-xscroll)*16*scale)+32, math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 	end
 	
 	if math.ceil(self.size) ~= self.size then --draw 1 more on the rightest
-		love.graphics.drawq(platformimg, platformquad[3], math.floor((self.x+self.size-1-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
+		love.graphics.draw(platformimg, platformquad[3], math.floor((self.x+self.size-1-xscroll)*16*scale), math.floor((self.y-8/16)*16*scale), 0, scale, scale)
 	end
 end
 

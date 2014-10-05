@@ -590,10 +590,10 @@ function editor_draw()
 									-- well, do nothing
 									-- or better: draw empty tiles almost transparent
 									love.graphics.setColor(255, 255, 255, 8)
-									love.graphics.drawq(tilequads[w].image, tilequads[w].quad, math.floor((x-splitxscroll[1]-1 + pastecenter[1])*16*scale)+(i-1)*16*scale, ((y-splityscroll[1]-1 + pastecenter[2])*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
+									love.graphics.draw(tilequads[w].image, tilequads[w].quad, math.floor((x-splitxscroll[1]-1 + pastecenter[1])*16*scale)+(i-1)*16*scale, ((y-splityscroll[1]-1 + pastecenter[2])*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
 								else
 									love.graphics.setColor(255, 255, 255, 72)
-									love.graphics.drawq(tilequads[w].image, tilequads[w].quad, math.floor((x-splitxscroll[1]-1 + pastecenter[1])*16*scale)+(i-1)*16*scale, ((y-splityscroll[1]-1 + pastecenter[2])*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
+									love.graphics.draw(tilequads[w].image, tilequads[w].quad, math.floor((x-splitxscroll[1]-1 + pastecenter[1])*16*scale)+(i-1)*16*scale, ((y-splityscroll[1]-1 + pastecenter[2])*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
 								end
 							end
 						end
@@ -612,7 +612,7 @@ function editor_draw()
 						for j, w in ipairs(v) do
 							if w[1] == mousetile then
 								--print(i,j,w[1],"SWITCHED")
-								love.graphics.drawq(tilequads[currenttile].image, tilequads[currenttile].quad, (i-1)*16*scale-(splitxscroll[1])*16*scale, ((j-1)*16*scale)-8*scale, 0, scale, scale)
+								love.graphics.draw(tilequads[currenttile].image, tilequads[currenttile].quad, (i-1)*16*scale-(splitxscroll[1])*16*scale, ((j-1)*16*scale)-8*scale, 0, scale, scale)
 							end
 						end
 					end
@@ -687,20 +687,20 @@ function editor_draw()
 					for i=1, brushwidth do
 						for j=1, brushheight do
 							if editentities == false then
-								love.graphics.drawq(tilequads[currenttile].image, tilequads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-1)*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
+								love.graphics.draw(tilequads[currenttile].image, tilequads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-1)*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
 								if tilewheel then
 									if j == 1 then
 										if currenttile == 2 then
 											-- one up
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(tilequads[currenttile-1].image, tilequads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
+											love.graphics.draw(tilequads[currenttile-1].image, tilequads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										elseif currenttile > 2 then
 											-- two up
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(tilequads[currenttile-1].image, tilequads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
+											love.graphics.draw(tilequads[currenttile-1].image, tilequads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,64)
-											love.graphics.drawq(tilequads[currenttile-2].image, tilequads[currenttile-2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-3)*16+8)*scale+((j-1)*16*scale)-2*scale, 0, scale, scale)
+											love.graphics.draw(tilequads[currenttile-2].image, tilequads[currenttile-2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-3)*16+8)*scale+((j-1)*16*scale)-2*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										end
 									end
@@ -708,33 +708,33 @@ function editor_draw()
 										if currenttile == smbtilecount + portaltilecount + customtilecount - 1 then
 											-- one down
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(tilequads[currenttile+1].image, tilequads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
+											love.graphics.draw(tilequads[currenttile+1].image, tilequads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										elseif currenttile <= smbtilecount + portaltilecount + customtilecount-2 then
 											-- two down
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(tilequads[currenttile+1].image, tilequads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
+											love.graphics.draw(tilequads[currenttile+1].image, tilequads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,64)
-											love.graphics.drawq(tilequads[currenttile+2].image, tilequads[currenttile+2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y+1)*16+8)*scale+((j-1)*16*scale)+2*scale, 0, scale, scale)
+											love.graphics.draw(tilequads[currenttile+2].image, tilequads[currenttile+2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y+1)*16+8)*scale+((j-1)*16*scale)+2*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										end
 									end
 								end
 							else
-								love.graphics.drawq(entityquads[currenttile].image, entityquads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-1)*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
+								love.graphics.draw(entityquads[currenttile].image, entityquads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-1)*16+8)*scale+((j-1)*16*scale), 0, scale, scale)
 								if tilewheel then
 									if j == 1 then
 										if currenttile == 2 then
 											-- one up
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(entityquads[currenttile-1].image, entityquads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
+											love.graphics.draw(entityquads[currenttile-1].image, entityquads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										elseif currenttile > 2 then
 											-- two up
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(entityquads[currenttile-1].image, entityquads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
+											love.graphics.draw(entityquads[currenttile-1].image, entityquads[currenttile-1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-2)*16+8)*scale+((j-1)*16*scale)-1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,64)
-											love.graphics.drawq(entityquads[currenttile-2].image, entityquads[currenttile-2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-3)*16+8)*scale+((j-1)*16*scale)-2*scale, 0, scale, scale)
+											love.graphics.draw(entityquads[currenttile-2].image, entityquads[currenttile-2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y-3)*16+8)*scale+((j-1)*16*scale)-2*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										end
 									end
@@ -742,14 +742,14 @@ function editor_draw()
 										if currenttile == entitiescount - 1 then
 											-- one down
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(entityquads[currenttile+1].image, entityquads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
+											love.graphics.draw(entityquads[currenttile+1].image, entityquads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										elseif currenttile <= entitiescount - 2 then
 											-- two down
 											love.graphics.setColor(255,255,255,112)
-											love.graphics.drawq(entityquads[currenttile+1].image, entityquads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
+											love.graphics.draw(entityquads[currenttile+1].image, entityquads[currenttile+1].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y)*16+8)*scale+((j-1)*16*scale)+1*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,64)
-											love.graphics.drawq(entityquads[currenttile+2].image, entityquads[currenttile+2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y+1)*16+8)*scale+((j-1)*16*scale)+2*scale, 0, scale, scale)
+											love.graphics.draw(entityquads[currenttile+2].image, entityquads[currenttile+2].quad, math.floor((x-splitxscroll[1]-1)*16*scale)+(i-1)*16*scale, ((y+1)*16+8)*scale+((j-1)*16*scale)+2*scale, 0, scale, scale)
 											love.graphics.setColor(255,255,255,255)
 										end
 									end
@@ -758,14 +758,14 @@ function editor_draw()
 						end
 					end
 				elseif editentities == false and not pastingtiles then
-					love.graphics.drawq(tilequads[currenttile].image, tilequads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8)*scale), 0, scale, scale)
+					love.graphics.draw(tilequads[currenttile].image, tilequads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8)*scale), 0, scale, scale)
 					if editortilemousescroll and (not assistmode or brushsizex <= 1 and brushsizey <= 1) then
 						for i = 1, 2 do
 							love.graphics.setColor(255, 255, 255, 200-(i*70))
 							if currenttile - i >= 1 then
 								if currenttile - i >= 89996 and currenttile - i < 90001 then
 								else
-									love.graphics.drawq(tilequads[currenttile-i].image, tilequads[currenttile-i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8-((i*16)+i))*scale), 0, scale, scale)
+									love.graphics.draw(tilequads[currenttile-i].image, tilequads[currenttile-i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8-((i*16)+i))*scale), 0, scale, scale)
 								end
 							end
 						end
@@ -773,7 +773,7 @@ function editor_draw()
 							love.graphics.setColor(255, 255, 255, 200-(i*70))
 							if (currenttile + i > smbtilecount+portaltilecount+customtilecount and currenttile + i < 90000) or (currenttile + i > animatedtilecount+90000 and currenttile + i > 89996) then
 							else
-								love.graphics.drawq(tilequads[currenttile+i].image, tilequads[currenttile+i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8+((i*16)+i))*scale), 0, scale, scale)
+								love.graphics.draw(tilequads[currenttile+i].image, tilequads[currenttile+i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8+((i*16)+i))*scale), 0, scale, scale)
 							end
 						end
 					elseif assistmode and (brushsizex > 1 or brushsizey > 1) then
@@ -783,24 +783,24 @@ function editor_draw()
 									--@DEV: DO NOTHING! I GUESS!
 								else
 									love.graphics.setColor(255, 255, 255, 200)	
-									love.graphics.drawq(tilequads[currenttile].image, tilequads[currenttile].quad, math.floor((x-splitxscroll[1]-1+xl-1)*16*scale), math.floor(((y-splityscroll[1]-1+yl-1)*16+8)*scale), 0, scale, scale)
+									love.graphics.draw(tilequads[currenttile].image, tilequads[currenttile].quad, math.floor((x-splitxscroll[1]-1+xl-1)*16*scale), math.floor(((y-splityscroll[1]-1+yl-1)*16+8)*scale), 0, scale, scale)
 								end
 							end
 						end
 					end
 				elseif not pastingtiles then 
-					love.graphics.drawq(entityquads[currenttile].image, entityquads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8)*scale), 0, scale, scale)
+					love.graphics.draw(entityquads[currenttile].image, entityquads[currenttile].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8)*scale), 0, scale, scale)
 					if editortilemousescroll and (not assistmode or brushsizex <= 1 and brushsizey <= 1) then
 						for i = 1, 2 do
 							love.graphics.setColor(255, 255, 255, 200-(i*70))
 							if currenttile - i > 0 then
-								love.graphics.drawq(entityquads[currenttile-i].image, entityquads[currenttile-i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8-((i*16)+i))*scale), 0, scale, scale)
+								love.graphics.draw(entityquads[currenttile-i].image, entityquads[currenttile-i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8-((i*16)+i))*scale), 0, scale, scale)
 							end
 						end
 						for i = 1, 2 do
 							love.graphics.setColor(255, 255, 255, 200-(i*70))
 							if currenttile + i < #entitylist then
-								love.graphics.drawq(entityquads[currenttile+i].image, entityquads[currenttile+i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8+((i*16)+i))*scale), 0, scale, scale)
+								love.graphics.draw(entityquads[currenttile+i].image, entityquads[currenttile+i].quad, math.floor((x-splitxscroll[1]-1)*16*scale), math.floor(((y-splityscroll[1]-1)*16+8+((i*16)+i))*scale), 0, scale, scale)
 							end
 						end
 					elseif assistmode and (brushsizex > 1 or brushsizey > 1) then
@@ -810,7 +810,7 @@ function editor_draw()
 									--@DEV: STILL NOTHING, JSYK
 								else
 									love.graphics.setColor(255, 255, 255, 200)	
-									love.graphics.drawq(entityquads[currenttile].image, entityquads[currenttile].quad, math.floor((x-splitxscroll[1]-1+xl-1)*16*scale), math.floor(((y-splityscroll[1]-1+yl-1)*16+8)*scale), 0, scale, scale)
+									love.graphics.draw(entityquads[currenttile].image, entityquads[currenttile].quad, math.floor((x-splitxscroll[1]-1+xl-1)*16*scale), math.floor(((y-splityscroll[1]-1+yl-1)*16+8)*scale), 0, scale, scale)
 								end
 							end
 						end
@@ -910,7 +910,7 @@ function editor_draw()
 			
 			if editentities then
 				for i = 1, entitiescount do
-					love.graphics.drawq(entityquads[i].image, entityquads[i].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
+					love.graphics.draw(entityquads[i].image, entityquads[i].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
 					if hotkeyfileexists and hotkeyset[tostring(2) .. "," .. tostring(i)] then
 						love.graphics.setColor(255, 0, 0)
 						love.graphics.rectangle("fill",math.mod((i-1), 22)*17*scale+21*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset,1*scale,17*scale)
@@ -937,11 +937,11 @@ function editor_draw()
 			elseif editentities == false then
 				if animatedtilelist then
 					for i = 1, tilelistcount+1 do
-						love.graphics.drawq(tilequads[i+tileliststart-1+90000].image, tilequads[i+tileliststart-1+90000].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
+						love.graphics.draw(tilequads[i+tileliststart-1+90000].image, tilequads[i+tileliststart-1+90000].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
 					end
 				else
 					for i = 1, tilelistcount+1 do
-						love.graphics.drawq(tilequads[i+tileliststart-1].image, tilequads[i+tileliststart-1].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
+						love.graphics.draw(tilequads[i+tileliststart-1].image, tilequads[i+tileliststart-1].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
 				
 						if hotkeyfileexists and hotkeyset[tostring(1) .. "," .. tostring(i + tileliststart-1)] then
 							love.graphics.setColor(255, 0, 0)
@@ -957,7 +957,7 @@ function editor_draw()
 				end
 			else
 				for i = 1, entitiescount do
-					love.graphics.drawq(entityquads[i].image, entityquads[i].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
+					love.graphics.draw(entityquads[i].image, entityquads[i].quad, math.mod((i-1), 22)*17*scale+5*scale, math.floor((i-1)/22)*17*scale+38*scale-tilesoffset, 0, scale, scale)
 				end
 			end
 			local mtbutton
@@ -3400,8 +3400,8 @@ function savesettings()
 		s = s .. "lives=" .. mariolivecount .. "\n"
 	end
 	
-	love.filesystem.mkdir( mappackfolder )
-	love.filesystem.mkdir( mappackfolder .. "/" .. mappack )
+	love.filesystem.createDirectory( mappackfolder )
+	love.filesystem.createDirectory( mappackfolder .. "/" .. mappack )
 	
 	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/settings.txt", s)
 end
