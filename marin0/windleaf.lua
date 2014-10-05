@@ -32,7 +32,7 @@ function windleaf:init(x, y)
 end
 
 function windleaf:update(dt)
-	if self.x > xscroll+width+1 and self.active then --check if off screen
+	if self.x > xscroll+width+1 or self.y > mapheight and self.active then --check if off screen
 		return true
 	else
 		return false

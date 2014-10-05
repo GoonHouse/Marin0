@@ -22,7 +22,7 @@ function button:init(x, y)
 end
 
 function button:update(dt)
-	local colls = checkrect(self.x+5/16, self.y-2/16, 20/16, 1, {"player", "goomba", "koopa", "box"})
+	local colls = checkrect(self.x+5/16, self.y-2/16, 20/16, 1, {"player", "box", "goomba", "koopa", "biggoomba", "bigkoopa", "shell", "paragoomba", "goombrat", "bomb", "splunkin", "sidestepper", "mole", "bigmole", "drybones", "core"})
 	
 	if (#colls > 0) ~= self.out then
 		self.out = not self.out
@@ -44,9 +44,9 @@ function button:draw()
 		ymod = 1
 	end
 	
-	love.graphics.draw(buttonbuttonimg, math.floor((self.x+5/16-xscroll)*16*scale), (self.y*16-10+ymod)*scale, 0, scale, scale)
+	love.graphics.draw(buttonbuttonimg, math.floor((self.x+5/16-xscroll)*16*scale), ((self.y-yscroll)*16-10+ymod)*scale, 0, scale, scale)
 	
-	love.graphics.draw(buttonbaseimg, math.floor((self.x-1/16-xscroll)*16*scale), (self.y*16-8)*scale, 0, scale, scale)
+	love.graphics.draw(buttonbaseimg, math.floor((self.x-1/16-xscroll)*16*scale), ((self.y-yscroll)*16-8)*scale, 0, scale, scale)
 end
 
 function button:addoutput(a)

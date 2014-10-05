@@ -90,15 +90,15 @@ function door:draw()
 	end
 	
 	if self.dir == "hor" then
-		love.graphics.draw(doorpieceimg, math.floor((self.x+14/16-xscroll-ymod)*16*scale), (self.y-4/16)*16*scale, math.pi*.5, scale, scale, 4, 0)
-		love.graphics.draw(doorpieceimg, math.floor((self.x+18/16-xscroll+ymod)*16*scale), (self.y-4/16)*16*scale, math.pi*1.5, scale, scale, 4, 0)
-		love.graphics.draw(doorcenterimg, math.floor((self.x+16/16-xscroll-ymod)*16*scale), (self.y-4/16)*16*scale, math.pi*.5-rot, scale, scale, 4, 2)
-		love.graphics.draw(doorcenterimg, math.floor((self.x+16/16-xscroll+ymod)*16*scale), (self.y-4/16)*16*scale, math.pi*1.5-rot, scale, scale, 4, 2)
+		love.graphics.draw(doorpieceimg, math.floor((self.x+14/16-xscroll-ymod)*16*scale), (self.y-4/16-yscroll)*16*scale, math.pi*.5, scale, scale, 4, 0)
+		love.graphics.draw(doorpieceimg, math.floor((self.x+18/16-xscroll+ymod)*16*scale), (self.y-4/16-yscroll)*16*scale, math.pi*1.5, scale, scale, 4, 0)
+		love.graphics.draw(doorcenterimg, math.floor((self.x+16/16-xscroll-ymod)*16*scale), (self.y-4/16-yscroll)*16*scale, math.pi*.5-rot, scale, scale, 4, 2)
+		love.graphics.draw(doorcenterimg, math.floor((self.x+16/16-xscroll+ymod)*16*scale), (self.y-4/16-yscroll)*16*scale, math.pi*1.5-rot, scale, scale, 4, 2)
 	else
-		love.graphics.draw(doorpieceimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+6/16-ymod)*16*scale, math.pi, scale, scale, 4, 0)
-		love.graphics.draw(doorpieceimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+10/16+ymod)*16*scale, 0, scale, scale, 4, 0)
-		love.graphics.draw(doorcenterimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+8/16-ymod)*16*scale, rot, scale, scale, 4, 2)
-		love.graphics.draw(doorcenterimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+8/16+ymod)*16*scale, math.pi+rot, scale, scale, 4, 2)
+		love.graphics.draw(doorpieceimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+6/16-yscroll-ymod)*16*scale, math.pi, scale, scale, 4, 0)
+		love.graphics.draw(doorpieceimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+10/16-yscroll+ymod)*16*scale, 0, scale, scale, 4, 0)
+		love.graphics.draw(doorcenterimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+8/16-yscroll-ymod)*16*scale, rot, scale, scale, 4, 2)
+		love.graphics.draw(doorcenterimg, math.floor((self.x+0.25-xscroll)*16*scale), (self.y+8/16-yscroll+ymod)*16*scale, math.pi+rot, scale, scale, 4, 2)
 	end
 end
 

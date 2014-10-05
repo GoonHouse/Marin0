@@ -1,7 +1,7 @@
 flyingfish = class:new()
 
 function flyingfish:init()
-	self.y = 15
+	self.y = mapheight
 	self.x = math.random(math.floor(splitxscroll[1]), math.floor(splitxscroll[1])+width)
 	self.width = 12/16
 	self.height = 12/16

@@ -97,31 +97,31 @@ function emancipationgrill:draw()
 		if self.dir == "hor" then
 			parstartleft = math.floor((self.startx-1-xscroll)*16*scale)
 			parstartright = math.floor((self.endx-1-xscroll)*16*scale)
-			love.graphics.setScissor(parstartleft, ((self.y-1)*16-2)*scale, self.range - emanceimgwidth*scale, scale*4)
+			love.graphics.setScissor(parstartleft, ((self.y-1-yscroll)*16-2)*scale, self.range - emanceimgwidth*scale, scale*4)
 			
 			love.graphics.setColor(unpack(emancelinecolor))
-			love.graphics.rectangle("fill", math.floor((self.startx-1-xscroll)*16*scale), ((self.y-1)*16-2)*scale, self.range, scale*4)
+			love.graphics.rectangle("fill", math.floor((self.startx-1-xscroll)*16*scale), ((self.y-1-yscroll)*16-2)*scale, self.range, scale*4)
 			love.graphics.setColor(255, 255, 255)
 			
 			for i, v in pairs(self.particles.i) do
-				local y = ((self.y-1)*16-self.particles.mod[i])*scale
+				local y = ((self.y-yscroll-1)*16-self.particles.mod[i])*scale
 				if self.particles.dir[i] == 1 then
 					local x = parstartleft+self.range*v
-					love.graphics.draw(emanceparticleimg, math.floor(x), y, math.pi/2, scale, scale)
+					love.graphics.draw(emanceparticleimg, math.floor(x), math.floor(y), math.pi/2, scale, scale)
 				else
 					local x = parstartright-self.range*v
-					love.graphics.draw(emanceparticleimg, math.floor(x), y, -math.pi/2, scale, scale, 1)
+					love.graphics.draw(emanceparticleimg, math.floor(x), math.floor(y), -math.pi/2, scale, scale, 1)
 				end
 			end
 			
 			love.graphics.setScissor()
 			
 			--Sidethings
-			love.graphics.draw(emancesideimg, parstartleft, ((self.y-1)*16-4)*scale, 0, scale, scale)
-			love.graphics.draw(emancesideimg, parstartright+16*scale, ((self.y-1)*16+4)*scale, math.pi, scale, scale)
+			love.graphics.draw(emancesideimg, parstartleft, ((self.y-1-yscroll)*16-4)*scale, 0, scale, scale)
+			love.graphics.draw(emancesideimg, parstartright+16*scale, ((self.y-1-yscroll)*16+4)*scale, math.pi, scale, scale)
 		else
-			parstartup = math.floor((self.starty-1)*16*scale)
-			parstartdown = math.floor((self.endy-1)*16*scale)
+			parstartup = math.floor((self.starty-1-yscroll)*16*scale)
+			parstartdown = math.floor((self.endy-1-yscroll)*16*scale)
 			love.graphics.setScissor(math.floor(((self.x-1-xscroll)*16+6)*scale), parstartup-8*scale, scale*4, self.range - emanceimgwidth*scale)
 			
 			love.graphics.setColor(unpack(emancelinecolor))
@@ -132,10 +132,10 @@ function emancipationgrill:draw()
 				local x = ((self.x-1-xscroll)*16-self.particles.mod[i]+9)*scale
 				if self.particles.dir[i] == 1 then
 					local y = parstartup+self.range*v
-					love.graphics.draw(emanceparticleimg, math.floor(x), y, math.pi, scale, scale)
+					love.graphics.draw(emanceparticleimg, math.floor(x), math.floor(y), math.pi, scale, scale)
 				else
 					local y = parstartdown-self.range*v
-					love.graphics.draw(emanceparticleimg, math.floor(x), y, 0, scale, scale, 1)
+					love.graphics.draw(emanceparticleimg, math.floor(x), math.floor(y), 0, scale, scale, 1)
 				end
 			end
 			

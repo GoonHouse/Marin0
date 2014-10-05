@@ -73,7 +73,7 @@ function cubedispenser:update(dt)
 end
 
 function cubedispenser:draw()
-	love.graphics.draw(cubedispenserimg, math.floor((self.cox-xscroll-1)*16*scale), (self.coy-1.5)*16*scale, 0, scale, scale, 0, 0)
+	love.graphics.draw(cubedispenserimg, math.floor((self.cox-xscroll-1)*16*scale), (self.coy-yscroll-1.5)*16*scale, 0, scale, scale, 0, 0)
 end
 
 function cubedispenser:removebox()

@@ -73,7 +73,7 @@ function upfire:draw()
 	if self.speedy > 0 then
 		verscale = -scale
 	end
-	love.graphics.draw(upfireimg, (self.x-xscroll-2/16)*16*scale, (self.y-.5+6/16)*16*scale, 0, scale, verscale, 0, 8)
+	love.graphics.draw(upfireimg, (self.x-xscroll-2/16)*16*scale, (self.y-.5+6/16-yscroll)*16*scale, 0, scale, verscale, 0, 8)
 end
 
 function upfire:leftcollide(a, b)
