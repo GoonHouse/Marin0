@@ -53,7 +53,7 @@ function lightbridge:draw()
 		rot = math.pi
 	end
 
-	love.graphics.draw(lightbridgesideimg, math.floor((self.cox-xscroll-.5)*16*scale), (self.coy-1)*16*scale, rot, scale, scale, 8, 8)
+	love.graphics.draw(lightbridgesideimg, math.floor((self.cox-xscroll-.5)*16*scale), (self.coy-yscroll-1)*16*scale, rot, scale, scale, 8, 8)
 end
 
 function lightbridge:updaterange()
@@ -72,7 +72,7 @@ function lightbridge:updaterange()
 	
 	local firstcheck = true
 	local quit = false
-	while x >= 1 and x <= mapwidth and y >= 1 and y <= 15 and tilequads[map[x][y][1]].collision == false and (x ~= startx or y ~= starty or dir ~= self.dir or firstcheck == true) and quit == false do
+	while x >= 1 and x <= mapwidth and y >= 1 and y <= mapheight and (tilequads[map[x][y][1]].collision == false or tilequads[map[x][y][1]].grate == true) and (x ~= startx or y ~= starty or dir ~= self.dir or firstcheck == true) and quit == false do
 		firstcheck = false
 		
 		if dir == "right" then
@@ -206,8 +206,8 @@ function lightbridgebody:draw()
 	love.graphics.setColor(255, 255, 255)
 	
 	if self.dir == "hor" then
-		love.graphics.draw(lightbridgeimg, math.floor((self.cox-xscroll-1)*16*scale), (self.coy-20/16)*16*scale, 0, scale, scale)
+		love.graphics.draw(lightbridgeimg, math.floor((self.cox-xscroll-1)*16*scale), (self.coy-20/16-yscroll)*16*scale, 0, scale, scale)
 	else
-		love.graphics.draw(lightbridgeimg, math.floor((self.cox-xscroll-5/16)*16*scale), (self.coy-1)*16*scale, math.pi/2, scale, scale, 8, 1)
+		love.graphics.draw(lightbridgeimg, math.floor((self.cox-xscroll-5/16)*16*scale), (self.coy-1-yscroll)*16*scale, math.pi/2, scale, scale, 8, 1)
 	end
 end

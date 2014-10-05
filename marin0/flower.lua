@@ -1,6 +1,6 @@
 flower = class:new()
 
-function flower:init(x, y)
+function flower:init(x, y, t)
 	--PHYSICS STUFF
 	self.starty = y
 	self.x = x-6/16
@@ -16,11 +16,16 @@ function flower:init(x, y)
 	self.destroy = false
 	self.autodelete = true
 	self.gravity = 0
+	self.t = t or "fire"
 	
 	--IMAGE STUFF
 	self.drawable = false
-	self.graphic = flowerimg
-	self.quad = flowerquad[1]
+	if self.t == "ice" then
+		self.graphic = iceflowerimg
+	else
+		self.graphic = flowerimg
+	end
+	self.quad = flowerquad[spriteset][1]
 	self.offsetX = 7
 	self.offsetY = 3
 	self.quadcenterX = 9
@@ -53,7 +58,7 @@ function flower:update(dt)
 		if self.quadi == 5 then
 			self.quadi = 1
 		end
-		self.quad = flowerquad[self.quadi]
+		self.quad = flowerquad[spriteset][self.quadi]
 		self.timer = self.timer - firefloweranimationdelay
 	end
 	
@@ -67,22 +72,13 @@ end
 function flower:draw()
 	if self.uptimer < mushroomtime and not self.destroy then
 		--Draw it coming out of the block.
-		love.graphics.drawq(self.graphic, self.quad, math.floor(((self.x-xscroll)*16+self.offsetX)*scale), math.floor((self.y*16-self.offsetY)*scale), 0, scale, scale, self.quadcenterX, self.quadcenterY)
+		love.graphics.drawq(self.graphic, self.quad, math.floor(((self.x-xscroll)*16+self.offsetX)*scale), math.floor(((self.y-yscroll)*16-self.offsetY)*scale), 0, scale, scale, self.quadcenterX, self.quadcenterY)
 	end
 end
 
 function flower:leftcollide(a, b)
 	if a == "player" then
-		if onlinemp then
-			if not getifmainmario(b) then
-				return false
-			end
-		end
-		b:grow()
-		self.active = false
-		self.destroy = true
-		self.drawable = false
-		table.insert(networksendqueue, "powerup;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		self:use(b)
 	end
 	
 	return false
@@ -90,16 +86,7 @@ end
 
 function flower:rightcollide(a, b)
 	if a == "player" then
-		if onlinemp then
-			if not getifmainmario(b) then
-				return false
-			end
-		end
-		b:grow()
-		self.active = false
-		self.destroy = true
-		self.drawable = false
-		table.insert(networksendqueue, "powerup;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		self:use(b)
 	end
 	
 	return false
@@ -107,34 +94,40 @@ end
 
 function flower:floorcollide(a, b)
 	if self.active and a == "player" then
-		if onlinemp then
-			if not getifmainmario(b) then
-				return false
-			end
-		end
-		b:grow()
-		self.active = false
-		self.destroy = true
-		self.drawable = false
-		table.insert(networksendqueue, "powerup;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		self:use(b)
 	end	
 end
 
 function flower:ceilcollide(a, b)
 	if self.active and a == "player" then
-		if onlinemp then
-			if not getifmainmario(b) then
-				return false
-			end
-		end
-		b:grow()
-		self.active = false
-		self.destroy = true
-		self.drawable = false
-		table.insert(networksendqueue, "powerup;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
+		self:use(b)
 	end	
 end
 
 function flower:jump(x)
 	
+end
+
+function flower:use(b)
+	if onlinemp then
+		if not getifmainmario(b) then
+			return false
+		end
+	end
+	b:grow()
+	if self.t == "ice" then
+		if b.size == 2 or b.size == 4 or b.size == 5 or b.size == 6 then
+			b.size = 7
+		end
+		b.size = 7
+	else
+		if b.size == 4 or b.size == 5 or b.size == 6 or b.size == 7 then
+			b.size = 3
+		end
+	end
+
+	self.active = false
+	self.destroy = true
+	self.drawable = false
+	table.insert(networksendqueue, "powerup;" .. networkclientnumber .. ";" .. math.floor(self.x) .. ";" .. math.floor(self.y))
 end

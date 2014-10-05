@@ -101,36 +101,116 @@ entitylist = {
 	"spikey",
 	"spikeyhalf",
 	"checkpoint",
-	"springgreen",
+	"poisonmush",
 	"downplant",
+	"paragoomba",
+	"bigbill",
+	"kingbill",
+	"sidestepper",
+	"barrel",
+	"icicle",
+	"angrysun",
+	"angrysunend",
+	"splunkin",
+	"splunkinhalf",
+	"threeup",
+	"biggoomba",
+	"bigspikey",
+	"bigkoopa",
+	"shell",
+	"goombrat",
+	"goombrathalf",
+	"firebro",--yeah I know turtle already made them :(
+	"plusclock",
+	"springgreen",
 	"redplant",
 	"reddownplant",
+	"thwomp",
+	"fishbone",
+	"drybones",
+	"dryboneshalf",
+	"muncher",
+	"bigbeetle",
+	"meteorstart",
+	"meteorend",
+	"drygoomba",
+	"drygoombahalf",
+	"dryplant",
+	"drydownplant",
+	"donut",
+	"boomerangbro",
+	"parabeetle",
+	"ninji",
+	"hammersuit",
+	"boo",
+	"mole",
+	"bigmole",
+	"bomb",
+	"bombhalf",
+	"fireplant",
+	"flipblock",
+	"downfireplant",
+	"torpedoted",
+	"frogsuit",
+	"parabeetleright",
+	"boomboom",
+	"levelball",
+	"leaf",
+	"koopablue",
+	"koopabluehalf",
+	"koopaflying2",
 	"windstart",
 	"windend",
-	"sidestepper",
-	"sidestepperhalf",
-	"fly",
-	"flyhalf",
-	"poisonmush",
-	"plusclock",
-	"secretpoints",
-	"pwing",
-	"bolt",
-	"icicle",
-	"barrel",
-	"barrelhalf",
-	"livefire",
-	"livefirehalf",
-	"fireend",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	""
+	"pipe2",
+	"pinksquid",
+	"door", --not portal
+	"ice",
+	"box2",
+	"energylauncherright",
+	"energylauncherleft",
+	"energylauncherup",
+	"energylauncherdown",
+	"energycatcherright",
+	"energycatcherleft",
+	"energycatcherup",
+	"energycatcherdown",
+	"turretleft",
+	"turretright",
+	"turret2left",
+	"turret2right",
+	"blocktogglebutton",
+	"buttonblockon",
+	"buttonblockoff",
+	"purplegeldown",
+	"purplegelright",
+	"purplegelleft",
+	"sleepfish",
+	"squarewave",
+	"delayer",
+	"coin",
+	"amp",
+	"parabeetlegreen",
+	"parabeetlegreenright",
+	"longfire",
+	"cannonball",
+	"minimushroom",
+	"rocketturret",
+	"glados",
+	"pedestal",
+	"portal1",
+	"portal2",
+	"text",
+	"regiontrigger",
+	"tiletool",
+	"iceflower",
+	"shyguy",
+	"shyguyhalf",
+	"enemytool",
+	"randomizer",
+	"yoshi",
+	"bigblocktogglebutton",
+	"beetleshell",
+	"musicchanger"
 }
 
 entitydescriptions = {
@@ -153,7 +233,7 @@ entitydescriptions = {
 	"place on empty underwater tile - cheep cheep fish - white", --"cheepwhite",
 	"place on empty tile - oscillating platform - right click for width", --"platformup", --my mouse is dying :(
 	"place on empty tile - oscillating platform - right click for width", --"platformright",
-	"place on empty tile - companion cube", --"box",
+	"place on empty tile - weighted storage cube", --"box",
 	"place on pipe tile - pipe - right click for destination sublevel", --"pipe",
 	"place on empty tile - lakito - you can also add a lakito end tile", --"lakito",
 	"place on empty tile - logical maze start", --"mazestart",
@@ -218,10 +298,10 @@ entitydescriptions = {
 	"place on wall - clockwise rotating fire - right click for width", --"castlefirecw",
 	"place anywhere - defines a right border for lakito - use with lakito", --"lakitoend",
 	"place anywhere - turns in input around", --notgate
-	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white",
-	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white",
-	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white",
-	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white",
+	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white, 4:purple",
+	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white, 4:purple",
+	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white, 4:purple",
+	"place on tile - creates gel on this block. 1: blue, 2: orange, 3: white, 4:purple",
 	"place anywhere - fire start - bowser firethings will regularly cross the screen", --"firestart",
 	"place on empty tile preferably on the first block on a bridge with an axe - bowser", --"bowser",
 	"place on empty tile preferably behind a bridge - axe } end of level", --"axe",
@@ -233,37 +313,117 @@ entitydescriptions = {
 	"place anywhere - a lava ball will jump up and down on this line", --"upfire",
 	"place on empty tile - spikey", --"spikey",
 	"place on empty tile - spikey - more to the right", --"spikeyhalf",
-	"place on empty tile - checkpoint - mario will spawn there if he dies after reaching it", --"checkpoint"
+	"place on empty tile - checkpoint - mario will spawn there if he dies after reaching it", --"checkpoint",
+	"place on a wall - poison mushroom", --"poisonmush",
+	"place on empty tile - upside down piranha plant", --"downplant",
+	"place on empty tile - paragoomba", --"paragoomba",
+	"place on bulletbill launchers - will make the launcher actually launch banzaibills", --"bigbill",
+	"place on empty tile - launches one giant king    bill - right click for speed", --"kingbill",
+	"place on empty tile - side stepper", --"sidestepper",
+	"place on empty tile - barrel", --"barrel",
+	"place on empty tile - icicle - right click for   gravity", --"icicle",
+	"place on empty tile - angry sun", --"angrysun",
+	"place anywhere - defines a right border for angry sun - use with an angry sun", --"angrysunend",
+	"place on empty tile - splunkin", --"splunkin",
+	"place on empty tile - splunkin - more to the right", --"splunkinhalf",
+	"place on a wall - 3-up moon", --"threeup",
+	"place on empty tile - giant goomba", --"biggoomba",
+	"place on empty tile - giant spikey", --"bigspikey",
+	"place on empty tile - giant koopa", --"bigkoopa",
+	"place on empty tile - koopa shell", --"shell",
+	"place on empty tile - goombrat", --"goombrat",
+	"place on empty tile - goombrat - more to the right", --"goombrathalf",
+	"place on empty tile - fire bro", --"firebro"
+	"place on a wall - clock", --"plusclock"
 	"place on empty tile - green spring", --"springgreen"
-	"place on empty tile - piranha plant will go down and up", --"downplant"
-	"place on empty tile - aggressive piranha plant will go up and down hastily", --"redplant"
-	"place on empty tile - aggressive piranha plant will go down and up hastily", --"reddownplant"
-	"place anywhere - defines the start of a wind sweeping zone", --"windstart"
-	"place anywhere - defines the end of a wind sweeping zone", --"windend"
-	"place on empty tile - sidestepper", --"sidestepper"
-	"place on empty tile - sidestepper Offset", --"sidestepperhalf"
-	"place on empty tile - fighter fly", --"fly"
-	"place on empty tile - fighter fly offset", --"flyhalf"
-	"place on a wall - poison mushroom", --"poisonmush"
-	"place on a wall - plusclock", --"plusclock"
-	"place on a wall - secret", --"secretpoints"
-	"place on a wall - pwing", --"pwing"
-	"place on a wall - lightning bolt", --"bolt"
-	"place on empty tile - falling icicle", --"icicle"
-	"place on empty tile - rolling barrel", --"barrel"
-	"place on empty tile - rolling barrel offset", --"barrelhalf"
-	"place on empty tile - living fire", --"livefire"
-	"place on empty tile - living fire offset", --"livefirehalf",
-	"place anywhere - fire start - bowser firethings will cease coming", --"fireend"
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused",
-	"place nowhere - unused"
+	"place on empty tile - red piranha plant will go up and down fast", --"redplant",
+	"place on empty tile - upside down red piranha plant", --"reddownplant",
+	"place on empty tile - thwomp", --"thwomp",
+	"place on empty underwater tile - fishbones - resists fireballs", --"fishbone",
+	"place on empty tile - drybones - resists fireballs", --"drybones",
+	"place on empty tile - drybones - more to the right", --"dryboneshalf",
+	"place on empty tile - muncher", --"muncher",
+	"place on empty tile - giant beetle", --"bigbeetle",
+	"place anywhere - defines the start of a meteor zone", --"meteorstart",
+	"place anywhere - defines the end of a meteor zone", --"meteorend",
+	"place on empty tile - bone goomba - resists fireballs", --"drygoomba",
+	"place on empty tile - bone goomba - more to the right", --"drygoombahalf",
+	"place on empty tile - dry piranha plant - resists fireballs", --"dryplant",
+	"place on empty tile - upside down dry piranha plant", --"drydownplant",
+	"place on empty tile - donut platform - falls when stepped on", --"donut",
+	"place on empty tile - boomerang bro", --"boomerangbro",
+	"place anywhere - parabeetle - left", --"parabeetle",
+	"place on empty tile - ninji", --"ninji",
+	"place on a wall - hammer suit", --"hammersuit",
+	"place anywhere - boo", --"boo",
+	"place on empty tile - monty mole", --"mole",
+	"place on empty tile - mega mole", --"bigmole",
+	"place on empty tile - bob-omb", --"bomb",
+	"place on empty tile - bob-omb - more to the right", --"bombhalf",
+	"place on empty tile - venus firetrap - shoots fire", --"fireplant",
+	"place on empty tile - rotating block - rotates when hit", --"donut",
+	"place on empty tile - upside down venus firetrap", --"downfireplant",
+	"place on empty tile - hand launches torpedo teds", --"torpedoted",
+	"place on a wall - frog suit", --"frogsuit",
+	"place anywhere - parabeetle - right", --"parabeetleright",
+	"place on empty tile - boomboom", --"boomboom",
+	"place on empty tile - ? ball - end of level",
+	"place on a wall - raccoon leaf", --"leaf",
+	"place on empty tile - blue koopa - moves fast", --"koopablue",
+	"place on empty tile - blue koopa - more to the right", --"koopabluehalf",
+	"place on empty tile - flying koopa, goes right and left", --"koopaflying2",
+	"place anywhere - beginning of wind", --"windstart",
+	"place anywhere - end of wind", --"windend",
+	"place on pipe tile - pipe - right click for destination sublevel - enter left or up", --"pipe2?",
+	"place on empty tile - pink squid - stompable", --"pinksquid",
+	"place on a door tile - door - right click for destination sublevel - press up to enter", --"door",
+	"place on a wall - ice - makes tile slippery", --"ice",
+	"place on empty tile - companion cube", --"box2",
+	"place on empty tile - high energy pellet launcher - right", --"energylauncherright",
+	"place on empty tile - high energy pellet launcher - left", --"energylauncherleft",
+	"place on empty tile - high energy pellet launcher - up", --"energylauncherup",
+	"place on empty tile - high energy pellet launcher - down", --"energylauncherdown",
+	"place on empty tile - high energy pellet catcher - right - use link", --"energycatcherright",
+	"place on empty tile - high energy pellet catcher - left - use link", --"energycatcherleft",
+	"place on empty tile - high energy pellet catcher - up - use link", --"energycatcherup",
+	"place on empty tile - high energy pellet catcher - down - use link", --"energycatcherdown",
+	"place on empty tile - turret - left", --"turretleft",
+	"place on empty tile - turret - right", --"turretright",
+	"place on empty tile - defective turret - left", --"turret2left",
+	"place on empty tile - defective turret - right", --"turret2right",
+	"place on empty tile - ! button - push to toggle ! button blocks - right click for colors", --"blocktogglebutton",
+	"place on empty tile - ! button block - on - right click for colors", --"buttonblockon",
+	"place on empty tile - ! button block - off - right click for colors", --"buttonblockoff",
+	"place on empty tile - will produce purple gel to down - purple gel } gravity", --"purplegeldown",
+	"place on empty tile - will produce purple gel to right - purple gel } gravity", --"purplegelright",
+	"place on empty tile - will produce purple gel to left - purple gel } gravity", --"purplegelleft",
+	"place on empty underwater tile - rip van fish - wakes up when player is near", --"sleepfish",
+	"place anywhere - turns output on then off - right click to choose delay", --"squarewave",
+	"place anywhere - delays an input - right click to choose delay", --"delayer",
+	"place anywhere - coin", --"coin",
+	"place anywhere - amp - right click to select path", --"amp",
+	"place anywhere - green parabeetle - left - goes fast", --"parabeetlegreen",
+	"place anywhere - green parabeetle - right - goes fast", --"parabeetlegreenright",
+	"place on empty tile - fire appears after a while then dissapears - right click to choose direction", --"longfire",
+	"place on tile - cannon ball - right click to choose direction", --"cannonball",
+	"place on a wall - mini mushroom", --"minimushroom",
+	"place on empty tile - rocket turret - shoots rockets", --"rocketturret",
+	"place on empty tile - glados", --"GLaDOS",
+	"place on empty tile - portal gun pedestal - right click to choose portals", --"pedestal",
+	"place on a wall - portal 1 - right click to choose side - use link tool", --"portal1",
+	"place on a wall - portal 2 - right click to choose side - use link tool", --"portal2",
+	"place anywhere - text - right click to type text", --"text",
+	"place anywhere - region trigger - right click to select region", --"region trigger",
+	"place anywhere - tile tool - rightclick to type function", --"tiletool",
+	"place on a wall - ice flower", --"iceflower",
+	"place on empty tile - shy guy", --"shyguy",
+	"place on empty tile - shy guy - more to the right", --"shyguyhalf",
+	"place anywhere - enemy tool - rightclick to type enemy to spawn", --"enemytool",
+	"place anywhere - randomizer - turns on a random output - right click to choose method", --"randomizer",
+	"place on a wall - yoshi egg", --"yoshi",
+	"place on empty tile - big ! button - push to toggle ! button blocks - right click for colors",
+	"place on empty tile - beetle shell", --"beetleshell",
+	"place anywhere - music changer - changes music - right click to select music" --"musicchanger",
 }
 
 rightclickvalues = {}
@@ -275,20 +435,53 @@ rightclickvalues["platformfall"] = {"width", 1.5, 2, 3, 5}
 rightclickvalues["timer"] = {"time", 1, 2, 4, 8}
 rightclickvalues["seesaw"] = {"type", 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-rightclickvalues["pipe"] = {"target", 0, 1, 2, 3, 4, 5}
-rightclickvalues["pipespawn"] = {"target", 0, 1, 2, 3, 4, 5}
+rightclickvalues["pipe"] = {"target", 0, 1, 2, 3, 4, 5, 6}
+rightclickvalues["pipespawn"] = {"target", 0, 1, 2, 3, 4, 5, 6}
 rightclickvalues["warppipe"] = {"target", 1, 2, 3, 4, 5, 6, 7, 8}
-rightclickvalues["vine"] = {"target", 0, 1, 2, 3, 4, 5}
+rightclickvalues["vine"] = {"target", 0, 1, 2, 3, 4, 5, 6}
 
 rightclickvalues["castlefirecw"] = {"length", 6, 12}
 rightclickvalues["castlefireccw"] = {"length", 6, 12}
 
 rightclickvalues["mazegate"] = {"gateno", 1, 2, 3, 4, 5}
 
-rightclickvalues["geltop"] = {"gelid", 1, 2, 3}
-rightclickvalues["gelleft"] = {"gelid", 1, 2, 3}
-rightclickvalues["gelbottom"] = {"gelid", 1, 2, 3}
-rightclickvalues["gelright"] = {"gelid", 1, 2, 3}
+rightclickvalues["geltop"] = {"gelid", 1, 2, 3, 4}
+rightclickvalues["gelleft"] = {"gelid", 1, 2, 3, 4}
+rightclickvalues["gelbottom"] = {"gelid", 1, 2, 3, 4}
+rightclickvalues["gelright"] = {"gelid", 1, 2, 3, 4}
+
+rightclickvalues["icicle"] = {"gravity", 10, 13, 15, 8, 5}
+
+rightclickvalues["kingbill"] = {"speed", 5, 3, 6, 7, 8, 9}
+
+rightclickvalues["pipe2"] = {"target", 0, 1, 2, 3, 4, 5, 6}
+rightclickvalues["door"] = {"target", 0, 1, 2, 3, 4, 5, 6}
+
+rightclickvalues["blocktogglebutton"] = {"color", 1, 2, 3, 4}
+rightclickvalues["buttonblockon"] = {"color", 1, 2, 3, 4}
+rightclickvalues["buttonblockoff"] = {"color", 1, 2, 3, 4}
+rightclickvalues["bigblocktogglebutton"] = {"color", 1, 2, 3, 4}
+
+rightclickvalues["delayer"] = {"delay", 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+rightclickvalues["amp"] = {"path", 1, 2, 3, 4, 0}
+
+rightclickvalues["longfire"] = {"direction", "left", "right", "up", "down"}
+rightclickvalues["cannonball"] = {"direction", "left", "right", "down", "up", "left down", "left up", "right down", "right up"}
+
+rightclickvalues["pedestal"] = {"portals", "both", "1 only", "2 only", "gel"}
+rightclickvalues["portal1"] = {"side", "left", "right", "up", "down"}
+rightclickvalues["portal2"] = {"side", "left", "right", "up", "down"}
+
+rightclickvalues["randomizer"] = {"method", 1, 2}
+rightclickvalues["musicchanger"] = {"music", "overworld", "underground", "castle", "underwater", "star", "custom"}
+
+rightclicktype = {}
+rightclicktype["text"] = {"text", "text: ", "text|white", "text"}
+rightclicktype["regiontrigger"] = {"region trigger", "width height", "1|1", "rt"}
+rightclicktype["squarewave"] = {"squarewave", "delay", "0.5", "sq"}
+rightclicktype["tiletool"] = {"tiletool", "function", "change to 1", "tt"}
+rightclicktype["enemytool"] = {"enemytool", "enemy", "goomba", "et"}
 
 function entity:init(img, x, y, width, height)
 	self.image = img

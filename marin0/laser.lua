@@ -58,7 +58,7 @@ function laser:update(dt)
 			width = -self.lasertable[i+3]+1
 			height = 2/16
 			
-			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa"})
+			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa", "biggoomba", "bigkoopa", "shell", "paragoomba", "goombrat", "bomb", "splunkin", "sidestepper", "mole", "drybones"})
 			
 			if #rectcol > 0 then
 				col = true
@@ -100,7 +100,7 @@ function laser:update(dt)
 			width = self.lasertable[i+3]+1
 			height = 2/16
 			
-			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa"})
+			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa", "biggoomba", "bigkoopa", "shell", "paragoomba", "goombrat", "bomb", "splunkin", "sidestepper", "mole", "drybones"})
 			
 			if #rectcol > 0 then
 				col = true
@@ -142,7 +142,7 @@ function laser:update(dt)
 			width = 2/16
 			height = -self.lasertable[i+4]+1
 			
-			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa"})
+			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa", "biggoomba", "bigkoopa", "shell", "paragoomba", "goombrat", "bomb", "splunkin", "sidestepper", "mole", "drybones"})
 			
 			if #rectcol > 0 then
 				col = true
@@ -184,7 +184,7 @@ function laser:update(dt)
 			width = 2/16
 			height = self.lasertable[i+4]+1
 			
-			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa"})
+			local rectcol = checkrect(x, y, width, height, {"player", "box", "goomba", "koopa", "biggoomba", "bigkoopa", "shell", "paragoomba", "goombrat", "bomb", "splunkin", "sidestepper", "mole", "drybones"})
 			
 			if #rectcol > 0 then
 				col = true
@@ -272,22 +272,22 @@ end
 function laser:draw()	
 	for i = 1, #self.lasertable, 5 do
 		if self.lasertable[i] == "left" then
-			love.graphics.setScissor(math.floor((self.lasertable[i+1]+self.lasertable[i+3]-xscroll-1)*16*scale), (self.lasertable[i+2]-1.5)*16*scale, math.max((-self.lasertable[i+3]+1)*16*scale, 0), 16*scale)
+			love.graphics.setScissor(math.floor((self.lasertable[i+1]+self.lasertable[i+3]-xscroll-1)*16*scale), (self.lasertable[i+2]-yscroll-1.5)*16*scale, math.max((-self.lasertable[i+3]+1)*16*scale, 0), 16*scale)
 			for x = self.lasertable[i+1], math.floor(self.lasertable[i+1]+self.lasertable[i+3])-1, -1 do
-				love.graphics.draw(laserimg, math.floor((x-xscroll-1)*16*scale), (self.lasertable[i+2]-20/16)*16*scale, 0, scale, scale)
+				love.graphics.draw(laserimg, math.floor((x-xscroll-1)*16*scale), (self.lasertable[i+2]-20/16-yscroll)*16*scale, 0, scale, scale)
 			end
 		elseif self.lasertable[i] == "right" then
-			love.graphics.setScissor(math.floor((self.lasertable[i+1]-xscroll-1)*16*scale), (self.lasertable[i+2]-1.5)*16*scale, math.max((self.lasertable[i+3]+1)*16*scale, 0), 16*scale)
+			love.graphics.setScissor(math.floor((self.lasertable[i+1]-xscroll-1)*16*scale), (self.lasertable[i+2]-1.5-yscroll)*16*scale, math.max((self.lasertable[i+3]+1)*16*scale, 0), 16*scale)
 			for x = self.lasertable[i+1], math.ceil(self.lasertable[i+1]+self.lasertable[i+3])+1 do
-				love.graphics.draw(laserimg, math.floor((x-xscroll-1)*16*scale), (self.lasertable[i+2]-20/16)*16*scale, 0, scale, scale)
+				love.graphics.draw(laserimg, math.floor((x-xscroll-1)*16*scale), (self.lasertable[i+2]-20/16-yscroll)*16*scale, 0, scale, scale)
 			end
 		elseif self.lasertable[i] == "up" then
 			for y = self.lasertable[i+2], self.lasertable[i+2]+self.lasertable[i+4], -1 do
-				love.graphics.draw(laserimg, math.floor((self.lasertable[i+1]-xscroll-5/16)*16*scale), (y-1)*16*scale, math.pi/2, scale, scale, 8, 1)
+				love.graphics.draw(laserimg, math.floor((self.lasertable[i+1]-xscroll-5/16)*16*scale), (y-1-yscroll)*16*scale, math.pi/2, scale, scale, 8, 1)
 			end
 		elseif self.lasertable[i] == "down" then
 			for y = self.lasertable[i+2], self.lasertable[i+2]+self.lasertable[i+4] do
-				love.graphics.draw(laserimg, math.floor((self.lasertable[i+1]-xscroll-5/16)*16*scale), (y-1)*16*scale, math.pi/2, scale, scale, 8, 1)
+				love.graphics.draw(laserimg, math.floor((self.lasertable[i+1]-xscroll-5/16)*16*scale), (y-1-yscroll)*16*scale, math.pi/2, scale, scale, 8, 1)
 			end
 		end
 		
@@ -303,7 +303,7 @@ function laser:draw()
 		rot = math.pi
 	end
 
-	love.graphics.draw(lasersideimg, math.floor((self.cox-xscroll-.5)*16*scale), (self.coy-1)*16*scale, rot, scale, scale, 8, 8)
+	love.graphics.draw(lasersideimg, math.floor((self.cox-xscroll-.5)*16*scale), (self.coy-1-yscroll)*16*scale, rot, scale, scale, 8, 8)
 end
 
 function laser:updaterange()
@@ -320,7 +320,7 @@ function laser:updaterange()
 	
 	local firstcheck = true
 	local quit = false
-	while x >= 1 and x <= mapwidth and y >= 1 and y <= 15 and tilequads[map[x][y][1]].collision == false and (x ~= startx or y ~= starty or dir ~= self.dir or firstcheck == true) and quit == false do
+	while x >= 1 and x <= mapwidth and y >= 1 and y <= mapheight and (tilequads[map[x][y][1]].collision == false or tilequads[map[x][y][1]].grate == true) and (x ~= startx or y ~= starty or dir ~= self.dir or firstcheck == true) and quit == false do
 		firstcheck = false
 		
 		if dir == "right" then
