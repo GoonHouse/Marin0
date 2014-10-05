@@ -1,9 +1,7 @@
 local args = {...}
 this = {}
-this.musiclist = args[1]
-this.trackname = args[2]
-this.tracksource = args[3]
-this.demandtrack = args[4]
+this.channelIn = args[1]
+this.channelOut = args[2]
 
 require("love.filesystem")
 require("love.sound")
@@ -16,11 +14,11 @@ local musicpath = "sounds/%s.ogg"
 
 local musiclist = {}
 local musictoload = {} -- waiting to be loaded into memory
+local wantedtrack = ""
 
-local function getmusiclist()
+local function getmusiclist(musicliststr)
 	-- the music string should have names separated by the ";" character
 	-- music will be loaded in in the same order as they appear in the string
-	local musicliststr = this.musiclist:pop()
 	if musicliststr then
 		for musicname in musicliststr:gmatch("[^;]+") do
 			if not musiclist[musicname] then
@@ -41,11 +39,10 @@ local function getfilename(name)
 end
 
 local function loadmusic()
-	local demandtrack = this.demandtrack:pop()
-	if #musictoload > 0 or demandtrack then
+	if #musictoload > 0 or wantedtrack~="" then
 		local name
-		if demandtrack then
-			name=demandtrack
+		if wantedtrack~="" then
+			name=wantedtrack
 		else
 			name=table.remove(musictoload, 1)
 		end
@@ -54,14 +51,23 @@ local function loadmusic()
 		if filename then
 			local source = love.audio.newSource(love.sound.newDecoder(filename, 512 * 1024), "static")
 			--print("thread loaded music", name)
-			this.trackname:push(name)
-			this.tracksource:push(source)
+			if wantedtrack~="" then
+				wantedtrack = ""
+			end
+			this.channelOut:push({mode="trackloaded", name=name, source=source})
 		end
 	end
 end
 
 while true do
-	getmusiclist()
+	local message = this.channelIn:pop()
+	if message then
+		if message.mode == "musiclist" then
+			getmusiclist(message.data)
+		elseif message.mode == "demandtrack" then
+			wantedtrack = message.data
+		end
+	end
 	loadmusic()
 	love.timer.sleep(1/60)
 end

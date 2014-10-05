@@ -3450,11 +3450,11 @@ function generatespritebatch()
 					local tilenumber = t[1]
 					if tilenumber ~= 0 and tilequads[tilenumber].invisible == false and tilequads[tilenumber].coinblock == false and tilequads[tilenumber].coin == false then
 						if tilenumber <= smbtilecount then
-							smbmsb:addq( tilequads[tilenumber].quad, (x-1)*16*scale, ((y-1)*16-8)*scale, 0, scale, scale )
+							smbmsb:add( tilequads[tilenumber].quad, (x-1)*16*scale, ((y-1)*16-8)*scale, 0, scale, scale )
 						elseif tilenumber <= smbtilecount+portaltilecount then
-							portalmsb:addq( tilequads[tilenumber].quad, (x-1)*16*scale, ((y-1)*16-8)*scale, 0, scale, scale )
+							portalmsb:add( tilequads[tilenumber].quad, (x-1)*16*scale, ((y-1)*16-8)*scale, 0, scale, scale )
 						elseif tilenumber <= smbtilecount+portaltilecount+customtilecount then
-							custommsb:addq( tilequads[tilenumber].quad, (x-1)*16*scale, ((y-1)*16-8)*scale, 0, scale, scale )
+							custommsb:add( tilequads[tilenumber].quad, (x-1)*16*scale, ((y-1)*16-8)*scale, 0, scale, scale )
 						end
 					end
 				end

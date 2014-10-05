@@ -5,16 +5,14 @@ music = {
 	list = {},
 	list_fast = {},
 	pitch = 1,
-	musiclist = love.thread.newChannel(),
-	trackname = love.thread.newChannel(),
-	tracksource = love.thread.newChannel(),
-	demandtrack = love.thread.newChannel(),
+	channelIn = love.thread.newChannel(),
+	channelOut = love.thread.newChannel()
 }
 
 music.stringlist = table.concat(music.toload, ";")
 
 function music:init()
-	self.thread:start(self.musiclist, self.trackname, self.tracksource, self.demandtrack)
+	self.thread:start(self.channelIn, self.channelOut)
 end
 
 function music:load(musicfile) -- can take a single file string or an array of file strings
@@ -26,7 +24,7 @@ function music:load(musicfile) -- can take a single file string or an array of f
 		self:preload(musicfile)
 	end
 	self.stringlist = table.concat(self.toload, ";")
-	self.musiclist:push(self.stringlist)
+	self.channelIn:push({mode="musiclist",data=self.stringlist})
 end
 
 function music:preload(musicfile)
@@ -39,10 +37,11 @@ end
 function music:play(name)
 	if name and soundenabled then
 		if self.loaded[name] == false then
-			self.demandtrack:supply(name)
-			local name = self.trackname:demand()
-			local source = self.musiclist:demand()
-			self:onLoad(name, source)
+			self.channelIn:supply({mode="demandtrack",data=name})
+			local message = self.channelOut:demand()
+			if message.mode=="trackloaded" then
+				self:onLoad(name, message.source)
+			end
 		end
 		if self.loaded[name] then
 			playsound(self.loaded[name])
@@ -68,10 +67,9 @@ end
 
 function music:update()
 	for i,v in ipairs(self.toload) do
-		local name = self.trackname:pop()
-		local source = self.musiclist:pop()
-		if name and source then
-			self:onLoad(name, source)
+		local message = self.channelOut:pop()
+		if message then
+			self:onLoad(message.name, message.source)
 		end
 	end
 	for name, source in pairs(self.loaded) do
