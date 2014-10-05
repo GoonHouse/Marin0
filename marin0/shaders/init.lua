@@ -84,14 +84,14 @@ local function CreateShaderPass()
 				end
 			end
 			if effect.supported == nil then
-				effect.supported = pcall(love.graphics.setPixelEffect, effect[1])
+				effect.supported = pcall(love.graphics.setShader, effect[1])
 				if not effect.supported then
 					print(string.format("Error setting shader: %s!", self.cureffect))
 				end
 			elseif effect.supported then
-				love.graphics.setPixelEffect(effect[1])
+				love.graphics.setShader(effect[1])
 			else
-				love.graphics.setPixelEffect()
+				love.graphics.setShader()
 			end
 			love.graphics.draw(self.canvas.canvas, self.canvas.quad, 0, 0)
 		end
@@ -128,7 +128,7 @@ function shaders:init(numpasses)
 			local name = "shaders".."/"..v
 			if love.filesystem.isFile(name) then
 				local str = love.filesystem.read(name)
-				local success, effect = pcall(love.graphics.newPixelEffect, str)
+				local success, effect = pcall(love.graphics.newShader, str)
 				if success then
 					local defs = {}
 					for vtype, extern in str:gmatch("extern (%w+) (%w+)") do
@@ -250,5 +250,5 @@ function shaders:postdraw()
 	end
 
 	love.graphics.setBlendMode(blendmode)
-	love.graphics.setPixelEffect()
+	love.graphics.setShader()
 end
