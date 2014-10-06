@@ -1392,7 +1392,7 @@ function properprintbackground(s, x, y, include, color, sc)
 				x = startx-((i)*8)*scale
 				y = y + 10*scale
 			elseif fontquadsback[char] then
-				love.graphics.drawq(fontimageback, fontquadsback[char], x+((i-1)*8)*scale, y-1*scale, 0, scale, scale)
+				love.graphics.draw(fontimageback, fontquadsback[char], x+((i-1)*8)*scale, y-1*scale, 0, scale, scale)
 			end
 		end
 	end
