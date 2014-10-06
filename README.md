@@ -8,7 +8,7 @@ Credits
 =======
 
 This was made by EntranceJew and HammyHammerGuy, but we also benefit from the work done by:
-* [Mari0 Special Edition](http://forum.stabyourself.net/viewtopic.php?f=8&t=4004) v9enemies [Docs](http://guegan.de/mari0doc/index.php)
+* [Mari0 Special Edition](http://forum.stabyourself.net/viewtopic.php?f=8&t=4004) v9enemies [Docs](http://guegan.de/mari0doc/index.php) [Level Converter](http://forum.stabyourself.net/viewtopic.php?f=12&t=1970)
 * [Alesan99's Entities](http://forum.stabyourself.net/viewtopic.php?f=13&t=3636) v0.8.0
 * [Mari0 Online Mod](http://forum.stabyourself.net/viewtopic.php?f=13&t=4440) v
 * [Super Mario Bros +](http://forum.stabyourself.net/viewtopic.php?f=13&t=3096)
