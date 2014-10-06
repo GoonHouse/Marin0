@@ -94,6 +94,8 @@ function love.load()
 	properprint(loadingtext, 25*8*scale-string.len(loadingtext)*4*scale, 108*scale)
 	love.graphics.present()
 	--require ALL the files!
+	require "utils"
+	require "hook"
 	require "shaders"
 	require "variables"
 	require "class"
